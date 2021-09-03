@@ -61,12 +61,15 @@ Open the `server` and `client` in separate VSCode workspaces or open the combine
 
 ### Purpose
 
-2-5 sentences describing what the system does
+SchedulR is a tool for ambitious people with little time. SchedulR has an easy-to-use interface and gives its users powerful tools to schedule and organize meetings on a professional level.
 
 ### Pages
 
-* Home: 1-3 sentences describing what the page displays and what a user can do
-* Shopping cart: ...
+* Login/Signup: A user creates an account or authenticates here.
+* Home: A user can see upcoming meetings and set their blocked time.
+* Create Meeting: A user creates meetings.
+* Meeting: This is where all attendees view meeting information.
+
 
 ### Entity-Relationship (ER) Diagram
 
