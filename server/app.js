@@ -8,6 +8,7 @@ var history = require("connect-history-api-fallback");
 //Routes
 const authRoute = require("./controllers/auth");
 const userRoute = require("./controllers/user");
+const devRoute = require("./controllers/dev")
 
 // Variables
 var mongoURI =
@@ -42,6 +43,7 @@ app.use(cors());
 // Import routes
 app.use("/api/auth", authRoute.router);
 app.use("/api/user", userRoute);
+app.use("/api/dev", devRoute)
 
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode

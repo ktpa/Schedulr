@@ -73,7 +73,6 @@ const model = {
     };
 
     token.user = user._id;
-
     console.log(token.user);
 
     var tokenInstance = new tokenModel(token);

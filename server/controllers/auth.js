@@ -1,11 +1,9 @@
 const router = require("express").Router();
 const app = require("../app");
+// var clientModel = require("../models/oauth_client"),
+//  userModel = require("../models/user"),
+//  tokenModel = require("../models/access_token");
 
-const userModel = require("../models/user");
-/*
-const clientModel = require("../models/oauth_client"),
-  tokenModel = require("../models/access_token");
-*/
 var OAuth2Server = require("oauth2-server"),
   Request = OAuth2Server.Request,
   Response = OAuth2Server.Response;
@@ -91,7 +89,7 @@ const loadExampleData = function () {
   });
 };
 loadExampleData();
-
+/*
 var dump = function () {
   clientModel.find(function (err, clients) {
     if (err) {
@@ -114,4 +112,5 @@ var dump = function () {
     console.log("users", users);
   });
 };
-dump();*/
+dump();
+*/
