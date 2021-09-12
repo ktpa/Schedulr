@@ -33,7 +33,7 @@ const model = {
           if (!user) {
             callback({ error: "User not found!" });
           } else {
-            // NOTE(numank) user should be a doc but user.comparePassword is defined.
+            // NOTE(numank) user should be a doc but user.comparePassword is undefined.
             // We might find a better way than creating a temp user here.
             // Furter testing required.
             const tempUser = new userModel(user);

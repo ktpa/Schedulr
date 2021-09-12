@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const app = require("../app");
-// var clientModel = require("../models/oauth_client"),
-//  userModel = require("../models/user"),
-//  tokenModel = require("../models/access_token");
+
+const userModel = require("../models/user");
 
 var OAuth2Server = require("oauth2-server"),
   Request = OAuth2Server.Request,
@@ -15,10 +14,6 @@ app.auth = new OAuth2Server({
 });
 
 router.post("/", obtainToken);
-
-router.get("/test", authenticateRequest, function (req, res) {
-  res.send("Congratulations, you are in a secret area!");
-});
 
 function obtainToken(req, res) {
   var request = new Request(req);
@@ -60,57 +55,3 @@ module.exports = {
   authenticateRequest: authenticateRequest,
   getUserFromToken: getUserFromToken,
 };
-/*
-const loadExampleData = function () {
-  var client1 = new clientModel({
-    clientId: "application",
-    clientSecret: "secret",
-    redirectUris: [],
-    grants: ["password", "authorization_code", "refresh_token"],
-  });
-
-  var user = new userModel({
-    username: "testUser",
-    password: "testPassword",
-  });
-
-  client1.save(function (err, client) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log("Created client", client);
-  });
-
-  user.save(function (err, user) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log("Created user", user);
-  });
-};
-loadExampleData();
-/*
-var dump = function () {
-  clientModel.find(function (err, clients) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log("clients", clients);
-  });
-
-  tokenModel.find(function (err, tokens) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log("tokens", tokens);
-  });
-
-  userModel.find(function (err, users) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log("users", users);
-  });
-};
-dump();
-*/

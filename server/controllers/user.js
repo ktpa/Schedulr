@@ -28,9 +28,9 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.get("/profile", authenticateRequest, function (req, res) {
+router.get("/profile", authenticateRequest, (req, res) => {
   if (!req.token) {
-    res.status(403);
+    res.status(401);
   }
 
   getUserFromToken(req.token).then((user) => {
@@ -38,6 +38,57 @@ router.get("/profile", authenticateRequest, function (req, res) {
       res.status(403);
     }
     res.status(200).json({ data: user });
+  });
+});
+
+router.patch("/profile", authenticateRequest, async (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then(async (user) => {
+    if (!user) {
+      res.status(403);
+    }
+    try {
+      var update = {};
+      if (req.body.name) {
+        update = { ...update, name: req.body.name };
+      }
+      if (req.body.password) {
+        update = { ...update, password: req.body.password };
+      }
+      if (req.body.profilePicUrl) {
+        update = { ...update, profilePicUrl: req.body.profilePicUrl };
+      }
+
+      let updatedUser = await userModel.findOneAndUpdate(
+        { _id: user.id },
+        update,
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+});
+
+router.delete("/", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user) {
+      res.status(403);
+    }
+    user.remove().then((response) => {
+      res.status(200).json(response);
+    });
   });
 });
 
