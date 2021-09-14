@@ -20,6 +20,7 @@ router.post("/signup", async (req, res) => {
       email: req.body.email,
       password: req.body.password,
       name: req.body.name,
+      profilePicUrl: req.body.profilePicUrl
     });
     newUser.save().then((doc) => res.status(200).json(doc));
     // TODO(numank): Investigate authorizing user after signup.
