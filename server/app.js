@@ -45,6 +45,10 @@ app.use("/api/auth", authRoute.router);
 app.use("/api/user", userRoute);
 app.use("/api/dev", devRoute)
 
+ app.get('/api', function(req, res) {
+     res.json({'message': 'This route is used for newman-wait that runs with the npm test command.'});
+ });
+
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode
 app.use(history());
