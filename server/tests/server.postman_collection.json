@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "b83b515b-53ae-49ca-8524-2cd532a35ea7",
-		"name": "server",
+		"_postman_id": "002642e2-4e98-4831-936c-cc51bbd6a393",
+		"name": "Server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -12,9 +12,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status test\", function () {\r",
-							"    pm.response.to.have.status(200)\r",
-							"})"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -51,6 +49,11 @@
 							"key": "name",
 							"value": "jens sjodin",
 							"type": "text"
+						},
+						{
+							"key": "profilePicUrl",
+							"value": "empty",
+							"type": "text"
 						}
 					]
 				},
@@ -76,9 +79,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status test\", function () {\r",
-							"    pm.response.to.have.status(200)\r",
-							"})"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -131,9 +132,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Status test\", function () {\r",
-							"    pm.response.to.have.status(200)\r",
-							"})"
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"token\", jsonData.accessToken);"
 						],
 						"type": "text/javascript"
 					}
@@ -194,6 +194,150 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "profilePicUrl",
+							"value": "www.google.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/user/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/user/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"user",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:{{port}}/api/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -211,7 +355,9 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
-					""
+					"pm.test(\"Status test\", function () {",
+					"    pm.response.to.have.status(200)",
+					"})"
 				]
 			}
 		}
