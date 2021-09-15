@@ -67,6 +67,49 @@ router.get("/:id", authenticateRequest, (req, res) => {
     });
 });
 
+router.patch("/:id", authenticateRequest, (req, res) => {
+    if (!req.token) {
+        res.status(401);
+    }
+    getUserFromToken(req.token).then(async (user) => {
+        if (!user) {
+            res.status(403);
+        }
+        try {
+            var update = {};
+            if (req.body.firstPossibleDay) {
+                update = { ...update, firstPossibleDay: req.body.firstPossibleDay };
+            }
+            if (req.body.lastPossibleDay) {
+                update = { ...update, lastPossibleDay: req.body.lastPossibleDay };
+            }
+            if (req.body.firstPossibleHour) {
+                update = { ...update, firstPossibleHour: req.body.firstPossibleHour };
+            }
+            if (req.body.lastPossibleHour) {
+                update = { ...update, lastPossibleHour: req.body.lastPossibleHour };
+            }
+            if (req.body.meetingName) {
+                update = { ...update, meetingName: req.body.meetingName };
+            }
+            if (req.body.participantsList) {
+                update = { ...update, participantsList: req.body.participantsList }
+            }
+
+            let updatedMeeting = await meetingModel.findOneAndUpdate(
+                { _id: req.body._id },
+                update,
+                {
+                    new: true,
+                    useFindAndModify: false,
+                });
+            res.status(200).json(updatedMeeting);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    });
+});
+
 router.delete("/:id", authenticateRequest, (req, res) => {
     if (!req.token) {
         res.status(401);
