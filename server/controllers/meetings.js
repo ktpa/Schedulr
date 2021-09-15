@@ -12,7 +12,7 @@ router.get("/", authenticateRequest, (req, res) => {
         if (!user) {
             res.status(403);
         }
-        meetingModel.find({participantsList: req.body._id}, function (err, meeting) {
+        meetingModel.find({participantsList: user._id}, function (err, meeting) {
             if (err) { return next(err); }
             if (meeting === null) {
                 return res.status(404).json({ "message": "Meeting not found" });
