@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
-const userModel = require("../models/user");
+const userModel = require("../models/users");
 
 router.post("/signup", async (req, res) => {
   try {

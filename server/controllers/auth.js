@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const app = require("../app");
 
-const userModel = require("../models/user");
+const userModel = require("../models/users");
 
 var OAuth2Server = require("oauth2-server"),
   Request = OAuth2Server.Request,

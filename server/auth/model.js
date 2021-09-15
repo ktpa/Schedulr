@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
 
-var client = require("../models/oauth_client"),
-  tokenModel = require("../models/access_token"),
-  userModel = require("../models/user");
+var client = require("../models/oauth_clients"),
+  tokenModel = require("../models/access_tokens"),
+  userModel = require("../models/users");
 
 const model = {
   getClient: function (clientId, clientSecret, callback) {
