@@ -8,17 +8,18 @@ router.get("/", authenticateRequest, (req, res) => {
         res.status(401);
     }
 
-    getUserFromToken(req.token).then((user) => {
+    getUserFromToken(req.token).then(async (user) => {
         if (!user) {
             res.status(403);
         }
-        meetingModel.find({participantsList: user._id}, function (err, meeting) {
+        console.log(user._id)
+        const meetings = await meetingModel.find({createdBy: user._id}, function (err, meetings) {
             if (err) { return next(err); }
-            if (meeting === null) {
+            if (meetings === null) {
                 return res.status(404).json({ "message": "Meeting not found" });
             };
-            res.status(200).json({ meeting: meeting });
-        });
+        }).populate('[participantsList]');
+        res.status(200).json({ data: meetings });
     });
 });
 
@@ -53,17 +54,17 @@ router.get("/:id", authenticateRequest, (req, res) => {
         res.status(401);
     }
 
-    getUserFromToken(req.token).then((user) => {
+    getUserFromToken(req.token).then(async (user) => {
         if (!user) {
             res.status(403);
         }
-        meetingModel.findOne({_id: req.body._id}, function (err, meeting) {
+        const meetings = await meetingModel.findOne({_id: req.params.id}, function (err, meeting) {
             if (err) { return next(err); }
             if (meeting === null) {
                 return res.status(404).json({ "message": "Meeting not found" });
             };
-            res.status(200).json({ meeting: meeting });
-        }).populate('participantsList');
+        }).populate('[participantsList]');
+        res.status(200).json({ data: meetings });
     });
 });
 
@@ -96,8 +97,8 @@ router.patch("/:id", authenticateRequest, (req, res) => {
                 update = { ...update, participantsList: req.body.participantsList }
             }
 
-            let updatedMeeting = await meetingModel.findOneAndUpdate(
-                { _id: req.body._id },
+            const updatedMeeting = await meetingModel.findOneAndUpdate(
+                { _id: req.params.id },
                 update,
                 {
                     new: true,

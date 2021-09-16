@@ -12,7 +12,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"user_id\", jsonData._id);"
 						],
 						"type": "text/javascript"
 					}
@@ -370,7 +371,7 @@
 							"type": "text"
 						},
 						{
-							"key": "participantsList",
+							"key": "participantsList[]",
 							"value": "{{user_id}}",
 							"type": "text"
 						}
@@ -416,13 +417,7 @@
 				],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "_id",
-							"value": "{{meeting_id}}",
-							"type": "text"
-						}
-					]
+					"urlencoded": []
 				},
 				"url": {
 					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
@@ -501,11 +496,6 @@
 						{
 							"key": "meetingName",
 							"value": "Hejhopp",
-							"type": "text"
-						},
-						{
-							"key": "_id",
-							"value": "{{meeting_id}}",
 							"type": "text"
 						}
 					]
