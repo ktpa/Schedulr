@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const userModel = require("../models/users");
+const blockedTimeModel = require("../models/blocked_times");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -91,6 +92,45 @@ router.delete("/", authenticateRequest, (req, res) => {
       res.status(200).json(response);
     });
   });
+});
+
+router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user) {
+      res.status(403);
+    }
+    
+    const newBlockedTime = new blockedTimeModel({
+      blockedTime: req.body.blockedTime,
+      user: user._id
+    });
+
+    newBlockedTime.save().then((doc) => res.status(200).json(doc));
+
+  });
+
+});
+
+router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then(async (user) => {
+    if (!user) {
+      res.status(403);
+    }
+  
+    
+    const deletedTime = await blockedTimeModel.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedTime);
+  
+  });
+
 });
 
 module.exports = router;
