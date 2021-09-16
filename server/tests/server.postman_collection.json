@@ -58,14 +58,14 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:{{port}}/api/user/signup",
+					"raw": "localhost:{{port}}/api/users/signup",
 					"host": [
 						"localhost"
 					],
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"signup"
 					]
 				}
@@ -236,7 +236,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:{{port}}/api/user/profile",
+					"raw": "http://localhost:{{port}}/api/users/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -244,7 +244,7 @@
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"profile"
 					]
 				}
@@ -290,7 +290,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://localhost:{{port}}/api/user/profile",
+					"raw": "http://localhost:{{port}}/api/users/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -298,43 +298,8 @@
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"profile"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Delete User",
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{token}}",
-						"type": "text"
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:{{port}}/api/user/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "{{port}}",
-					"path": [
-						"api",
-						"user",
-						""
 					]
 				}
 			},
@@ -477,6 +442,9 @@
 		},
 		{
 			"name": "Meetings",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"method": "GET",
 				"header": [
@@ -491,6 +459,57 @@
 						"type": "text"
 					}
 				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Meeting",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "meetingName",
+							"value": "Hejhopp",
+							"type": "text"
+						},
+						{
+							"key": "_id",
+							"value": "{{meeting_id}}",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
 					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
 					"protocol": "http",
@@ -544,6 +563,41 @@
 						"api",
 						"meetings",
 						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						""
 					]
 				}
 			},
