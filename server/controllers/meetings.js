@@ -12,7 +12,6 @@ router.get("/", authenticateRequest, (req, res) => {
         if (!user) {
             res.status(403);
         }
-        console.log(user._id)
         const meetings = await meetingModel.find({createdBy: user._id}, function (err, meetings) {
             if (err) { return next(err); }
             if (meetings === null) {
@@ -23,7 +22,7 @@ router.get("/", authenticateRequest, (req, res) => {
     });
 });
 
-router.post("/", authenticateRequest, async (req, res) => {
+router.post("/", authenticateRequest, (req, res) => {
     if (!req.token) {
         res.status(401);
     }
@@ -42,7 +41,8 @@ router.post("/", authenticateRequest, async (req, res) => {
                 meetingName: req.body.meetingName,
                 participantsList: req.body.participantsList
             });
-            newMeeting.save().then((doc) => res.status(200).json(doc));
+            newMeeting.save().then(doc => res.status(200).json(doc), (err) => res.status(400).json(err));
+            //newMeeting.save().then((doc) => res.status(200).json(doc));
         } catch (err) {
             res.status(500).json(err);
         }
