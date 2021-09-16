@@ -71,10 +71,7 @@ const model = {
     token.client = {
       id: client.clientId,
     };
-
     token.user = user._id;
-    console.log(token.user);
-
     var tokenInstance = new tokenModel(token);
     tokenInstance.save(
       function (callback, err, token) {
