@@ -103,16 +103,23 @@ router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    
-    const newBlockedTime = new blockedTimeModel({
-      blockedTime: req.body.blockedTime,
-      user: user._id
-    });
+    let timeArray = [];
+    req.body.blockedTime.map((time) => {
+      timeArray.push({
+        blockedTime: time,
+        user: user._id
+      })
+    })
 
-    newBlockedTime.save().then((doc) => res.status(200).json(doc));
+    blockedTimeModel.insertMany(timeArray, (err, docs) => {
+      if(err) {
+        res.status(500).json(err);
+      }
+      res.status(200).json(docs);
+    })
 
+    //newBlockedTime.save().then((doc) => res.status(200).json(doc));
   });
-
 });
 
 router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
@@ -125,12 +132,10 @@ router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
       res.status(403);
     }
   
-    
     const deletedTime = await blockedTimeModel.findByIdAndDelete(req.params.id);
     res.status(200).json(deletedTime);
   
   });
-
 });
 
 module.exports = router;

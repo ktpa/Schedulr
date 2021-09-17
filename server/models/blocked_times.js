@@ -11,4 +11,9 @@ const blockedTimeSchema = new Schema({
     }
 });
 
+blockedTimeSchema.index({
+    user: 1,
+    blockedTime: 1
+}, {unique: true})
+
 module.exports = mongoose.model("BlockedTimes", blockedTimeSchema);
