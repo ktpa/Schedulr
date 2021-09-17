@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const clientModel = require("../models/oauth_client");
+const clientModel = require("../models/oauth_clients");
 
 router.post("/client", function (req, res) {
  const client = new clientModel({

@@ -6,9 +6,10 @@ var cors = require("cors");
 var history = require("connect-history-api-fallback");
 
 //Routes
-const authRoute = require("./controllers/auth");
-const userRoute = require("./controllers/user");
-const devRoute = require("./controllers/dev")
+const authRoutes = require("./controllers/auth");
+const usersRoutes = require("./controllers/users");
+const devRoutes = require("./controllers/dev");
+const meetingsRoutes = require("./controllers/meetings");
 
 // Variables
 var mongoURI =
@@ -41,9 +42,10 @@ app.options("*", cors());
 app.use(cors());
 
 // Import routes
-app.use("/api/auth", authRoute.router);
-app.use("/api/user", userRoute);
-app.use("/api/dev", devRoute)
+app.use("/api/auth", authRoutes.router);
+app.use("/api/users", usersRoutes);
+app.use("/api/dev", devRoutes);
+app.use("/api/meetings", meetingsRoutes);
 
  app.get('/api', function(req, res) {
      res.json({'message': 'This route is used for newman-wait that runs with the npm test command.'});

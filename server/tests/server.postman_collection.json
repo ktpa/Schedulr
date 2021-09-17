@@ -12,7 +12,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"user_id\", jsonData._id);"
 						],
 						"type": "text/javascript"
 					}
@@ -58,14 +59,14 @@
 					]
 				},
 				"url": {
-					"raw": "localhost:{{port}}/api/user/signup",
+					"raw": "localhost:{{port}}/api/users/signup",
 					"host": [
 						"localhost"
 					],
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"signup"
 					]
 				}
@@ -236,7 +237,7 @@
 					]
 				},
 				"url": {
-					"raw": "http://localhost:{{port}}/api/user/profile",
+					"raw": "http://localhost:{{port}}/api/users/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -244,7 +245,7 @@
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"profile"
 					]
 				}
@@ -258,7 +259,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							""
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"user_id\", jsonData.data._id);"
 						],
 						"type": "text/javascript"
 					}
@@ -289,7 +291,7 @@
 					"urlencoded": []
 				},
 				"url": {
-					"raw": "http://localhost:{{port}}/api/user/profile",
+					"raw": "http://localhost:{{port}}/api/users/profile",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -297,8 +299,260 @@
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Meeting",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"meeting_id\", jsonData._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "createdBy",
+							"value": "{{user_id}}",
+							"type": "text"
+						},
+						{
+							"key": "firstPossibleDay",
+							"value": "2022-09-14",
+							"type": "text"
+						},
+						{
+							"key": "lastPossibleDay",
+							"value": "2022-09-14",
+							"type": "text"
+						},
+						{
+							"key": "firstPossibleHour",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "lastPossibleHour",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "meetingName",
+							"value": "My First Meeting",
+							"type": "text"
+						},
+						{
+							"key": "participantsList[]",
+							"value": "{{user_id}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Find Meeting",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Meetings",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Meeting",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "meetingName",
+							"value": "Hejhopp",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Meeting",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "_id",
+							"value": "{{meeting_id}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}"
 					]
 				}
 			},
@@ -324,7 +578,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:{{port}}/api/user/",
+					"raw": "http://localhost:{{port}}/api/users/",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -332,7 +586,7 @@
 					"port": "{{port}}",
 					"path": [
 						"api",
-						"user",
+						"users",
 						""
 					]
 				}

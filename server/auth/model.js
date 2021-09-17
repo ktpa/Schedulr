@@ -1,8 +1,8 @@
 var mongoose = require("mongoose");
 
-var client = require("../models/oauth_client"),
-  tokenModel = require("../models/access_token"),
-  userModel = require("../models/user");
+var client = require("../models/oauth_clients"),
+  tokenModel = require("../models/access_tokens"),
+  userModel = require("../models/users");
 
 const model = {
   getClient: function (clientId, clientSecret, callback) {
@@ -71,10 +71,7 @@ const model = {
     token.client = {
       id: client.clientId,
     };
-
     token.user = user._id;
-    console.log(token.user);
-
     var tokenInstance = new tokenModel(token);
     tokenInstance.save(
       function (callback, err, token) {
