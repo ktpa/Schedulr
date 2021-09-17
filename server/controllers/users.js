@@ -118,7 +118,6 @@ router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
       res.status(200).json(docs);
     })
 
-    //newBlockedTime.save().then((doc) => res.status(200).json(doc));
   });
 });
 
