@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const userModel = require("../models/users");
+const blockedTimeModel = require("../models/blocked_times");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -90,6 +91,49 @@ router.delete("/", authenticateRequest, (req, res) => {
     user.remove().then((response) => {
       res.status(200).json(response);
     });
+  });
+});
+
+router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user) {
+      res.status(403);
+    }
+    let timeArray = [];
+    req.body.blockedTime.map((time) => {
+      timeArray.push({
+        blockedTime: time,
+        user: user._id
+      })
+    })
+
+    blockedTimeModel.insertMany(timeArray, (err, docs) => {
+      if(err) {
+        res.status(500).json(err);
+      }
+      res.status(200).json(docs);
+    })
+
+  });
+});
+
+router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then(async (user) => {
+    if (!user) {
+      res.status(403);
+    }
+  
+    const deletedTime = await blockedTimeModel.findByIdAndDelete(req.params.id);
+    res.status(200).json(deletedTime);
+  
   });
 });
 

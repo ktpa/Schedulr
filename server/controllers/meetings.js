@@ -2,6 +2,8 @@ const router = require("express").Router();
 const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const meetingModel = require("../models/meetings");
+const availableTimeModel = require("../models/available_times");
+const mongoose = require("mongoose");
 
 router.get("/", authenticateRequest, (req, res) => {
     if (!req.token) {
@@ -58,15 +60,35 @@ router.get("/:id", authenticateRequest, (req, res) => {
         if (!user) {
             res.status(403);
         }
-        const meetings = await meetingModel.findOne({_id: req.params.id}, function (err, meeting) {
-            if (err) { return next(err); }
-            if (meeting === null) {
-                return res.status(404).json({ "message": "Meeting not found" });
-            };
-        }).populate('[participantsList]');
-        res.status(200).json({ data: meetings });
+        const findOneMeeting = meetingModel.aggregate([
+            { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
+          ]);
+          findOneMeeting.lookup({
+            from: "blockedtimes",
+            localField: "createdBy",
+            foreignField: "user",
+            as: "blockedTimes",
+          });
+          findOneMeeting.lookup({
+            from: "users",
+            localField: "participantsList",
+            foreignField: "_id",
+            as: "participantsList",
+          });
+          findOneMeeting.lookup({
+            from: "availabletimes",
+            localField: "_id",
+            foreignField: "meeting",
+            as: "availableTimes"
+          });
+          findOneMeeting.exec().then(
+            (meeting) => res.status(200).json(meeting),
+            (err) => res.status(500).json(err)
+          );
+          
     });
 });
+
 
 router.patch("/:id", authenticateRequest, (req, res) => {
     if (!req.token) {
@@ -133,6 +155,49 @@ router.delete("/:id", authenticateRequest, (req, res) => {
         }
     });
 });
+
+router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
+    if (!req.token) {
+      res.status(401);
+    }
+  
+    getUserFromToken(req.token).then((user) => {
+      if (!user) {
+        res.status(403);
+      }
+      let timeArray = [];
+      req.body.availableTime.map((time) => {
+        timeArray.push({
+          availableTime: time,
+          user: user._id,
+          meeting: req.params.id
+        })
+      })
+  
+      availableTimeModel.insertMany(timeArray, (err, docs) => {
+        if(err) {
+          res.status(500).json(err);
+        }
+        res.status(200).json(docs);
+      })
+    });
+  });
+  
+  router.delete("/:meetingid/availableTimes/:id", authenticateRequest, (req, res) => {
+    if (!req.token) {
+      res.status(401);
+    }
+  
+    getUserFromToken(req.token).then(async (user) => {
+      if (!user) {
+        res.status(403);
+      }
+    
+      const deletedTime = await availableTimeModel.findByIdAndDelete(req.params.id);
+      res.status(200).json(deletedTime);
+    
+    });
+  });
 
 module.exports = router;
 
