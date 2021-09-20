@@ -6,24 +6,18 @@ const blockedTimeModel = require("../models/blocked_times");
 
 router.post("/signup", async (req, res) => {
   try {
-    userModel
-      .findOne({
-        $or: [{ username: req.body.username }, { email: req.body.email }],
-      })
-      .then((user) => {
-        if (user)
-          return res
-            .status(400)
-            .json({ invalidParams: "Email or username is already in use!" });
-      });
     const newUser = new userModel({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
       name: req.body.name,
-      profilePicUrl: req.body.profilePicUrl
+      profilePicUrl: req.body.profilePicUrl,
     });
-    newUser.save().then((doc) => res.status(200).json(doc));
+    newUser.save().then(
+      (doc) => res.status(200).json(doc),
+      (err) =>
+        res.status(400).json({ error: `${Object.keys(err.keyValue)}_in_use` })
+    );
     // TODO(numank): Investigate authorizing user after signup.
   } catch (err) {
     res.status(500).json(err);
@@ -103,31 +97,34 @@ router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    if (typeof req.body.blockedTime === "string") {
-      try {
-          const newBlockedTime = new blockedTimeModel({
-            blockedTime: req.body.blockedTime,
-            user: user._id
+    try {
+      if (typeof req.body.blockedTime === "string") {
+        const newBlockedTime = new blockedTimeModel({
+          blockedTime: req.body.blockedTime,
+          user: user._id,
+        });
+        newBlockedTime.save().then(
+          (doc) => res.status(200).json(doc),
+          (err) => res.status(400).json(err)
+        );
+      } else {
+        var timeArray = [];
+        req.body.blockedTime.map((time) => {
+          timeArray.push({
+            blockedTime: time,
+            user: user._id,
           });
-          newBlockedTime.save().then(doc => res.status(200).json(doc), (err) => res.status(400).json(err));
-        } catch (err) {
-          res.status(500).json(err);
-        }
-    } else {
-    var timeArray = [];
-    req.body.blockedTime.map((time) => {
-      timeArray.push({
-        blockedTime: time,
-        user: user._id
-      })
-    })
+        });
 
-    blockedTimeModel.insertMany(timeArray, (err, docs) => {
-      if(err) {
-        res.status(500).json(err);
+        blockedTimeModel.insertMany(timeArray, (err, docs) => {
+          if (err) {
+            res.status(500).json(err);
+          }
+          res.status(200).json(docs);
+        });
       }
-        res.status(200).json(docs);
-    })
+    } catch (err) {
+      res.status(500).json(err);
     }
   });
 });
@@ -141,12 +138,12 @@ router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-  
+
     const deletedTime = await blockedTimeModel.findByIdAndDelete(req.params.id);
     if (deletedTime === null) {
-      return res.status(404).json({ "message": "Blocked time not found" });
+      return res.status(404).json({ message: "Blocked time not found" });
     }
-      res.status(200).json(deletedTime);
+    res.status(200).json(deletedTime);
   });
 });
 
