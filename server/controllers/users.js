@@ -3,8 +3,10 @@ const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const userModel = require("../models/users");
 const blockedTimeModel = require("../models/blocked_times");
+const lodash = require("lodash");
 
 router.post("/signup", async (req, res) => {
+  var publicFileds = ["_id", "username", "email", "name"];
   try {
     const newUser = new userModel({
       username: req.body.username,
@@ -14,9 +16,13 @@ router.post("/signup", async (req, res) => {
       profilePicUrl: req.body.profilePicUrl,
     });
     newUser.save().then(
-      (doc) => res.status(200).json(doc),
-      (err) =>
-        res.status(400).json({ error: `${Object.keys(err.keyValue)}_in_use` })
+      (doc) => res.status(200).json(lodash.pick(doc, publicFileds)),
+
+      (err) => {
+        const errorMessage =
+          err.code === 11000 ? `${Object.keys(err.keyValue)}_in_use` : err;
+        res.status(400).json({ error: errorMessage });
+      }
     );
     // TODO(numank): Investigate authorizing user after signup.
   } catch (err) {
