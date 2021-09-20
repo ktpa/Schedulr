@@ -35,7 +35,7 @@ router.post("/", authenticateRequest, (req, res) => {
         }
         try {
             const newMeeting = new meetingModel({
-                createdBy: req.body.createdBy,
+                createdBy: user._id,
                 firstPossibleDay: req.body.firstPossibleDay,
                 lastPossibleDay: req.body.lastPossibleDay,
                 firstPossibleHour: req.body.firstPossibleHour,
@@ -165,7 +165,19 @@ router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
       if (!user) {
         res.status(403);
       }
-      let timeArray = [];
+      if (typeof req.body.availableTime === "string") {
+      try {
+          const newAvailableTime = new availableTimeModel({
+            availableTime: req.body.availableTime,
+            user: user._id,
+            meeting: req.params.id
+          });
+          newAvailableTime.save().then(doc => res.status(200).json(doc), (err) => res.status(400).json(err));
+        } catch (err) {
+          res.status(500).json(err);
+        }
+    } else {
+      var timeArray = [];
       req.body.availableTime.map((time) => {
         timeArray.push({
           availableTime: time,
@@ -180,6 +192,7 @@ router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
         }
         res.status(200).json(docs);
       })
+    }
     });
   });
   
@@ -194,6 +207,9 @@ router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
       }
     
       const deletedTime = await availableTimeModel.findByIdAndDelete(req.params.id);
+      if (deletedTime === null) {
+        return res.status(404).json({ "message": "Available time not found" });
+      }
       res.status(200).json(deletedTime);
     
     });
