@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "002642e2-4e98-4831-936c-cc51bbd6a393",
+		"_postman_id": "e18d872e-3ff9-4c38-a37e-f57515bc3e2d",
 		"name": "Server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -12,8 +12,7 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"var jsonData = JSON.parse(responseBody);\r",
-							"postman.setGlobalVariable(\"user_id\", jsonData._id);"
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -54,7 +53,76 @@
 						{
 							"key": "profilePicUrl",
 							"value": "empty",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:{{port}}/api/users/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup New User Karl",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "karl",
+							"contentType": "text/html",
 							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "karl@email.com",
+							"contentType": "text/html",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "karl",
+							"contentType": "text/html",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "karl nilsson",
+							"type": "text"
+						},
+						{
+							"key": "profilePicUrl",
+							"value": "empty",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -127,7 +195,7 @@
 			"response": []
 		},
 		{
-			"name": "Get AccessToken / Login w password",
+			"name": "Login w password & Set Variable",
 			"event": [
 				{
 					"listen": "test",
@@ -197,7 +265,7 @@
 			"response": []
 		},
 		{
-			"name": "User Profile",
+			"name": "Update User Profile",
 			"event": [
 				{
 					"listen": "test",
@@ -253,7 +321,7 @@
 			"response": []
 		},
 		{
-			"name": "User Profile",
+			"name": "Get User Profile & Set Variable",
 			"event": [
 				{
 					"listen": "test",
@@ -307,7 +375,145 @@
 			"response": []
 		},
 		{
-			"name": "Create Meeting",
+			"name": "Create Blocked Time & Set Variable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"blockedTime_id\", jsonData._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "blockedTime",
+							"value": "2021-09-26T00:00:00.000Z",
+							"type": "text"
+						},
+						{
+							"key": "blockedTime",
+							"value": "2021-09-27T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "blockedTime",
+							"value": "2021-09-28T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}/blockedTimes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"blockedTimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Multiple Blocked Time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "blockedTime",
+							"value": "2021-09-26T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "blockedTime",
+							"value": "2021-09-27T00:00:00.000Z",
+							"type": "text"
+						},
+						{
+							"key": "blockedTime",
+							"value": "2021-09-28T00:00:00.000Z",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}/blockedTimes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"blockedTimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Meeting & Set Variable",
 			"event": [
 				{
 					"listen": "test",
@@ -347,12 +553,12 @@
 						},
 						{
 							"key": "firstPossibleDay",
-							"value": "2022-09-14",
+							"value": "2021-09-25",
 							"type": "text"
 						},
 						{
 							"key": "lastPossibleDay",
-							"value": "2022-09-14",
+							"value": "2021-09-30",
 							"type": "text"
 						},
 						{
@@ -371,8 +577,13 @@
 							"type": "text"
 						},
 						{
-							"key": "participantsList[]",
+							"key": "participantsList",
 							"value": "{{user_id}}",
+							"type": "text"
+						},
+						{
+							"key": "participantsList",
+							"value": "61484048760b3e2c08a07a39",
 							"type": "text"
 						}
 					]
@@ -388,6 +599,144 @@
 						"api",
 						"meetings",
 						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Available Time & Set Variable",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"availableTime_id\", jsonData._id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "availableTime",
+							"value": "2021-10-28T00:00:00.000Z",
+							"type": "text"
+						},
+						{
+							"key": "availableTime",
+							"value": "2021-09-29T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "availableTime",
+							"value": "2021-09-30T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}/availableTimes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}",
+						"availableTimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Multiple Available Time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "availableTime",
+							"value": "2021-10-28T00:00:00.000Z",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "availableTime",
+							"value": "2021-09-29T00:00:00.000Z",
+							"type": "text"
+						},
+						{
+							"key": "availableTime",
+							"value": "2021-09-30T00:00:00.000Z",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}/availableTimes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}",
+						"availableTimes"
 					]
 				}
 			},
@@ -417,7 +766,13 @@
 				],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": []
+					"urlencoded": [
+						{
+							"key": "_id",
+							"value": "{{meeting_id}}",
+							"type": "text"
+						}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
@@ -497,6 +852,11 @@
 							"key": "meetingName",
 							"value": "Hejhopp",
 							"type": "text"
+						},
+						{
+							"key": "_id",
+							"value": "{{meeting_id}}",
+							"type": "text"
 						}
 					]
 				},
@@ -511,6 +871,110 @@
 						"api",
 						"meetings",
 						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Blocked Time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}/blockedTimes/{{blockedTime_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"blockedTimes",
+						"{{blockedTime_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Available Time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}/availableTimes/{{availableTime_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}",
+						"availableTimes",
+						"{{availableTime_id}}"
 					]
 				}
 			},
