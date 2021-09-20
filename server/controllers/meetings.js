@@ -14,12 +14,12 @@ router.get("/", authenticateRequest, (req, res) => {
         if (!user) {
             res.status(403);
         }
-        const meetings = await meetingModel.find({createdBy: user._id}, function (err, meetings) {
+        const meetings = await meetingModel.find({participantsList: user._id}, function (err, meetings) {
             if (err) { return next(err); }
             if (meetings === null) {
                 return res.status(404).json({ "message": "Meeting not found" });
             };
-        }).populate('[participantsList]');
+        }).populate('participantsList');
         res.status(200).json({ data: meetings });
     });
 });
