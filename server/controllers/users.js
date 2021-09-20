@@ -99,11 +99,22 @@ router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
     res.status(401);
   }
 
-  getUserFromToken(req.token).then((user) => {
+  getUserFromToken(req.token).then(async (user) => {
     if (!user) {
       res.status(403);
     }
-    let timeArray = [];
+    if (typeof req.body.blockedTime === "string") {
+      try {
+          const newBlockedTime = new blockedTimeModel({
+            blockedTime: req.body.blockedTime,
+            user: user._id
+          });
+          newBlockedTime.save().then(doc => res.status(200).json(doc), (err) => res.status(400).json(err));
+        } catch (err) {
+          res.status(500).json(err);
+        }
+    } else {
+    var timeArray = [];
     req.body.blockedTime.map((time) => {
       timeArray.push({
         blockedTime: time,
@@ -115,9 +126,9 @@ router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
       if(err) {
         res.status(500).json(err);
       }
-      res.status(200).json(docs);
+        res.status(200).json(docs);
     })
-
+    }
   });
 });
 
@@ -132,8 +143,10 @@ router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
     }
   
     const deletedTime = await blockedTimeModel.findByIdAndDelete(req.params.id);
-    res.status(200).json(deletedTime);
-  
+    if (deletedTime === null) {
+      return res.status(404).json({ "message": "Blocked time not found" });
+    }
+      res.status(200).json(deletedTime);
   });
 });
 
