@@ -19,7 +19,7 @@ router.get("/", authenticateRequest, (req, res) => {
             if (meetings === null) {
                 return res.status(404).json({ "message": "Meeting not found" });
             };
-        }).populate('participantsList');
+        }).populate('participantsList', '-password');
         res.status(200).json({ data: meetings });
     });
 });
@@ -75,19 +75,22 @@ router.get("/:id", authenticateRequest, (req, res) => {
             localField: "createdBy",
             foreignField: "user",
             as: "blockedTimes",
-          });
+          }).project("-blockedTimes.user");
+          // TODO(numank): We can fetch only blocked times after now().
           findOneMeeting.lookup({
             from: "users",
             localField: "participantsList",
             foreignField: "_id",
             as: "participantsList",
-          });
+          }).project("-participantsList.password");
           findOneMeeting.lookup({
             from: "availabletimes",
             localField: "_id",
             foreignField: "meeting",
             as: "availableTimes"
-          });
+          }).project("-availableTimes.meeting");
+          // TODO(numank): We can populate users here as well.
+          // Will be useful on the front end.
           findOneMeeting.exec().then(
             (meeting) => res.status(200).json(meeting),
             (err) => res.status(500).json(err)
