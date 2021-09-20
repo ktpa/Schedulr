@@ -34,6 +34,14 @@ router.post("/", authenticateRequest, (req, res) => {
             res.status(403);
         }
         try {
+            let participants = req.body.participantsList ?? []
+            if(typeof participants === 'string'){
+              participants = participants.split()
+            }
+            if(!participants.includes(user._id)){
+              participants.push(user._id);
+            }
+
             const newMeeting = new meetingModel({
                 createdBy: user._id,
                 firstPossibleDay: req.body.firstPossibleDay,
@@ -41,7 +49,7 @@ router.post("/", authenticateRequest, (req, res) => {
                 firstPossibleHour: req.body.firstPossibleHour,
                 lastPossibleHour: req.body.lastPossibleHour,
                 meetingName: req.body.meetingName,
-                participantsList: req.body.participantsList
+                participantsList: participants,
             });
             newMeeting.save().then(doc => res.status(200).json(doc), (err) => res.status(400).json(err));
         } catch (err) {
