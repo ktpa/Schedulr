@@ -522,16 +522,15 @@
 							"var jsonData = JSON.parse(responseBody);\r",
 							"postman.setGlobalVariable(\"meeting_id\", jsonData._id);\r",
 							"\r",
-							"pm.test(\"The response has all properties\", () => {\r",
+							"pm.test(\"participantsList is valid\", () => {\r",
 							"    const responseJson = pm.response.json();\r",
 							"    const participantsList = responseJson.participantsList;\r",
+							"    // Checking the participant list array.\r",
 							"    pm.expect(responseJson.participantsList).to.be.an(\"Array\");\r",
 							"    pm.expect(participantsList.length).to.be.of.greaterThan(0);\r",
-							"    pm.expect(participantsList.length).to.be.eq.to((arr) => {\r",
-							"        return(new Set(arr).size !== array.length);\r",
-							"    });\r",
-							"\r",
-							"});"
+							"    pm.expect(participantsList.length).to.equal(new Set(participantsList).size);\r",
+							"});\r",
+							"    "
 						],
 						"type": "text/javascript"
 					}
@@ -1094,7 +1093,7 @@
 	"variable": [
 		{
 			"key": "port",
-			"value": "3001"
+			"value": "3000"
 		}
 	]
 }
