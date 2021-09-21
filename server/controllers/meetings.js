@@ -39,11 +39,9 @@ router.post("/", authenticateRequest, (req, res) => {
     }
     try {
       let participants = req.body.participantsList ?? [];
+      
       if (typeof participants === "string") {
         participants = participants.split();
-      }
-      if (!participants.includes(user._id)) {
-        participants.push(user._id);
       }
 
       const newMeeting = new meetingModel({
