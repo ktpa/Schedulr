@@ -6,7 +6,7 @@ const blockedTimeModel = require("../models/blocked_times");
 const lodash = require("lodash");
 
 router.post("/signup", async (req, res) => {
-  var publicFileds = ["_id", "username", "email", "name"];
+  var publicFields = ["_id", "username", "email", "name"];
   try {
     const newUser = new userModel({
       username: req.body.username,
@@ -16,7 +16,7 @@ router.post("/signup", async (req, res) => {
       profilePicUrl: req.body.profilePicUrl,
     });
     newUser.save().then(
-      (doc) => res.status(200).json(lodash.pick(doc, publicFileds)),
+      (doc) => res.status(200).json(lodash.pick(doc, publicFields)),
 
       (err) => {
         const errorMessage =
