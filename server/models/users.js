@@ -30,21 +30,27 @@ const userSchema = new Schema({
 // Further testing required.
 
 userSchema.pre("save", function (next) {
-  const user = this;
-
-  bcrypt.genSalt(10, function (saltError, salt) {
-    if (saltError) {
-      return next(saltError);
-    } else {
-      bcrypt.hash(user.password, salt, function (hashError, hash) {
-        if (hashError) {
-          return next(hashError);
-        }
-        user.password = hash;
-        next();
-      });
+  try {
+    const user = this;
+    if (user.password.length < 8) {
+      return next("insecure_password");
     }
-  });
+    bcrypt.genSalt(10, function (saltError, salt) {
+      if (saltError) {
+        return next(saltError);
+      } else {
+        bcrypt.hash(user.password, salt, function (hashError, hash) {
+          if (hashError) {
+            return next(hashError);
+          }
+          user.password = hash;
+          next();
+        });
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
 });
 
 userSchema.pre("findOneAndUpdate", function (next) {

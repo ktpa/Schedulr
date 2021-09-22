@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "e18d872e-3ff9-4c38-a37e-f57515bc3e2d",
-		"name": "Server",
+		"_postman_id": "f15de9c9-9625-41d9-9ca0-693df689a39d",
+		"name": "Server 3",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -41,7 +41,7 @@
 						},
 						{
 							"key": "password",
-							"value": "jens",
+							"value": "jensjens",
 							"contentType": "text/html",
 							"type": "text"
 						},
@@ -109,7 +109,7 @@
 						},
 						{
 							"key": "password",
-							"value": "karl",
+							"value": "karlkarl",
 							"contentType": "text/html",
 							"type": "text"
 						},
@@ -239,7 +239,7 @@
 						},
 						{
 							"key": "password",
-							"value": "jens",
+							"value": "jensjens",
 							"type": "text"
 						},
 						{
@@ -520,7 +520,17 @@
 					"script": {
 						"exec": [
 							"var jsonData = JSON.parse(responseBody);\r",
-							"postman.setGlobalVariable(\"meeting_id\", jsonData._id);"
+							"postman.setGlobalVariable(\"meeting_id\", jsonData._id);\r",
+							"\r",
+							"pm.test(\"participantsList is valid\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const participantsList = responseJson.participantsList;\r",
+							"    // Checking the participant list array.\r",
+							"    pm.expect(responseJson.participantsList).to.be.an(\"Array\");\r",
+							"    pm.expect(participantsList.length).to.be.of.greaterThan(0);\r",
+							"    pm.expect(participantsList.length).to.equal(new Set(participantsList).size);\r",
+							"});\r",
+							"    "
 						],
 						"type": "text/javascript"
 					}
@@ -583,7 +593,7 @@
 						},
 						{
 							"key": "participantsList",
-							"value": "61484048760b3e2c08a07a39",
+							"value": "614983fce4af4323b046ecbc",
 							"type": "text"
 						}
 					]
