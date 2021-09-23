@@ -8,17 +8,17 @@ export default new Vuex.Store({
   state: {
     status: '',
     token: localStorage.getItem('token') || '',
-    user: {}
+    userId: localStorage.getItem('userId') || ''
   },
   mutations: {
 
     auth_request(state) {
       state.status = 'loading'
     },
-    auth_success(state, token, user) {
+    auth_success(state, payload) {
       state.status = 'success'
-      state.token = token
-      state.user = user
+      state.userId = payload.userId
+      state.token = payload.token
     },
     auth_error(state) {
       state.status = 'error'
@@ -34,13 +34,18 @@ export default new Vuex.Store({
         commit('auth_request')
         authApi
           .login(user)
-          .then(resp => {
-            const token = resp.data.accessToken
-            const user = resp.data.user
+          .then(res => {
+            const token = res.data.accessToken
+            const userId = res.data.user
+            const payload = {
+              token: token,
+              userId: userId
+            }
             localStorage.setItem('token', token)
+            localStorage.setItem('userId', userId)
             axios.defaults.headers.common.Authorization = token
-            commit('auth_success', token, user)
-            resolve(resp)
+            commit('auth_success', payload)
+            resolve(res)
           })
           .catch(err => {
             commit('auth_error')
@@ -49,18 +54,25 @@ export default new Vuex.Store({
           })
       })
     },
-    register({ commit }, user) {
+    signup({ commit }, user) {
       return new Promise((resolve, reject) => {
         commit('auth_request')
         authApi
-          .signup(user)
-          .then(resp => {
-            const token = resp.data.token
-            const user = resp.data.user
+          .signup(user).then(() => {
+            return authApi.login({ username: user.username, password: user.password })
+          })
+          .then(res => {
+            const token = res.data.accessToken
+            const userId = res.data._id
+            const payload = {
+              token: token,
+              userId: userId
+            }
             localStorage.setItem('token', token)
+            localStorage.setItem('userId', userId)
             axios.defaults.headers.common.Authorization = token
-            commit('auth_success', token, user)
-            resolve(resp)
+            commit('auth_success', payload)
+            resolve(res)
           })
           .catch(err => {
             commit('auth_error', err)
@@ -80,6 +92,8 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.token,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    userId: state => state.userId,
+    token: state => state.token
   }
 })

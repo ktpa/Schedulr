@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
     if (store.getters.isLoggedIn) {
       return next()
     }
-    next('/landing')
+    next('/login')
   } else if (to.matched.some(record => record.meta.beforeAuth)) {
     if (store.getters.isLoggedIn) {
       return next('/')

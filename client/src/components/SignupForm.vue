@@ -51,7 +51,7 @@ export default {
         name: this.form.name
       }
       this.$store
-        .dispatch('register', user)
+        .dispatch('signup', user)
         .then(() => this.$router.push('/'))
         .catch(err => console.log(err))
     }
