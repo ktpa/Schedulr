@@ -5,7 +5,7 @@ const userModel = require("../models/users");
 const blockedTimeModel = require("../models/blocked_times");
 const lodash = require("lodash");
 
-router.post("/signup", async (req, res) => {
+router.post("/", async (req, res) => {
   var publicFields = ["_id", "username", "email", "name"];
   try {
     const newUser = new userModel({
@@ -30,7 +30,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-router.get("/profile", authenticateRequest, (req, res) => {
+router.get("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
   }
@@ -43,7 +43,7 @@ router.get("/profile", authenticateRequest, (req, res) => {
   });
 });
 
-router.patch("/profile", authenticateRequest, async (req, res) => {
+router.patch("/:id", authenticateRequest, async (req, res) => {
   if (!req.token) {
     res.status(401);
   }
@@ -79,7 +79,7 @@ router.patch("/profile", authenticateRequest, async (req, res) => {
   });
 });
 
-router.delete("/", authenticateRequest, (req, res) => {
+router.delete("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
   }
