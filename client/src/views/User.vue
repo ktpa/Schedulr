@@ -1,75 +1,64 @@
 <template>
   <div>
     <b-jumbotron>
-      <input
-        @input="handleInput($event.target.value)"
-        type="text"
-        v-model="name"
-        placeholder="name"
-        id="name"
+      <b-input type="text" v-model="form.name" placeholder="name" id="name" />
+      <br />
+      <b-input
+        type="email"
+        v-model="form.email"
+        placeholder="e-mail"
+        id="email"
       />
       <br />
-      <input type="email" v-model="email" placeholder="e-mail" id="email" />
-      <br />
-      <input
+      <b-input
         type="text"
-        v-model="username"
+        v-model="form.username"
         placeholder="username"
         id="username"
       />
       <br />
-      <input
+      <b-input
         type="password"
-        v-model="password"
+        v-model="form.password"
         placeholder="password"
         id="password"
       />
       <br />
-      <b-button
-        type="submit"
-        v-on:click="submitSignup(name, email, username, password)"
-        >Signup</b-button
-      >
-      <b-button type="submit" v-on:click="submitLogin(username, password)"
-        >Login</b-button
-      >
-      <p>
-        Your typed name:<br />
-        {{ nameField }}
-      </p>
+      <b-button type="submit" v-on:click="submitSignup(form)">
+        Signup
+      </b-button>
+      <b-button type="submit" v-on:click="submitLogin(form)">
+        Login
+      </b-button>
     </b-jumbotron>
   </div>
 </template>
 <script>
-// @ is an alias to /src
-import { signup, login } from '@/Api'
+import { authApi } from '@/api/auth.js'
 
 export default {
   name: 'user',
-  data() {
-    return {
-      nameField: 'none'
-    }
-  },
+  data: () => ({ form: {} }),
+
   methods: {
-    handleInput(value) {
-      this.nameField = value
-    },
-    submitSignup(name, email, username, password) {
+    submitSignup(form) {
       const user = {
-        username: username,
-        email: email,
-        password: password,
-        name: name
+        username: form.username,
+        email: form.email,
+        password: form.password,
+        name: form.name
       }
-      signup(user).then(res => (this.message = res))
+      authApi
+        .signup(user)
+        .then(res => console.log(res))
+        .catch(err => console.log(err.response.data))
     },
-    submitLogin(username, password) {
+    submitLogin(form) {
       const user = {
-        username: username,
-        password: password
+        username: form.username,
+        password: form.password
       }
-      login(user).then(res => console.log(res))
+      authApi.login(user).then(res => console.log(res))
     }
   }
 }
