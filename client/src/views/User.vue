@@ -27,8 +27,11 @@
       <br />
       <b-button
         type="submit"
-        v-on:click="submit(name, email, username, password)"
-        >Submit</b-button
+        v-on:click="submitSignup(name, email, username, password)"
+        >Signup</b-button
+      >
+      <b-button type="submit" v-on:click="submitLogin(username, password)"
+        >Login</b-button
       >
       <p>
         Your typed name:<br />
@@ -39,7 +42,7 @@
 </template>
 <script>
 // @ is an alias to /src
-import { Api } from '@/Api'
+import { signup, login } from '@/Api'
 
 export default {
   name: 'user',
@@ -52,23 +55,21 @@ export default {
     handleInput(value) {
       this.nameField = value
     },
-    submit(name, email, username, password) {
-      console.log(name)
+    submitSignup(name, email, username, password) {
       const user = {
         username: username,
         email: email,
         password: password,
         name: name
       }
-
-      Api.post('/users', user)
-        .then(response => {
-          console.log(response)
-          this.message = response.data.message
-        })
-        .catch(error => {
-          this.message = error
-        })
+      signup(user).then(res => (this.message = res))
+    },
+    submitLogin(username, password) {
+      const user = {
+        username: username,
+        password: password
+      }
+      login(user).then(res => console.log(res))
     }
   }
 }
