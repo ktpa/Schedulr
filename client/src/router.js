@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import store from './api/store'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
+import Profile from './views/Profile.vue'
 import PageNotFound from './views/PageNotFound.vue'
 
 Vue.use(Router)
@@ -23,6 +24,14 @@ const router = new Router({
       path: '/login',
       name: 'Login',
       component: Login,
+      meta: {
+        beforeAuth: true
+      }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile,
       meta: {
         beforeAuth: true
       }

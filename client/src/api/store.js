@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import axios from 'axios'
 import { authApi } from '@/api/auth.js'
+import { Api } from '@/Api.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -43,7 +43,7 @@ export default new Vuex.Store({
             }
             localStorage.setItem('token', token)
             localStorage.setItem('userId', userId)
-            axios.defaults.headers.common.Authorization = token
+            Api.defaults.headers.common.Authorization = `Bearer ${token}`
             commit('auth_success', payload)
             resolve(res)
           })
@@ -70,7 +70,7 @@ export default new Vuex.Store({
             }
             localStorage.setItem('token', token)
             localStorage.setItem('userId', userId)
-            axios.defaults.headers.common.Authorization = token
+            Api.defaults.headers.common.Authorization = `Bearer ${token}`
             commit('auth_success', payload)
             resolve(res)
           })
@@ -85,7 +85,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('logout')
         localStorage.removeItem('token')
-        delete axios.defaults.headers.common.Authorization
+        delete Api.defaults.headers.common.Authorization
         resolve()
       })
     }
