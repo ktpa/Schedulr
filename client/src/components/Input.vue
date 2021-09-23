@@ -1,17 +1,22 @@
 <template>
-    <div>
-      <b-form-group
-        id="fieldset-1"
-        description="name"
-        label="Enter your name"
-        label-for="input-1"
-        valid-feedback="Perfect!"
-        :invalid-feedback="invalidFeedback"
+  <div>
+    <b-form-group
+      id="fieldset-1"
+      description="name"
+      label="Enter your name"
+      label-for="input-1"
+      valid-feedback="Perfect!"
+      :invalid-feedback="invalidFeedback"
+      :state="state"
+    >
+      <b-form-input
+        id="input-1"
+        v-model="name"
         :state="state"
-      >
-        <b-form-input id="input-1" v-model="name" :state="state" trim></b-form-input>
-      </b-form-group>
-    </div>
+        trim
+      ></b-form-input>
+    </b-form-group>
+  </div>
 </template>
 
 <script>
@@ -23,16 +28,16 @@ export default defineComponent({
       return this.name.length >= 4
     },
     invalidFeedback() {
-      if(this.name.length > 0) {
+      if (this.name.length > 0) {
         return 'Enter at least 4 characters.'
       }
       return 'Please enter something.'
     }
   },
-    data() {
-      return {
-        name: ''
-      }
-    },
+  data() {
+    return {
+      name: ''
+    }
+  }
 })
 </script>

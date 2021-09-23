@@ -22,10 +22,8 @@
   </div>
 </template>
 <script>
-import { authApi } from '@/api/auth.js'
-
 export default {
-  name: 'login',
+  name: 'loginForm',
   data: () => ({
     form: {
       username: '',
@@ -34,25 +32,15 @@ export default {
   }),
 
   methods: {
-    submitLogin(form) {
+    submitLogin() {
       const user = {
         username: this.form.username,
         password: this.form.password
       }
-      authApi
-        .login(user)
-        .then(response => {
-          document.cookie =
-            'SESSION=' +
-            response.data.accessToken +
-            ';' +
-            response.data.accessTokenExpiresAt +
-            ';path=/'
-          this.$router.push('/')
-        })
-        .catch(error => {
-          return error
-        })
+      this.$store
+        .dispatch('login', user)
+        .then(() => this.$router.push('/'))
+        .catch(err => console.log(err))
     }
   }
 }

@@ -1,4 +1,4 @@
-a<template>
+<template>
   <div>
     <b-jumbotron>
       <b-input type="text" v-model="form.name" placeholder="name" id="name" />
@@ -31,10 +31,8 @@ a<template>
   </div>
 </template>
 <script>
-import { authApi } from '@/api/auth.js'
-
 export default {
-  name: 'user',
+  name: 'signupForm',
   data: () => ({
     form: {
       username: '',
@@ -52,10 +50,10 @@ export default {
         password: this.form.password,
         name: this.form.name
       }
-      authApi
-        .signup(user)
-        .then(res => console.log(res))
-        .catch(err => console.log(err.response.data))
+      this.$store
+        .dispatch('register', user)
+        .then(() => this.$router.push('/'))
+        .catch(err => console.log(err))
     }
   }
 }
