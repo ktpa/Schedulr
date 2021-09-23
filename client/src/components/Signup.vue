@@ -1,4 +1,4 @@
-<template>
+a<template>
   <div>
     <b-jumbotron>
       <b-input type="text" v-model="form.name" placeholder="name" id="name" />
@@ -24,11 +24,8 @@
         id="password"
       />
       <br />
-      <b-button type="submit" v-on:click="submitSignup(form)">
+      <b-button type="submit" v-on:click="submitSignup()">
         Signup
-      </b-button>
-      <b-button type="submit" v-on:click="submitLogin(form)">
-        Login
       </b-button>
     </b-jumbotron>
   </div>
@@ -38,34 +35,30 @@ import { authApi } from '@/api/auth.js'
 
 export default {
   name: 'user',
-  data: () => ({ form: {} }),
+  data: () => ({
+    form: {
+      username: '',
+      email: '',
+      password: '',
+      name: ''
+    }
+  }),
 
   methods: {
-    submitSignup(form) {
+    submitSignup() {
       const user = {
-        username: form.username,
-        email: form.email,
-        password: form.password,
-        name: form.name
+        username: this.form.username,
+        email: this.form.email,
+        password: this.form.password,
+        name: this.form.name
       }
       authApi
         .signup(user)
         .then(res => console.log(res))
         .catch(err => console.log(err.response.data))
-    },
-    submitLogin(form) {
-      const user = {
-        username: form.username,
-        password: form.password
-      }
-      authApi.login(user).then(res => console.log(res))
     }
   }
 }
 </script>
 
-<style>
-.btn_message {
-  margin-bottom: 1em;
-}
-</style>
+<style></style>

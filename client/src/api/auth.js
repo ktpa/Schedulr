@@ -15,18 +15,6 @@ export const authApi = {
       ...payload,
       grant_type: 'password'
     }
-    Api.post('/auth', qs.stringify(payload), OAUTH_CLIENT_CONFIG)
-      .then(response => {
-        document.cookie =
-          'SESSION=' +
-          response.data.accessToken +
-          ';' +
-          response.data.accessTokenExpiresAt +
-          ';path=/'
-        return response
-      })
-      .catch(error => {
-        return error
-      })
+    return Api.post('/auth', qs.stringify(payload), OAUTH_CLIENT_CONFIG)
   }
 }
