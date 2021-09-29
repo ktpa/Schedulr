@@ -1,10 +1,32 @@
 <template>
   <div class="landing">
-    <LoginForm v-if="isLogin" />
-    <SignupForm v-if="!isLogin" />
-    <b-button variant="link" @click="switchForm">
-      Click here if you would like to {{ isLogin ? 'sign up.' : 'login' }}
-    </b-button>
+    <div class="card">
+      <div class="left-section">
+        <div class="logo">
+          <h3>Schedulr</h3>
+        </div>
+
+        <LoginForm v-if="isLogin" />
+        <SignupForm v-if="!isLogin" />
+        <b-link class="switch-forms" variant="link" sm @click="switchForm">
+          Click here if you would like to {{ isLogin ? 'sign up' : 'login' }}
+        </b-link>
+      </div>
+      <div class="right-section">
+        <div class="motto">
+          <h2>Time is precious!</h2>
+          <h5 class="sub">
+            Let <i>Schedulr</i> arrange all your meetings<br />
+            and get-togethers!
+          </h5>
+        </div>
+        <img
+          class="landing-vector"
+          src="../res/images/landingVector.svg"
+          alt="landing vector"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -31,7 +53,113 @@ export default {
 <style>
 .landing {
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+}
+.card {
+  display: flex;
+  flex-direction: row !important;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 10px 10px 10px #00000030;
+  justify-content: center;
+  align-content: center;
+  height: 600px;
+  width: 1000px;
+  margin: 20px 20px 20px 20px;
+}
+.left-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+  height: 100%;
+  min-width: 40%;
+  padding: 0 50px;
+}
+.logo {
+  margin-top: 50px;
+}
+
+.right-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 60%;
+  background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-size: 100%;
+}
+@media (max-width: 768px) {
+  .card {
+    width: 80%;
+  }
+  .left-section {
+    width: 100%;
+    padding: 0 20px;
+  }
+  .right-section {
+    display: none;
+  }
+}
+
+.motto {
+  text-align: left;
+  margin-left: 50px;
+}
+.sub {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.landing-vector {
+  position: relative;
+  aspect-ratio: 16/9;
+  margin-left: -110px;
+  max-height: 340px;
+}
+
+.switch-forms {
+  display: flex;
+  align-self: center;
+  margin-bottom: 50px;
+  font-size: 12px !important;
+  text-decoration: none !important;
+  z-index: 2;
+}
+.switch-forms:hover {
+  text-decoration: none !important;
+}
+.wrapper {
+  width: 100%;
+}
+.form-input {
+  margin-bottom: 10px;
+}
+.inner-addon {
+  position: relative;
+}
+
+.inner-addon .input-icon {
+  position: absolute;
+  padding: 10px;
+  margin-top: 2px;
+  pointer-events: none;
+}
+
+.left-addon .input-icon {
+  left: 0px;
+}
+
+.left-addon input {
+  padding-left: 35px;
+}
+
+.landing-vector {
+  pointer-events: none;
 }
 </style>

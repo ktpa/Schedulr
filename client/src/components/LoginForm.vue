@@ -1,28 +1,40 @@
 <template>
-  <div>
-    <b-jumbotron>
+  <div class="wrapper">
+    <div class="inner-addon left-addon">
+      <BIconHash class="input-icon" />
       <b-input
+        class="form-input"
         type="text"
         v-model="form.username"
-        placeholder="username"
+        placeholder="Username"
         id="username"
       />
-      <br />
+    </div>
+
+    <div class="inner-addon left-addon">
+      <BIconShieldLock class="input-icon" />
       <b-input
+        class="form-input"
         type="password"
         v-model="form.password"
-        placeholder="password"
+        placeholder="Password"
         id="password"
       />
-      <br />
-      <b-button type="submit" v-on:click="submitLogin()">
-        Login
-      </b-button>
-    </b-jumbotron>
+    </div>
+
+    <b-button class="submit-login" type="submit" v-on:click="submitLogin()">
+      Login
+    </b-button>
   </div>
 </template>
 <script>
+import { BIconHash, BIconShieldLock } from 'bootstrap-vue'
+
 export default {
+  components: {
+    BIconHash,
+    BIconShieldLock
+  },
   name: 'loginForm',
   data: () => ({
     form: {
