@@ -1,37 +1,63 @@
 <template>
-  <div>
-    <b-jumbotron>
-      <b-input type="text" v-model="form.name" placeholder="name" id="name" />
-      <br />
+  <div class="wrapper">
+    <div class="inner-addon left-addon">
+      <BIconPerson class="input-icon" />
       <b-input
+        class="form-input"
+        type="text"
+        v-model="form.name"
+        placeholder="Name"
+        id="name"
+      />
+    </div>
+
+    <div class="inner-addon left-addon">
+      <BIconAt class="input-icon" />
+      <b-input
+        class="form-input"
         type="email"
         v-model="form.email"
-        placeholder="e-mail"
+        placeholder="E-mail"
         id="email"
       />
-      <br />
+    </div>
+
+    <div class="inner-addon left-addon">
+      <BIconHash class="input-icon" />
       <b-input
+        class="form-input"
         type="text"
         v-model="form.username"
-        placeholder="username"
+        placeholder="Username"
         id="username"
       />
-      <br />
+    </div>
+
+    <div class="inner-addon left-addon">
+      <BIconShieldLock class="input-icon" />
       <b-input
+        class="form-input"
         type="password"
         v-model="form.password"
-        placeholder="password"
+        placeholder="Password"
         id="password"
       />
-      <br />
-      <b-button type="submit" v-on:click="submitSignup()">
-        Signup
-      </b-button>
-    </b-jumbotron>
+    </div>
+
+    <b-button class="submit-signup" type="submit" v-on:click="submitSignup()">
+      Signup
+    </b-button>
   </div>
 </template>
 <script>
+import { BIconAt, BIconShieldLock, BIconHash, BIconPerson } from 'bootstrap-vue'
 export default {
+  components: {
+    BIconHash,
+    BIconShieldLock,
+    BIconAt,
+    BIconPerson
+  },
   name: 'signupForm',
   data: () => ({
     form: {
