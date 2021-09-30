@@ -110,6 +110,10 @@ export default {
   .right-section {
     display: none;
   }
+  .logo {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .motto {
