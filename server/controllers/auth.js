@@ -9,7 +9,7 @@ var OAuth2Server = require("oauth2-server"),
 
 app.auth = new OAuth2Server({
   model: require("../auth/model"),
-  accessTokenLifetime: 60 * 60,
+  accessTokenLifetime: 60 * 60 * 24 * 30,
   allowBearerTokensInQueryString: true,
 });
 
