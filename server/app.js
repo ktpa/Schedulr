@@ -4,6 +4,7 @@ var morgan = require("morgan");
 var path = require("path");
 var cors = require("cors");
 var history = require("connect-history-api-fallback");
+var initDefClient = require("./auth/initDefaultClient");
 
 //Routes
 const authRoutes = require("./controllers/auth");
@@ -81,6 +82,7 @@ app.listen(port, function (err) {
   console.log(`Express server listening on port ${port}, in ${env} mode`);
   console.log(`Backend: http://localhost:${port}/api/`);
   console.log(`Frontend (production): http://localhost:${port}/`);
+  initDefClient()
 });
 
 module.exports = app;
