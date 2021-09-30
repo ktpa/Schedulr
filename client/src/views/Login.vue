@@ -3,7 +3,7 @@
     <div class="card">
       <div class="left-section">
         <div class="logo">
-          <h3>Schedulr</h3>
+          <img src="../res/images/logo.png" alt="logo" class="login-logo" />
         </div>
 
         <LoginForm v-if="isLogin" />
@@ -59,6 +59,9 @@ export default {
 
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
 }
+.login-logo {
+  height: 50px;
+}
 .card {
   display: flex;
   flex-direction: row !important;
@@ -81,7 +84,9 @@ export default {
   padding: 0 50px;
 }
 .logo {
+  display: flex;
   margin-top: 50px;
+  align-content: flex-start;
 }
 
 .right-section {
