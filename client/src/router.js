@@ -33,7 +33,7 @@ const router = new Router({
       name: 'Profile',
       component: Profile,
       meta: {
-        beforeAuth: true
+        requiresAuth: true
       }
     },
     { path: '/:pathMatch(.*)*', component: PageNotFound }
