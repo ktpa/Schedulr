@@ -2,13 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { authApi } from '@/api/auth.js'
 import { Api } from '@/Api.js'
-Vue.use(Vuex)
+import cookie from 'vue-cookies'
 
+Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     status: '',
-    token: localStorage.getItem('token') || '',
-    userId: localStorage.getItem('userId') || ''
+    token: cookie.get('token') || '',
+    userId: cookie.get('userId') || ''
   },
   mutations: {
 
@@ -41,15 +42,16 @@ export default new Vuex.Store({
               token: token,
               userId: userId
             }
-            localStorage.setItem('token', token)
-            localStorage.setItem('userId', userId)
+            Vue.$cookies.set('token', token)
+            Vue.$cookies.set('userId', userId)
             Api.defaults.headers.common.Authorization = `Bearer ${token}`
             commit('auth_success', payload)
             resolve(res)
           })
           .catch(err => {
             commit('auth_error')
-            localStorage.removeItem('token')
+            Vue.$cookies.remove('token')
+            Vue.$cookies.remove('userId')
             reject(err)
           })
       })
@@ -68,15 +70,16 @@ export default new Vuex.Store({
               token: token,
               userId: userId
             }
-            localStorage.setItem('token', token)
-            localStorage.setItem('userId', userId)
+            Vue.$cookies.set('token', token)
+            Vue.$cookies.set('userId', userId)
             Api.defaults.headers.common.Authorization = `Bearer ${token}`
             commit('auth_success', payload)
             resolve(res)
           })
           .catch(err => {
             commit('auth_error', err)
-            localStorage.removeItem('token')
+            Vue.$cookies.remove('token')
+            Vue.$cookies.remove('userId')
             reject(err)
           })
       })
@@ -84,7 +87,8 @@ export default new Vuex.Store({
     logout({ commit }) {
       return new Promise((resolve, reject) => {
         commit('logout')
-        localStorage.removeItem('token')
+        Vue.$cookies.remove('token')
+        Vue.$cookies.remove('userId')
         delete Api.defaults.headers.common.Authorization
         resolve()
       })
