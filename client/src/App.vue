@@ -1,14 +1,20 @@
 <template>
   <div id="app">
-    <!-- Render the content of the current page view -->
+    <Header v-if="isLoggedIn()" />
     <router-view />
     <Footer />
   </div>
 </template>
 <script>
+import Header from './components/Header'
 import Footer from './components/Footer.vue'
 export default {
-  components: { Footer }
+  components: { Header, Footer },
+  methods: {
+    isLoggedIn() {
+      return this.$store.getters.isLoggedIn
+    }
+  }
 }
 </script>
 <style>
