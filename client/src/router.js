@@ -42,7 +42,7 @@ const router = new Router({
       name: 'Create Meeting',
       component: CreateMeeting,
       meta: {
-        beforeAuth: true
+        requiresAuth: true
       }
     },
     { path: '/:pathMatch(.*)*', component: PageNotFound }
