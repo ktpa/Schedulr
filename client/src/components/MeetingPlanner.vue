@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!this.hoursToggle">
       <h2>Meeting date range</h2>
       <DatePicker
         v-model="range"
@@ -8,6 +8,8 @@
         :drag-attribute="selectDragAttribute"
         is-range
         @drag="dragValue = $event"
+        :first-day-of-week="2"
+        show-iso-weeknumbers
       >
         <template v-slot:day-popover="{ format }">
           <div>
@@ -18,8 +20,11 @@
         </template>
       </DatePicker>
     </div>
+    <div v-else>
+      <h2>Hours</h2>
+    </div>
     <div>
-      <b-button>Hours</b-button>
+      <b-button v-on:click="changeActiveScreen">Next</b-button>
     </div>
   </div>
 </template>
@@ -34,9 +39,10 @@ export default {
   },
   data() {
     return {
+      hoursToggle: false,
       range: {
         start: Date.now(),
-        end: Date.now() + 3
+        end: new Date(Date.now() + 5)
       },
       modelConfig: {
         start: {
@@ -48,12 +54,18 @@ export default {
       }
     }
   },
+  methods: {
+    changeActiveScreen() {
+      if (!this.hoursToggle) this.hoursToggle = true
+      else this.hoursToggle = false
+    }
+  },
   computed: {
     selectDragAttribute() {
       return {
         popover: {
           visibility: 'hover',
-          isInteractive: false // Defaults to true when using slot
+          isInteractive: false
         }
       }
     }
