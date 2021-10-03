@@ -586,16 +586,6 @@
 							"key": "meetingName",
 							"value": "My First Meeting",
 							"type": "text"
-						},
-						{
-							"key": "participantsList",
-							"value": "{{user_id}}",
-							"type": "text"
-						},
-						{
-							"key": "participantsList",
-							"value": "614983fce4af4323b046ecbc",
-							"type": "text"
 						}
 					]
 				},
