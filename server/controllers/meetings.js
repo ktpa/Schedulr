@@ -38,12 +38,6 @@ router.post("/", authenticateRequest, (req, res) => {
       res.status(403);
     }
     try {
-      let participants = req.body.participantsList ?? [];
-      
-      if (typeof participants === "string") {
-        participants = participants.split();
-      }
-
       const newMeeting = new meetingModel({
         createdBy: user._id,
         firstPossibleDay: req.body.firstPossibleDay,
@@ -51,7 +45,7 @@ router.post("/", authenticateRequest, (req, res) => {
         firstPossibleHour: req.body.firstPossibleHour,
         lastPossibleHour: req.body.lastPossibleHour,
         meetingName: req.body.meetingName,
-        participantsList: participants,
+        participantsList: user._id,
       });
       newMeeting.save().then(
         (doc) => res.status(200).json(doc),
@@ -72,40 +66,45 @@ router.get("/:id", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    const findOneMeeting = meetingModel.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
-    ]);
-    findOneMeeting
-      .lookup({
-        from: "blockedtimes",
-        localField: "createdBy",
-        foreignField: "user",
-        as: "blockedTimes",
-      })
-      .project("-blockedTimes.user");
-    // TODO(numank): We can fetch only blocked times after now().
-    findOneMeeting
-      .lookup({
-        from: "users",
-        localField: "participantsList",
-        foreignField: "_id",
-        as: "participantsList",
-      })
-      .project("-participantsList.password");
-    findOneMeeting
-      .lookup({
-        from: "availabletimes",
-        localField: "_id",
-        foreignField: "meeting",
-        as: "availableTimes",
-      })
-      .project("-availableTimes.meeting");
-    // TODO(numank): We can populate users here as well.
-    // Will be useful on the front end.
-    findOneMeeting.exec().then(
-      (meeting) => res.status(200).json(meeting),
-      (err) => res.status(500).json(err)
-    );
+
+    try {
+      const findOneMeeting = meetingModel.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
+      ]);
+      findOneMeeting
+        .lookup({
+          from: "blockedtimes",
+          localField: "createdBy",
+          foreignField: "user",
+          as: "blockedTimes",
+        })
+        .project("-blockedTimes.user");
+      // TODO(numank): We can fetch only blocked times after now().
+      findOneMeeting
+        .lookup({
+          from: "users",
+          localField: "participantsList",
+          foreignField: "_id",
+          as: "participantsList",
+        })
+        .project("-participantsList.password");
+      findOneMeeting
+        .lookup({
+          from: "availabletimes",
+          localField: "_id",
+          foreignField: "meeting",
+          as: "availableTimes",
+        })
+        .project("-availableTimes.meeting");
+      // TODO(numank): We can populate users here as well.
+      // Will be useful on the front end.
+      findOneMeeting.exec().then(
+        (meeting) => res.status(200).json(meeting),
+        (err) => res.status(500).json(err)
+      );
+    } catch (err) {
+      res.status(500).json(err);
+    }
   });
 });
 
