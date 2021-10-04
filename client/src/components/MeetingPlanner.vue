@@ -40,8 +40,6 @@ export default {
   },
   data() {
     return {
-      start: '',
-      end: '',
       hoursToggle: false,
       range: {
         start: Date.now(),
@@ -61,16 +59,11 @@ export default {
     changeActiveScreen() {
       if (!this.hoursToggle) {
         this.hoursToggle = true
-        this.registerDates(this.start, this.end)
+        this.registerDates()
       } else this.hoursToggle = false
     },
-    registerDates(date1, date2) {
-      console.log(
-        'This is where we register dates, date1: ' +
-          date1 +
-          ' . date2: ' +
-          date2
-      )
+    registerDates() {
+      console.log(this.range.start)
     }
   },
   computed: {
