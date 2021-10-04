@@ -57,6 +57,9 @@ userSchema.pre("findOneAndUpdate", function (next) {
   const query = this;
   const update = query.getUpdate();
   if (update.password) {
+    if (update.password.length < 8) {
+      return next("insecure_password");
+    }
     bcrypt.genSalt(10, function (saltError, salt) {
       if (saltError) {
         return next(saltError);

@@ -43,6 +43,38 @@ router.get("/:id", authenticateRequest, (req, res) => {
   });
 });
 
+router.put("/:id", authenticateRequest, async (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then(async (user) => {
+    if (!user) {
+      res.status(403);
+    }
+    try {
+      const replacement = {
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password,
+        name: req.body.name,
+        profilePicUrl: req.body.profilePicUrl
+      }
+      let updatedUser = await userModel.findOneAndUpdate(
+        { _id: user.id },
+        replacement,
+        {
+          new: true,
+          useFindAndModify: false,
+        }
+      );
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+});
+
 router.patch("/:id", authenticateRequest, async (req, res) => {
   if (!req.token) {
     res.status(401);
