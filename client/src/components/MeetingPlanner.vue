@@ -3,6 +3,7 @@
     <div v-if="!this.hoursToggle">
       <h2>Meeting date range</h2>
       <DatePicker
+        data-date-picker="deactivated"
         v-model="range"
         :select-attribute="selectDragAttribute"
         :drag-attribute="selectDragAttribute"
@@ -39,6 +40,8 @@ export default {
   },
   data() {
     return {
+      start: '',
+      end: '',
       hoursToggle: false,
       range: {
         start: Date.now(),
@@ -56,8 +59,18 @@ export default {
   },
   methods: {
     changeActiveScreen() {
-      if (!this.hoursToggle) this.hoursToggle = true
-      else this.hoursToggle = false
+      if (!this.hoursToggle) {
+        this.hoursToggle = true
+        this.registerDates(this.start, this.end)
+      } else this.hoursToggle = false
+    },
+    registerDates(date1, date2) {
+      console.log(
+        'This is where we register dates, date1: ' +
+          date1 +
+          ' . date2: ' +
+          date2
+      )
     }
   },
   computed: {
