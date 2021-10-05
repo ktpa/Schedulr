@@ -60,12 +60,13 @@ router.put("/:id", authenticateRequest, async (req, res) => {
         name: req.body.name,
         profilePicUrl: req.body.profilePicUrl
       }
-      let updatedUser = await userModel.findOneAndUpdate(
+      let updatedUser = await userModel.findOneAndReplace(
         { _id: user.id },
         replacement,
         {
           new: true,
           useFindAndModify: false,
+          context: 'query'
         }
       );
       res.status(200).json(updatedUser);

@@ -1,13 +1,12 @@
 <template>
   <div class="profile">
+  <h1>Welcome {{this.currName}}</h1>
     <div class="update_profile">
       <b-button v-if="disabled" @click="activateProfile">Update Profile</b-button>
     </div>
 
-    <b-form @submit.prevent="onUpdateProfile">
+    <b-form ref="form" @submit="onUpdateProfile">
     <div class="profile-details">
-    <p>{{this.$store.getters.userId}}</p>
-    <p>{{this.user}}</p>
       <p v-if="errors.length">
     <b>Please correct the following error(s):</b>
     <b-list-group>
@@ -64,6 +63,7 @@ export default {
         password: '',
         profilePicUrl: ''
       },
+      currName: '',
       disabled: true,
       errors: []
     }
@@ -78,55 +78,44 @@ export default {
         this.user.email = userRes.email
         this.user.password = userRes.password
         this.user.profilePicUrl = userRes.profilePicUrl
+        this.currName = userRes.name
       })
       .catch(err => {
         console.log(err)
       })
   },
   methods: {
+    getProfile() {
+      userApi.getProfile(this.$store.getters.userId)
+        .then(res => {
+          const userRes = res.data.data
+          this.user.name = userRes.name
+          this.user.username = userRes.username
+          this.user.email = userRes.email
+          this.user.password = userRes.password
+          this.user.profilePicUrl = userRes.profilePicUrl
+          this.currName = userRes.name
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
     activateProfile() {
       this.disabled = !this.disabled
     },
     onUpdateProfile() {
       if (!this.checkForm()) {
-        console.log('didnt work')
         return
       }
       this.disabled = !this.disabled
-      console.log(this.user.name)
-      console.log(this.user.password)
-      console.log(this.user)
       userApi.putProfile(this.$store.getters.userId, this.user)
+      this.getProfile()
       alert('Your profile has been updated')
-      userApi
-        .getProfile(this.$store.getters.userId)
-        .then(res => {
-          const userRes = res.data.data
-          this.user.name = userRes.name
-          this.user.username = userRes.username
-          this.user.email = userRes.email
-          this.user.password = userRes.password
-          this.user.profilePicUrl = userRes.profilePicUrl
-        })
-        .catch(err => {
-          console.log(err)
-        })
     },
     onCancel() {
       this.disabled = !this.disabled
-      userApi
-        .getProfile(this.$store.getters.userId)
-        .then(res => {
-          const userRes = res.data.data
-          this.user.name = userRes.name
-          this.user.username = userRes.username
-          this.user.email = userRes.email
-          this.user.password = userRes.password
-          this.user.profilePicUrl = userRes.profilePicUrl
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      this.errors = []
+      this.getProfile()
     },
     checkForm() {
       this.errors = []
