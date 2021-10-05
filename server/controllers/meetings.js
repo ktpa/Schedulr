@@ -108,7 +108,7 @@ router.get("/:id", authenticateRequest, (req, res) => {
   });
 });
 
-router.patch("/:id", authenticateRequest, (req, res) => {
+router.put("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
   }

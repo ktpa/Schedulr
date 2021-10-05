@@ -833,7 +833,7 @@
 		{
 			"name": "Update Meeting",
 			"request": {
-				"method": "PATCH",
+				"method": "PUT",
 				"header": [
 					{
 						"key": "Authorization",
