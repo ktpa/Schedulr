@@ -3,6 +3,7 @@ const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const meetingModel = require("../models/meetings");
 const availableTimeModel = require("../models/available_times");
+const lodash = require("lodash");
 const mongoose = require("mongoose");
 
 router.get("/", authenticateRequest, (req, res) => {
@@ -246,6 +247,52 @@ router.delete(
       } catch (err) {
         res.status(500).json(err);
       }
+    });
+  }
+);
+
+router.patch(
+  "/:meetingid/users/:userid",
+  authenticateRequest,
+  async (req, res) => {
+    if (!req.token) {
+      res.status(401);
+    }
+
+    getUserFromToken(req.token).then(async (user) => {
+      if (!user) {
+        res.status(403);
+      }
+
+      await meetingModel.findById(req.params.meetingid).then((meeting) => {
+        if (!meeting) {
+          res.status(404).json("meeting_not_found");
+        }
+        if (lodash.some(meeting.participantsList, { _id: user._id })) {
+          const index = lodash.findIndex(meeting.participantsList, {
+            _id: user._id,
+          });
+          meeting.participantsList.splice(index, 1);
+          meeting.save().then(
+            (newMeeting) =>
+              res.status(200).json({
+                ...newMeeting._doc,
+                updateMessage: "user_has_been_removed",
+              }),
+            (err) => res.status(500).json(err)
+          );
+        } else {
+          meeting.participantsList = [...meeting.participantsList, user._id];
+          meeting.save().then(
+            (newMeeting) =>
+              res.status(200).json({
+                ...newMeeting._doc,
+                updateMessage: "user_has_been_added",
+              }),
+            (err) => res.status(500).json(err)
+          );
+        }
+      });
     });
   }
 );
