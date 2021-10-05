@@ -1,53 +1,62 @@
 <template>
   <div class="profile">
-  <h1>Welcome {{this.currName}}</h1>
+    <h1>Welcome {{ this.currName }}</h1>
     <div class="update_profile">
-      <b-button v-if="disabled" @click="activateProfile">Update Profile</b-button>
+      <b-button v-if="disabled" @click="activateProfile"
+        >Update Profile</b-button
+      >
     </div>
 
     <b-form ref="form" @submit="onUpdateProfile">
-    <div class="profile-details">
-      <p v-if="errors.length">
-    <b>Please correct the following error(s):</b>
-    <b-list-group>
-      <b-list-group-item v-for="error in errors" :key="error">{{ error }}</b-list-group-item>
-    </b-list-group>
-  </p>
-      <br />
+      <div class="profile-details">
+        <p v-if="errors.length">
+          <b>Please correct the following error(s):</b>
+          <b-list-group>
+            <b-list-group-item v-for="error in errors" :key="error">{{
+              error
+            }}</b-list-group-item>
+          </b-list-group>
+        </p>
+        <br />
         <b-input
-        type="text"
-        v-model="user.username" :disabled=true
-        placeholder="username"
-        id="username"
-      />
-      <br />
-      <b-input
-        type="email"
-        v-model="user.email" :disabled=true
-        placeholder="e-mail"
-        id="email"
-      />
-      <br />
+          type="text"
+          v-model="user.username"
+          :disabled="true"
+          placeholder="username"
+          id="username"
+        />
+        <br />
         <b-input
-        type="text"
-        v-model="user.name" :disabled="disabled"
-        placeholder="name"
-        id="name"
-      />
-      <br />
-      <b-input
-        type="password"
-        v-model="user.password" :disabled="disabled"
-        placeholder="password"
-        id="password"
-      />
-    </div>
-        <div>
-    <b-button v-if="!disabled" v-on:click="onCancel">Cancel</b-button>
-    <b-button v-if="!disabled" v-on:click="onUpdateProfile">Save Changes</b-button>
-    </div>
-  </b-form>
-
+          type="email"
+          v-model="user.email"
+          :disabled="true"
+          placeholder="e-mail"
+          id="email"
+        />
+        <br />
+        <b-input
+          type="text"
+          v-model="user.name"
+          :disabled="disabled"
+          placeholder="name"
+          id="name"
+        />
+        <br />
+        <b-input
+          type="password"
+          v-model="user.password"
+          :disabled="disabled"
+          placeholder="password"
+          id="password"
+        />
+      </div>
+      <div>
+        <b-button v-if="!disabled" v-on:click="onCancel">Cancel</b-button>
+        <b-button v-if="!disabled" v-on:click="onUpdateProfile"
+          >Save Changes</b-button
+        >
+      </div>
+    </b-form>
   </div>
 </template>
 <script>
@@ -86,13 +95,14 @@ export default {
   },
   methods: {
     getProfile() {
-      userApi.getProfile(this.$store.getters.userId)
+      userApi
+        .getProfile(this.$store.getters.userId)
         .then(res => {
           const userRes = res.data.data
           this.user.name = userRes.name
           this.user.username = userRes.username
           this.user.email = userRes.email
-          this.user.password = userRes.password
+          this.user.password = '******'
           this.user.profilePicUrl = userRes.profilePicUrl
           this.currName = userRes.name
         })
@@ -108,8 +118,17 @@ export default {
         return
       }
       this.disabled = !this.disabled
-      userApi.putProfile(this.$store.getters.userId, this.user)
-      this.getProfile()
+      userApi
+        .updateProfile(this.$store.getters.userId, {
+          name: this.user.name,
+          password: this.user.password
+        })
+        .then(updatedProfile => {
+          console.log(updatedProfile.data.name)
+          console.log(updatedProfile.data.password)
+          this.user.name = updatedProfile.data.name
+          this.user.password = '******'
+        })
       alert('Your profile has been updated')
     },
     onCancel() {
