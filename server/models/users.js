@@ -57,6 +57,9 @@ userSchema.pre("findOneAndUpdate", function (next) {
   const query = this;
   const update = query.getUpdate();
   if (update.password) {
+    if (update.password.length < 8) {
+      return next("insecure_password");
+    }
     bcrypt.genSalt(10, function (saltError, salt) {
       if (saltError) {
         return next(saltError);
@@ -65,7 +68,13 @@ userSchema.pre("findOneAndUpdate", function (next) {
           if (hashError) {
             return next(hashError);
           }
-          query.setUpdate({ $set: { password: hash } });
+          query.setUpdate({
+            $set: {
+              password: hash,
+              name: update.name,
+              profilePicUrl: update.profilePicUrl,
+            },
+          });
           next();
         });
       }
