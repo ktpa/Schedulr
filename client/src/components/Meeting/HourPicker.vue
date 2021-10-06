@@ -1,6 +1,7 @@
 <template>
   <div class="hour-picker">
     <span>{{ this.day }}</span>
+    <span>{{ this.slotList }}</span>
     <TimeSlot
       v-for="slot in slotList"
       :key="slot.time"
@@ -17,7 +18,7 @@
 import TimeSlot from './TimeSlot.vue'
 import lodash from 'lodash'
 export default {
-  /* slotList: [{time, active, blocked, numOfAvailable}] */
+  /* hoursList: [{time, active, blocked, numOfAvailable}] */
   props: ['day', 'hoursList', 'onChange'],
   components: {
     TimeSlot
