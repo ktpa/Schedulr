@@ -8,6 +8,7 @@
         isBlocked ? 'blocked' : isSelected ? 'available' : 'idle',
         'time-slot-button'
       ]"
+      @click="statusChange()"
     >
       <span>{{ this.num }}</span>
     </div>
@@ -16,7 +17,7 @@
 
 <script>
 export default {
-  props: ['day', 'time', 'active', 'blocked', 'numOfVotes'],
+  props: ['day', 'time', 'active', 'blocked', 'numOfVotes', 'onChange'],
   data() {
     return {
       selectedDay: this.day,
@@ -24,6 +25,20 @@ export default {
       isSelected: this.active,
       isBlocked: this.blocked,
       num: this.numOfVotes
+    }
+  },
+  methods: {
+    statusChange() {
+      if (!this.isBlocked) {
+        this.isSelected = !this.isSelected
+        // NOTE(numank): This is callback, will be defined and passed to this component
+        // from the parent component!
+        this.onChange({
+          day: this.selectedDay,
+          time: this.timePeriod,
+          status: this.isSelected
+        })
+      }
     }
   }
 }
