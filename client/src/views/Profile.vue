@@ -3,8 +3,7 @@
     <h1>Welcome {{ this.currName }}</h1>
     <div class="update_profile">
       <b-button v-if="disabled" @click="activateProfile"
-        >Update Profile</b-button
-      >
+        >Update Profile</b-button>
     </div>
 
     <b-form ref="form" @submit="onUpdateProfile">
@@ -17,7 +16,7 @@
             }}</b-list-group-item>
           </b-list-group>
         </p>
-        <br />
+        <br/>
         <b-input
           type="text"
           v-model="user.username"
@@ -50,11 +49,9 @@
           id="password"
         />
       </div>
-      <div>
-        <b-button v-if="!disabled" v-on:click="onCancel">Cancel</b-button>
-        <b-button v-if="!disabled" v-on:click="onUpdateProfile"
-          >Save Changes</b-button
-        >
+      <div class="form_buttons">
+        <b-button class="form_button1" v-if="!disabled" variant="danger" v-on:click="onCancel">Cancel</b-button>
+        <b-button class="form_button2" v-if="!disabled" variant="success" v-on:click="onUpdateProfile">Save Changes</b-button>
       </div>
     </b-form>
   </div>
@@ -124,9 +121,8 @@ export default {
           password: this.user.password
         })
         .then(updatedProfile => {
-          console.log(updatedProfile.data.name)
-          console.log(updatedProfile.data.password)
           this.user.name = updatedProfile.data.name
+          this.currName = updatedProfile.data.name
           this.user.password = '******'
         })
       alert('Your profile has been updated')
@@ -155,9 +151,16 @@ export default {
 </script>
 
 <style>
+.update_profile {
+  padding-top: 20px;
+}
 .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+.form_buttons {
+  padding-top: 20px;
+}
+
 </style>
