@@ -17,14 +17,13 @@
 
 <script>
 export default {
-  props: ['day', 'time', 'active', 'blocked', 'numOfVotes', 'onChange'],
+  props: ['time', 'active', 'blocked', 'numOfAvailable', 'onSlotClick'],
   data() {
     return {
-      selectedDay: this.day,
       timePeriod: this.time,
       isSelected: this.active,
       isBlocked: this.blocked,
-      num: this.numOfVotes
+      num: this.numOfAvailable
     }
   },
   methods: {
@@ -33,10 +32,9 @@ export default {
         this.isSelected = !this.isSelected
         // NOTE(numank): This is callback, will be defined and passed to this component
         // from the parent component!
-        this.onChange({
-          day: this.selectedDay,
+        this.onSlotClick({
           time: this.timePeriod,
-          status: this.isSelected
+          isSelected: this.isSelected
         })
       }
     }
@@ -48,6 +46,8 @@ export default {
 .time-slot {
   display: flex;
   flex-direction: column;
+  margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .time-slot-button {
