@@ -1,0 +1,77 @@
+<template>
+  <div class="time-slot">
+    <div class="time-slot-text">
+      <span>{{ this.timePeriod }}</span>
+    </div>
+    <div
+      v-bind:class="[
+        isBlocked ? 'blocked' : isSelected ? 'available' : 'idle',
+        'time-slot-button'
+      ]"
+    >
+      <span>{{ this.num }}</span>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: ['day', 'time', 'active', 'blocked', 'numOfVotes'],
+  data() {
+    return {
+      selectedDay: this.day,
+      timePeriod: this.time,
+      isSelected: this.active,
+      isBlocked: this.blocked,
+      num: this.numOfVotes
+    }
+  }
+}
+</script>
+
+<style scoped>
+.time-slot {
+  display: flex;
+  flex-direction: column;
+}
+
+.time-slot-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  font-size: 14px;
+  font-weight: 700;
+}
+.time-slot-button:hover {
+  opacity: 0.6;
+}
+.time-slot-button:active {
+  opacity: 0.8;
+}
+.time-slot-text {
+  display: flex;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+.time-slot-text span,
+.time-slot-button span {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.available {
+  background-color: #58c6b5;
+}
+.blocked {
+  background-color: #ed695f;
+}
+.idle {
+  background-color: rgb(226, 226, 226);
+}
+</style>
