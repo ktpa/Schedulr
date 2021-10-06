@@ -100,7 +100,12 @@ router.get("/:id", authenticateRequest, (req, res) => {
       // TODO(numank): We can populate users here as well.
       // Will be useful on the front end.
       findOneMeeting.exec().then(
-        (meeting) => res.status(200).json(meeting[0]),
+        (meeting) => {
+          if (meeting.length < 1) {
+            res.status(404).json("meeting_not_found");
+          }
+          res.status(200).json(meeting[0]);
+        },
         (err) => res.status(500).json(err)
       );
     } catch (err) {
