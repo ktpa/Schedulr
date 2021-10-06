@@ -4,6 +4,7 @@ import store from './api/store'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
+import BlockedTimes from './views/BlockedTimes.vue'
 import PageNotFound from './views/PageNotFound.vue'
 
 Vue.use(Router)
@@ -32,6 +33,14 @@ const router = new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/blocked-times',
+      name: 'BlockedTimes',
+      component: BlockedTimes,
       meta: {
         requiresAuth: true
       }
