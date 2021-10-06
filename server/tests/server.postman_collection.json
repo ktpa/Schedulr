@@ -693,7 +693,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}/users/{{meeting_id}}",
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}/users/{{user_id_2}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -704,7 +704,7 @@
 						"meetings",
 						"{{meeting_id}}",
 						"users",
-						"{{meeting_id}}"
+						"{{user_id_2}}"
 					]
 				}
 			},

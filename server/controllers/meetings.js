@@ -269,6 +269,9 @@ router.patch(
           res.status(404).json("meeting_not_found");
         }
         if (lodash.some(meeting.participantsList, { _id: user._id })) {
+          if (lodash.isEqual(meeting.createdBy, user._id)) {
+            return res.status(405).json("creator_cannot_leave_meeting");
+          }
           const index = lodash.findIndex(meeting.participantsList, {
             _id: user._id,
           });
