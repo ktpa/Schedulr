@@ -8,5 +8,6 @@ export const meetingApi = {
     Api.post(`/meetings/${meetingId}/availableTimes`, times),
   deleteAvailableTime: (meetingId, availableTimeId) =>
     Api.delete(`/meetings/${meetingId}/availableTimes/${availableTimeId}`),
+  update: (meetingId, update) => Api.put(`/meetings/${meetingId}`, update),
   delete: meetingId => Api.delete(`/meetings/${meetingId}`)
 }
