@@ -22,8 +22,7 @@ export default {
     TimeSlot
   },
   watch: {
-    // eslint-disable-next-line space-before-function-paren
-    hoursList: function(newList) {
+    hoursList: function (newList) {
       this.slotList = newList
     }
   },
