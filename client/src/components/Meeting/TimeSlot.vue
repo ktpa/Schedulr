@@ -10,7 +10,9 @@
       ]"
       @click="statusChange()"
     >
-      <span>{{ this.num }}</span>
+      <span v-if="this.numOfAvailable && this.numOfAvailable > 0">{{
+        this.numOfAvailable
+      }}</span>
     </div>
   </div>
 </template>
