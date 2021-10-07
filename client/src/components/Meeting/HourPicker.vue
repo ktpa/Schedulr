@@ -1,10 +1,8 @@
 <template>
   <div class="hour-picker">
-    <span>{{ this.day }}</span>
-    <span>{{ this.slotList }}</span>
     <TimeSlot
       v-for="slot in slotList"
-      :key="slot.time"
+      :key="slot.time.toString()"
       :time="slot.time"
       :active="slot.active"
       :blocked="slot.blocked"
@@ -23,6 +21,7 @@ export default {
   components: {
     TimeSlot
   },
+
   data() {
     return {
       selectedDay: this.day,

@@ -1,6 +1,5 @@
 <template>
   <div class="date-hour-picker">
-    <span>{{ this.meeting }}</span>
     <DatePicker
       v-model="selectedDay"
       :first-day-of-week="2"
@@ -9,8 +8,7 @@
       show-iso-weeknumbers
       is-required
     />
-    <HourPicker :day="this.selectedDay" :hoursList="this.dataList" />
-    <b-button @click="log">temporary log button</b-button>
+    <HourPicker :day="this.selectedDay" :hoursList="this.generatedData" />
   </div>
 </template>
 
@@ -28,17 +26,14 @@ export default {
   data() {
     return {
       selectedDay: new Date(this.meeting.firstPossibleDay),
-      selectedHours: [],
-      dataList: []
+      selectedHours: []
     }
   },
-  methods: {
-    log() {
-      this.generateDataList(this.meeting)
-      console.log(this.dataList)
-    },
-    generateDataList(meeting) {
-      this.dataList = []
+  computed: {
+    // eslint-disable-next-line space-before-function-paren
+    generatedData: function() {
+      const meeting = this.meeting
+      const tempDataList = []
       const AN_HOUR = 1000 * 3600
       const INTERVAL = AN_HOUR / 2
       const A_DAY = AN_HOUR * 24
@@ -60,7 +55,7 @@ export default {
           const date = new Date(firstDay.valueOf())
           date.setDate(date.getDate() + days)
           date.setTime(date.getTime() + INTERVAL * intervals)
-          this.dataList.push({
+          tempDataList.push({
             time: date
           })
         }
@@ -70,12 +65,12 @@ export default {
       // end object should look like this
       // hoursList: [{time, active, blocked, numOfAvailable}]
       meeting.availableTimes.map(time => {
-        const index = lodash.findIndex(this.dataList, {
+        const index = lodash.findIndex(tempDataList, {
           date: time.availableTime
         })
         if (time.user === this.$store.getters.userId) {
-          this.dataList[index] = {
-            ...this.dataList[index],
+          tempDataList[index] = {
+            ...tempDataList[index],
             active: true
           }
         }
@@ -84,20 +79,21 @@ export default {
         //     ? 0
         //     : this.dataList[index].numOfAvailable
 
-        return (this.dataList[index] = {
-          ...this.dataList[index],
+        return (tempDataList[index] = {
+          ...tempDataList[index],
           numOfAvailable: 1
         })
       })
       meeting.blockedTimes.map(time => {
-        const index = lodash.findIndex(this.dataList, {
+        const index = lodash.findIndex(tempDataList, {
           date: time.blockedTime
         })
-        return (this.dataList[index] = {
-          ...this.dataList[index],
+        return (tempDataList[index] = {
+          ...tempDataList[index],
           blocked: true
         })
       })
+      return tempDataList
     }
   }
 }

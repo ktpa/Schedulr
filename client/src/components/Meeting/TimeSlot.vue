@@ -1,7 +1,7 @@
 <template>
   <div class="time-slot">
     <div class="time-slot-text">
-      <span>{{ this.getLabel('timePeriod') }}</span>
+      <span>{{ this.getLabel(this.timePeriod) }}</span>
     </div>
     <div
       v-bind:class="[
@@ -16,8 +16,9 @@
 </template>
 
 <script>
-import { moment } from 'moment'
+import moment from 'moment'
 export default {
+  name: 'TimeSlot',
   props: ['time', 'active', 'blocked', 'numOfAvailable', 'onSlotClick'],
   data() {
     return {
@@ -40,7 +41,9 @@ export default {
       }
     },
     getLabel(date) {
-      moment(date).format('hh:mm')
+      return moment(date)
+        .format('hh:mm')
+        .toString()
     }
   }
 }
