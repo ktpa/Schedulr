@@ -1,5 +1,5 @@
 <template>
-  <h1>
+  <h1 class="landing">
     <MeetingPlanner />
   </h1>
 </template>
