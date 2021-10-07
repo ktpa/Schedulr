@@ -169,7 +169,7 @@ router.delete("/:id", authenticateRequest, (req, res) => {
     }
     try {
       meetingModel.findOneAndDelete(
-        { _id: req.body._id },
+        { _id: req.params.id },
         function (err, meeting) {
           if (err) {
             return next(err);

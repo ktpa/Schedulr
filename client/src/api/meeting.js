@@ -7,5 +7,6 @@ export const meetingApi = {
   addAvailableTimes: (meetingId, times) =>
     Api.post(`/meetings/${meetingId}/availableTimes`, times),
   deleteAvailableTime: (meetingId, availableTimeId) =>
-    Api.delete(`/meetings/${meetingId}/availableTimes/${availableTimeId}`)
+    Api.delete(`/meetings/${meetingId}/availableTimes/${availableTimeId}`),
+  delete: meetingId => Api.delete(`/meetings/${meetingId}`)
 }
