@@ -42,7 +42,7 @@ export default {
     },
     getLabel(date) {
       return moment(date)
-        .format('hh:mm')
+        .format('HH:mm')
         .toString()
     }
   }
