@@ -32,10 +32,6 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  min-height: 100vh;
-}
-
 h1 {
   float: left;
 }
