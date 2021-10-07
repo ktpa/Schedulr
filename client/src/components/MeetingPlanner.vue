@@ -25,7 +25,7 @@
       />
     </div>
     <div v-if="this.incorrect">
-      <p class="errorText">Date has not been set.</p>
+      <p class="errorText h6">Date has not been set.</p>
     </div>
     <div>
       <b-button v-on:click="createMeeting()" class="confirmBtn"
@@ -37,10 +37,10 @@
 
 <script>
 import { DatePicker } from 'v-calendar'
+import { meetingApi } from '@/api/meeting.js'
 
 export default {
   name: 'MeetingPlanner',
-  incorrect: false,
   components: {
     DatePicker
   },
@@ -49,7 +49,7 @@ export default {
       form: {
         name: ''
       },
-      meeting: '',
+      incorrect: false,
       date: Date.now(),
       modelConfig: {
         start: {
@@ -66,14 +66,22 @@ export default {
       if (this.date instanceof Date) {
         console.log('Date is defined.')
         this.incorrect = false
-        this.meeting = {
-          userID: this.$store.userID,
-          day: this.date,
+        const meeting = {
+          firstPossibleDay: this.date.toISOString().split('T')[0],
+          lastPossibleDay: this.date.toISOString().split('T')[0],
           firstPossibleHour: 0,
           lastPossibleHour: 23,
-          meetingName: this.form.meetingName,
-          participantsList: this.$store.userID
+          meetingName: this.form.name
         }
+        console.log(meeting)
+        meetingApi
+          .createMeeting(meeting)
+          .then(() => {
+            this.$router.push('/')
+          })
+          .catch(err => {
+            console.log(err)
+          })
       } else {
         console.log('Date is not defined.')
         this.incorrect = true
@@ -99,5 +107,11 @@ export default {
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+.errorText {
+  color: red;
+}
+.successful {
+  color: rgb(56, 187, 56);
 }
 </style>
