@@ -21,6 +21,7 @@
 import { DatePicker } from 'v-calendar'
 import lodash from 'lodash'
 import HourPicker from './HourPicker.vue'
+import { meetingApi } from '../../api/meeting'
 export default {
   // meeting is the original API response
   props: ['meeting'],
@@ -32,6 +33,27 @@ export default {
     return {
       selectedDay: new Date(this.meeting.firstPossibleDay),
       changeList: []
+    }
+  },
+  watch: {
+    // this is where we update backend with current changes
+    // eslint-disable-next-line space-before-function-paren
+    changeList: function() {
+      const meetingId = this.$route.params.id
+      if (this.changeList.length > 0) {
+        this.changeList.map(change => {
+          if (change.active) {
+            return meetingApi
+              .addAvailableTimes(meetingId, { availableTime: change.time })
+              .then(res => console.log(res))
+              .catch(err => console.log(err))
+          }
+          return meetingApi
+            .deleteAvailableTime(meetingId)
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+        })
+      }
     }
   },
   methods: {
@@ -80,7 +102,6 @@ export default {
           time: time.availableTime
         })
         if (time.user === this.$store.getters.userId) {
-          console.log('found one')
           tempDataList[index] = {
             ...tempDataList[index],
             active: true
