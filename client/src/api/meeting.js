@@ -9,5 +9,8 @@ export const meetingApi = {
   deleteAvailableTime: (meetingId, availableTimeId) =>
     Api.delete(`/meetings/${meetingId}/availableTimes/${availableTimeId}`),
   update: (meetingId, update) => Api.put(`/meetings/${meetingId}`, update),
+  // TODO(numank): Yeah this is pretty stupid, I should update the backend.
+  joinOrLeave: (meetingId, userId) =>
+    Api.patch(`/meetings/${meetingId}/users/${userId}`),
   delete: meetingId => Api.delete(`/meetings/${meetingId}`)
 }
