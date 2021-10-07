@@ -36,30 +36,21 @@ export default {
       const tempDataList = []
       const AN_HOUR = 1000 * 3600
       const INTERVAL = AN_HOUR / 2
-      const A_DAY = AN_HOUR * 24
 
       const start = meeting.firstPossibleHour
       const end = meeting.lastPossibleHour
 
-      const firstDay = new Date(meeting.firstPossibleDay)
-      firstDay.setTime(firstDay.getTime() + AN_HOUR * start)
-      const lastDay = new Date(meeting.lastPossibleDay)
-      const dayDifference = (lastDay.getTime() - firstDay.getTime()) / A_DAY + 1
+      const day = new Date(this.selectedDay)
+      day.setTime(day.getTime() + AN_HOUR * start)
 
-      for (let days = 0; days < dayDifference; days++) {
-        for (
-          let intervals = 0;
-          intervals < (end - start) * 2 + 1;
-          intervals++
-        ) {
-          const date = new Date(firstDay.valueOf())
-          date.setDate(date.getDate() + days)
-          date.setTime(date.getTime() + INTERVAL * intervals)
-          tempDataList.push({
-            time: date
-          })
-        }
+      for (let intervals = 0; intervals < (end - start) * 2 + 1; intervals++) {
+        const date = new Date(day.valueOf())
+        date.setTime(date.getTime() + INTERVAL * intervals)
+        tempDataList.push({
+          time: date
+        })
       }
+
       // our dataList is generated tailored to our needs
       // now we need to fill it with our data
       // end object should look like this

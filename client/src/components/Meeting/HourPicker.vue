@@ -21,7 +21,12 @@ export default {
   components: {
     TimeSlot
   },
-
+  watch: {
+    // eslint-disable-next-line space-before-function-paren
+    hoursList: function(newList) {
+      this.slotList = newList
+    }
+  },
   data() {
     return {
       selectedDay: this.day,
