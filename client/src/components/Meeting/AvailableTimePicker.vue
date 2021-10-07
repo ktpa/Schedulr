@@ -47,12 +47,23 @@ export default {
               .addAvailableTimes(meetingId, { availableTime: change.time })
               .then(res => console.log(res))
               .catch(err => console.log(err))
+          } else {
+            let idToDelete = null
+            this.meeting.availableTimes.forEach(time => {
+              if (
+                time.availableTime === change.time &&
+                time.user === this.$store.getters.userId
+              ) {
+                idToDelete = time._id
+              }
+            })
+            return meetingApi
+              .deleteAvailableTime(meetingId, idToDelete)
+              .then(res => console.log(res))
+              .catch(err => console.log(err))
           }
-          return meetingApi
-            .deleteAvailableTime(meetingId)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
         })
+
         this.changeList = []
       }
     }

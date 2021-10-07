@@ -43,11 +43,11 @@ export default {
       if (!this.slotList[index].blocked) {
         if (changedSlot.isSelected) {
           // user selected the slot, update the list
-          this.slotList[index].active = 'true'
+          this.slotList[index].active = true
           this.slotList[index].numOfAvailable += 1
         } else {
           // user unselected the slot, update the list
-          this.slotList[index].active = 'false'
+          this.slotList[index].active = false
           this.slotList[index].numOfAvailable -= 1
         }
         // This is callback, will be defined and passed to this component
