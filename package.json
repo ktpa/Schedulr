@@ -7,7 +7,10 @@
     "postinstall": "npm install --prefix server && npm install --prefix client && npm install --only=dev --prefix client && npm run build --prefix client"
   },
   "dependencies": {
+<<<<<<< HEAD
     "moment": "^2.29.1",
+=======
+>>>>>>> b765c0a34f44325a5ac929c1725859323a24b76c
     "v-calendar": "^2.3.2"
   }
 }
