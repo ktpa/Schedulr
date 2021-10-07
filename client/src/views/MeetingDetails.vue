@@ -20,7 +20,6 @@ export default {
     meetingApi
       .getOne(this.$route.params.id)
       .then(res => {
-        console.log(res.data)
         this.meeting = res.data
       })
       .catch(err => {

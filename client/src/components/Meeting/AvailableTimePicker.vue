@@ -1,5 +1,6 @@
 <template>
   <div class="date-hour-picker">
+    <span>{{ this.changeList }}</span>
     <DatePicker
       v-model="selectedDay"
       :first-day-of-week="2"
@@ -8,7 +9,11 @@
       show-iso-weeknumbers
       is-required
     />
-    <HourPicker :day="this.selectedDay" :hoursList="this.generatedData" />
+    <HourPicker
+      :day="this.selectedDay"
+      :hoursList="this.generatedData"
+      :onChange="this.updateChangeList"
+    />
   </div>
 </template>
 
@@ -26,7 +31,20 @@ export default {
   data() {
     return {
       selectedDay: new Date(this.meeting.firstPossibleDay),
-      selectedHours: []
+      changeList: []
+    }
+  },
+  methods: {
+    updateChangeList(change) {
+      const index = lodash.findIndex(this.changeList, {
+        time: change.time
+      })
+      // if list has this update
+      if (index > -1) {
+        return this.changeList.splice(index, 1)
+      }
+      // if not, add it
+      return (this.changeList = [...this.changeList, change])
     }
   },
   computed: {
@@ -62,13 +80,14 @@ export default {
           time: time.availableTime
         })
         if (time.user === this.$store.getters.userId) {
+          console.log('found one')
           tempDataList[index] = {
             ...tempDataList[index],
             active: true
           }
         }
 
-        if (index > 0) {
+        if (index > -1) {
           const value =
             typeof tempDataList[index].numOfAvailable === 'undefined'
               ? 0
@@ -91,7 +110,6 @@ export default {
           blocked: true
         })
       })
-      tempDataList.map(a => console.log(a.time))
       return tempDataList
     }
   }

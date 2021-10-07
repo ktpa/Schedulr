@@ -38,7 +38,8 @@ export default {
     slotClickCallback(changedSlot) {
       // find the record from the list
       // update the list with the params
-      const index = lodash.findIndex(this.slotList, changedSlot.time)
+
+      const index = lodash.findIndex(this.slotList, { time: changedSlot.time })
       if (!this.slotList[index].blocked) {
         if (changedSlot.isSelected) {
           // user selected the slot, update the list
@@ -51,10 +52,7 @@ export default {
         }
         // This is callback, will be defined and passed to this component
         // from the parent component!
-        this.onChange({
-          time: this.timePeriod,
-          isSelected: this.isSelected
-        })
+        this.onChange(this.slotList[index])
       }
     },
     getNumOfAvailables(time) {
