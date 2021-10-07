@@ -47,7 +47,8 @@ export default {
         const date = new Date(day.valueOf())
         date.setTime(date.getTime() + INTERVAL * intervals)
         tempDataList.push({
-          time: date
+          time: date.toISOString(),
+          numOfAvailable: null
         })
       }
 
@@ -55,9 +56,10 @@ export default {
       // now we need to fill it with our data
       // end object should look like this
       // hoursList: [{time, active, blocked, numOfAvailable}]
+
       meeting.availableTimes.map(time => {
         const index = lodash.findIndex(tempDataList, {
-          date: time.availableTime
+          time: time.availableTime
         })
         if (time.user === this.$store.getters.userId) {
           tempDataList[index] = {
@@ -65,25 +67,31 @@ export default {
             active: true
           }
         }
-        // const value =
-        //   this.dataList[index].numOfAvailable === undefined
-        //     ? 0
-        //     : this.dataList[index].numOfAvailable
 
-        return (tempDataList[index] = {
-          ...tempDataList[index],
-          numOfAvailable: 1
-        })
+        if (index > 0) {
+          const value =
+            typeof tempDataList[index].numOfAvailable === 'undefined'
+              ? 0
+              : tempDataList[index].numOfAvailable + 1
+
+          return (tempDataList[index] = {
+            ...tempDataList[index],
+            numOfAvailable: value
+          })
+        }
+        return 0
       })
+
       meeting.blockedTimes.map(time => {
         const index = lodash.findIndex(tempDataList, {
-          date: time.blockedTime
+          time: time.blockedTime
         })
         return (tempDataList[index] = {
           ...tempDataList[index],
           blocked: true
         })
       })
+      tempDataList.map(a => console.log(a.time))
       return tempDataList
     }
   }
