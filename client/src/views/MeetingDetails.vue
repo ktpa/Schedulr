@@ -1,5 +1,6 @@
 <template>
   <div class="page">
+    <h1>{{ this.meeting.meetingName }}</h1>
     <AvailableTimePicker v-if="this.meeting" :meeting="this.meeting" />
   </div>
 </template>
@@ -33,5 +34,9 @@ export default {
 <style scoped>
 .page {
   min-height: 100vh;
+}
+
+h1 {
+  float: left;
 }
 </style>

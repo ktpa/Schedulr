@@ -68,5 +68,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 280px;
+  margin-left: 50px;
+}
+
+@media (max-width: 768px) {
+  .hour-picker {
+    margin-top: 50px;
+    margin-left: 25px;
+  }
 }
 </style>

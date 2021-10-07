@@ -1,6 +1,5 @@
 <template>
   <div class="date-hour-picker">
-    <span>{{ this.changeList }}</span>
     <DatePicker
       v-model="selectedDay"
       :first-day-of-week="2"
@@ -152,8 +151,13 @@ export default {
 <style scoped>
 .date-hour-picker {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .date-hour-picker {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>
