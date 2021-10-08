@@ -1,6 +1,5 @@
 <template>
   <div class="date-hour-picker">
-    <span>{{ this.changeList }}</span>
     <DatePicker
       v-model="selectedDay"
       :first-day-of-week="2"
@@ -21,9 +20,10 @@
 import { DatePicker } from 'v-calendar'
 import lodash from 'lodash'
 import HourPicker from './HourPicker.vue'
+import { meetingApi } from '../../api/meeting'
 export default {
   // meeting is the original API response
-  props: ['meeting'],
+  props: ['meeting', 'onChange'],
   components: {
     DatePicker,
     HourPicker
@@ -32,6 +32,42 @@ export default {
     return {
       selectedDay: new Date(this.meeting.firstPossibleDay),
       changeList: []
+    }
+  },
+  watch: {
+    // this is where we update backend with current changes
+    // eslint-disable-next-line space-before-function-paren
+    changeList: function() {
+      const meetingId = this.$route.params.id
+      if (this.changeList.length > 0) {
+        this.changeList.map(change => {
+          if (change.active) {
+            return meetingApi
+              .addAvailableTimes(meetingId, { availableTime: change.time })
+              .then(res => {
+                console.log(res)
+                this.onChange()
+              })
+              .catch(err => console.log(err))
+          } else {
+            let idToDelete = null
+            this.meeting.availableTimes.forEach(time => {
+              if (
+                time.availableTime === change.time &&
+                time.user === this.$store.getters.userId
+              ) {
+                idToDelete = time._id
+              }
+            })
+            return meetingApi
+              .deleteAvailableTime(meetingId, idToDelete)
+              .then(res => console.log(res))
+              .catch(err => console.log(err))
+          }
+        })
+
+        this.changeList = []
+      }
     }
   },
   methods: {
@@ -80,7 +116,6 @@ export default {
           time: time.availableTime
         })
         if (time.user === this.$store.getters.userId) {
-          console.log('found one')
           tempDataList[index] = {
             ...tempDataList[index],
             active: true
@@ -119,8 +154,13 @@ export default {
 <style scoped>
 .date-hour-picker {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .date-hour-picker {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

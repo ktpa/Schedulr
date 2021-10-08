@@ -10,7 +10,9 @@
       ]"
       @click="statusChange()"
     >
-      <span>{{ this.num }}</span>
+      <span v-if="this.numOfAvailable && this.numOfAvailable > 0">{{
+        this.numOfAvailable
+      }}</span>
     </div>
   </div>
 </template>
@@ -55,13 +57,13 @@ export default {
   flex-direction: column;
   margin-right: 10px;
   margin-bottom: 5px;
+  width: 32px;
 }
 
 .time-slot-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 32px;
   height: 32px;
   border-radius: 100%;
   font-size: 14px;
@@ -92,6 +94,9 @@ export default {
 }
 .blocked {
   background-color: #ed695f;
+}
+.blocked:hover {
+  opacity: 1 !important;
 }
 .idle {
   background-color: rgb(226, 226, 226);

@@ -22,7 +22,8 @@ export default {
     TimeSlot
   },
   watch: {
-    hoursList: function (newList) {
+    // eslint-disable-next-line space-before-function-paren
+    hoursList: function(newList) {
       this.slotList = newList
     }
   },
@@ -42,11 +43,11 @@ export default {
       if (!this.slotList[index].blocked) {
         if (changedSlot.isSelected) {
           // user selected the slot, update the list
-          this.slotList[index].active = 'true'
+          this.slotList[index].active = true
           this.slotList[index].numOfAvailable += 1
         } else {
           // user unselected the slot, update the list
-          this.slotList[index].active = 'false'
+          this.slotList[index].active = false
           this.slotList[index].numOfAvailable -= 1
         }
         // This is callback, will be defined and passed to this component
@@ -67,5 +68,14 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 280px;
+  align-content: flex-start;
+  margin-left: 50px;
+}
+
+@media (max-width: 768px) {
+  .hour-picker {
+    margin-top: 50px;
+    margin-left: 25px;
+  }
 }
 </style>

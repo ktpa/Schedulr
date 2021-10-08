@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <Header v-if="isLoggedIn()" />
-    <router-view />
+    <div id="root">
+      <router-view />
+    </div>
     <Footer />
   </div>
 </template>
@@ -23,5 +25,8 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+#root {
+  min-height: calc(100vh - 122px);
 }
 </style>

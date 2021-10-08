@@ -1,10 +1,12 @@
 <template>
   <div>
     <b-list-group id="meetings_list">
-    <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
-    <span>{{meeting.meetingName}}</span>
-    <span>Participants: {{meeting.participantsList.length}}</span>
-    </b-list-group-item>
+      <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
+        <a :href="`meeting/${meeting._id}`">
+          <span>{{ meeting.meetingName }}</span>
+          <span>Participants: {{ meeting.participantsList.length }}</span>
+        </a>
+      </b-list-group-item>
     </b-list-group>
   </div>
 </template>
@@ -15,7 +17,7 @@ import { meetingApi } from '@/api/meeting.js'
 
 export default {
   name: 'home',
-  components: { },
+  components: {},
   data() {
     return {
       meetings: []
@@ -30,7 +32,7 @@ export default {
       .catch(err => console.log(err))
   },
   methods: {
-    participants: (a) => {
+    participants: a => {
       console.log(a)
       return a.length
     }
@@ -38,22 +40,30 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #meetings_list {
   display: flex;
   align-self: flex-end;
 }
 .list-group-item {
-  display: flex;
   padding: 15px;
-  justify-content: space-between;
+  margin-bottom: 10px;
 }
 .list-group-item:nth-child(even) {
   display: flex;
-  background-color: #FC7A30;
+  background-color: #fc7a30;
 }
 .list-group-item:nth-child(odd) {
   display: flex;
-  background-color: #DA6B6B;
+  background-color: #da6b6b;
+}
+a {
+  display: flex;
+  color: white;
+  width: 100%;
+  justify-content: space-between;
+}
+a:hover {
+  text-decoration: none;
 }
 </style>

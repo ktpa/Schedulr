@@ -1104,13 +1104,7 @@
 				],
 				"body": {
 					"mode": "urlencoded",
-					"urlencoded": [
-						{
-							"key": "_id",
-							"value": "{{meeting_id}}",
-							"type": "text"
-						}
-					]
+					"urlencoded": []
 				},
 				"url": {
 					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",

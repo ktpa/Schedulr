@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <footer v-if="isLoggedIn()" class="footer">
-      <p>All rights reserved 2021</p>
-      <p>Contact us at: MaidenUpName@email.com</p>
-    </footer>
-  </div>
+  <footer v-if="isLoggedIn()" id="footer">
+    <p>Copyright © 2021, Schedulr All rights reserved.</p>
+    <p><a href="mailTo:info@schedulr.email">Contact us</a></p>
+  </footer>
 </template>
 
 <script>
@@ -18,11 +16,12 @@ export default {
 </script>
 
 <style scoped>
-.footer {
+#footer {
   display: flex;
+  width: 100%;
   align-self: flex-end;
   justify-content: space-between;
   color: #2c3e50;
-  padding: 10%;
+  padding: 10px 20px;
 }
 </style>
