@@ -23,7 +23,7 @@ import HourPicker from './HourPicker.vue'
 import { meetingApi } from '../../api/meeting'
 export default {
   // meeting is the original API response
-  props: ['meeting'],
+  props: ['meeting', 'onChange'],
   components: {
     DatePicker,
     HourPicker
@@ -44,7 +44,10 @@ export default {
           if (change.active) {
             return meetingApi
               .addAvailableTimes(meetingId, { availableTime: change.time })
-              .then(res => console.log(res))
+              .then(res => {
+                console.log(res)
+                this.onChange()
+              })
               .catch(err => console.log(err))
           } else {
             let idToDelete = null

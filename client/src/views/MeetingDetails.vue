@@ -31,7 +31,11 @@
           ><BIconX />
         </b-button>
       </div>
-      <AvailableTimePicker v-if="this.meeting" :meeting="this.meeting" />
+      <AvailableTimePicker
+        v-if="this.meeting"
+        :meeting="this.meeting"
+        :onChange="this.reFetch"
+      />
       <b-button
         class="delete-button"
         v-if="
@@ -148,6 +152,18 @@ export default {
           _id: this.$store.getters.userId
         }) > -1
       )
+    },
+    // this is not a good practice!
+    reFetch() {
+      meetingApi
+        .getOne(this.$route.params.id)
+        .then(res => {
+          this.meeting = res.data
+        })
+        .catch(err => {
+          console.log(err)
+          this.$router.push('/404')
+        })
     }
   }
 }
