@@ -1,6 +1,32 @@
 <template>
   <div class="landing">
-    <img class="abstract rotating" src="../res/images/loading.svg" />
+    <svg
+      class="abstract rotating"
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 24 24"
+      style="enable-background:new 0 0 24 24;"
+      xml:space="preserve"
+    >
+      <circle cx="12" cy="22" r="2" />
+      <circle cx="12" cy="2" r="2" />
+      <circle cx="22" cy="12" r="2" />
+      <circle cx="2" cy="12" r="2" />
+      <path
+        d="M19,3c1.1,0,2,0.9,2,2c0,1.1-0.9,2-2,2c-1.1,0-2-0.9-2-2C17,3.9,17.9,3,19,3z"
+      />
+      <path
+        d="M19,17c1.1,0,2,0.9,2,2s-0.9,2-2,2c-1.1,0-2-0.9-2-2C17,17.9,17.9,17,19,17z"
+      />
+      <path d="M5,3c1.1,0,2,0.9,2,2S6.1,7,5,7C3.9,7,3,6.1,3,5S3.9,3,5,3z" />
+      <path
+        d="M5,17c1.1,0,2,0.9,2,2s-0.9,2-2,2c-1.1,0-2-0.9-2-2S3.9,17,5,17z"
+      />
+    </svg>
     <div class="card">
       <div class="left-section">
         <div class="logo">
@@ -54,52 +80,59 @@ export default {
 <style>
 .abstract {
   position: absolute;
-  height: 150vh;
+  height: 600vh;
   z-index: 0;
-  left: 33%;
-  top: 33%;
-  opacity: 0.3;
-  top: 33%;
-  filter: blur(10px);
-  fill: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(237, 105, 95, 1) 0%,
-    rgba(88, 198, 181, 1) 100%
-  );
-  stroke: linear-gradient(
-    90deg,
-    rgba(2, 0, 36, 1) 0%,
-    rgba(237, 105, 95, 1) 0%,
-    rgba(88, 198, 181, 1) 100%
-  );
+  left: -66%;
+  top: -20%;
+  opacity: 0.1;
 }
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {
     -webkit-transform: rotate(0deg);
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
+    fill: blue;
   }
   to {
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
+    fill: red;
   }
 }
 @keyframes rotating {
-  from {
+  0% {
     -ms-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
+    fill: #58c6b5;
+    filter: blur(5px);
   }
-  to {
+  25% {
+    fill: #ed695f;
+  }
+  50% {
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+    transform: rotate(180deg);
+    fill: #58c6b5;
+    filter: blur(10px);
+  }
+  75% {
+    fill: #ed685f;
+  }
+  100% {
     -ms-transform: rotate(360deg);
     -moz-transform: rotate(360deg);
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
+    fill: #58c6b5;
+    filter: blur(5px);
   }
 }
 .rotating {
