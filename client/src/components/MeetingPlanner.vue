@@ -92,8 +92,8 @@ export default {
         console.log(meeting)
         meetingApi
           .createMeeting(meeting)
-          .then(() => {
-            this.$router.push('/')
+          .then(res => {
+            this.$router.push(`/meeting/${res.data._id}`)
           })
           .catch(err => {
             console.log(err)
