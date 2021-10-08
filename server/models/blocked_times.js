@@ -1,9 +1,12 @@
 var mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const date = new Date()
+const isoDate = date.toISOString().split('T')[0]
+
 const blockedTimeSchema = new Schema({
     blockedTime: {
-        type: Date
+         type: Date, required: true, min: isoDate 
     },
     user: { 
         type: mongoose.Schema.Types.ObjectId, 

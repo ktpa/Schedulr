@@ -5,14 +5,11 @@
     </div>
     <div
       v-bind:class="[
-        isBlocked ? 'blocked' : isSelected ? 'available' : 'idle',
+        isSelected ? 'blocked' : 'idle',
         'time-slot-button'
       ]"
       @click="statusChange()"
     >
-      <span v-if="this.numOfAvailable && this.numOfAvailable > 0">{{
-        this.numOfAvailable
-      }}</span>
     </div>
   </div>
 </template>
@@ -21,26 +18,28 @@
 import moment from 'moment'
 export default {
   name: 'TimeSlot',
-  props: ['time', 'active', 'blocked', 'numOfAvailable', 'onSlotClick'],
+  props: ['time', 'active', 'onSlotClick'],
+  watch: {
+    // eslint-disable-next-line space-before-function-paren
+    active: function(newData) {
+      this.isSelected = newData
+    }
+  },
   data() {
     return {
       timePeriod: this.time,
-      isSelected: this.active,
-      isBlocked: this.blocked,
-      num: this.numOfAvailable
+      isSelected: this.active
     }
   },
   methods: {
     statusChange() {
-      if (!this.isBlocked) {
-        this.isSelected = !this.isSelected
-        // NOTE(numank): This is callback, will be defined and passed to this component
-        // from the parent component!
-        this.onSlotClick({
-          time: this.timePeriod,
-          isSelected: this.isSelected
-        })
-      }
+      this.isSelected = !this.isSelected
+      // NOTE(numank): This is callback, will be defined and passed to this component
+      // from the parent component!
+      this.onSlotClick({
+        time: this.timePeriod,
+        isSelected: this.isSelected
+      })
     },
     getLabel(date) {
       return moment(date)
@@ -89,9 +88,6 @@ export default {
   user-select: none; /* Standard */
 }
 
-.available {
-  background-color: #58c6b5;
-}
 .blocked {
   background-color: #ed695f;
 }
