@@ -4,6 +4,7 @@ import store from './api/store'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
+import MeetingDetails from './views/MeetingDetails.vue'
 import PageNotFound from './views/PageNotFound.vue'
 import CreateMeeting from './views/CreateMeeting.vue'
 
@@ -41,6 +42,14 @@ const router = new Router({
       path: '/create-meeting',
       name: 'Create Meeting',
       component: CreateMeeting,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/meeting/:id',
+      name: 'Meeting',
+      component: MeetingDetails,
       meta: {
         requiresAuth: true
       }

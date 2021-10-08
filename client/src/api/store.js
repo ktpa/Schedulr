@@ -12,7 +12,6 @@ export default new Vuex.Store({
     userId: cookie.get('userId') || ''
   },
   mutations: {
-
     auth_request(state) {
       state.status = 'loading'
     },
@@ -60,12 +59,16 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request')
         authApi
-          .signup(user).then(() => {
-            return authApi.login({ username: user.username, password: user.password })
+          .signup(user)
+          .then(() => {
+            return authApi.login({
+              username: user.username,
+              password: user.password
+            })
           })
           .then(res => {
             const token = res.data.accessToken
-            const userId = res.data._id
+            const userId = res.data.user
             const payload = {
               token: token,
               userId: userId
