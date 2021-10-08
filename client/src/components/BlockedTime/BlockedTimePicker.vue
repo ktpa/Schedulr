@@ -1,11 +1,9 @@
 <template>
   <div class="date-hour-picker">
-    <span>{{ this.changeList }}</span>
     <DatePicker
       v-model="selectedDay"
       :first-day-of-week="2"
-      :min-date="this.meeting.firstPossibleDay"
-      :max-date="this.meeting.lastPossibleDay"
+      :min-date="new Date()"
       show-iso-weeknumbers
       is-required
     />
@@ -23,8 +21,8 @@ import lodash from 'lodash'
 import BlockedHourPicker from './BlockedHourPicker.vue'
 import { userApi } from '../../api/user'
 export default {
-  // meeting is the original API response
-  props: ['meeting'],
+  name: 'BlockedTimePicker',
+  props: ['blockedTimes', 'onChange'],
   components: {
     DatePicker,
     BlockedHourPicker
@@ -36,23 +34,22 @@ export default {
     }
   },
   watch: {
+    // this is where we update backend with current changes
     changeList: function () {
       if (this.changeList.length > 0) {
         this.changeList.map(change => {
           if (change.active) {
             return userApi
-              .createBlockedTime(this.$store.getters.userId, { availableTime: change.time })
+              .createBlockedTime(this.$store.getters.userId, { blockedTime: change.time })
               .then(res => {
-                console.log(res)
                 this.onChange()
               })
               .catch(err => console.log(err))
           } else {
             let idToDelete = null
-            this.meeting.availableTimes.forEach(time => {
+            this.blockedTimes.forEach(time => {
               if (
-                time.availableTime === change.time &&
-                time.user === this.$store.getters.userId
+                time.blockedTime === change.time
               ) {
                 idToDelete = time._id
               }
@@ -83,14 +80,14 @@ export default {
   },
   computed: {
     generatedData: function () {
-      const meeting = this.meeting
+      const list = this.blockedTimes
       const tempDataList = []
       const AN_HOUR = 1000 * 3600
       const INTERVAL = AN_HOUR / 2
 
-      const start = meeting.firstPossibleHour
-      const end = meeting.lastPossibleHour
-
+      const start = 0
+      const end = 23
+      this.selectedDay.setHours(0, 0, 0, 0)
       const day = new Date(this.selectedDay)
       day.setTime(day.getTime() + AN_HOUR * start)
 
@@ -105,8 +102,19 @@ export default {
       // our dataList is generated tailored to our needs
       // now we need to fill it with our data
       // end object should look like this
-      // hoursList: [{time, active, blocked, numOfAvailable}]
+      // hoursList: [{time, active}]
 
+      list.forEach(time => {
+        const index = lodash.findIndex(tempDataList, {
+          time: time.blockedTime
+        })
+        if (index > -1) {
+          tempDataList[index] = {
+            ...tempDataList[index],
+            active: true
+          }
+        }
+      })
       return tempDataList
     }
   }
@@ -116,8 +124,13 @@ export default {
 <style scoped>
 .date-hour-picker {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   width: 100%;
+}
+
+@media (max-width: 768px) {
+  .date-hour-picker {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 </style>

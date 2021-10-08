@@ -17,8 +17,14 @@
 <script>
 import moment from 'moment'
 export default {
-  name: 'BlockedTimeSlot',
-  props: ['time', 'active', 'blocked', 'onSlotClick'],
+  name: 'TimeSlot',
+  props: ['time', 'active', 'onSlotClick'],
+  watch: {
+    // eslint-disable-next-line space-before-function-paren
+    active: function(newData) {
+      this.isSelected = newData
+    }
+  },
   data() {
     return {
       timePeriod: this.time,
@@ -32,7 +38,7 @@ export default {
       // from the parent component!
       this.onSlotClick({
         time: this.timePeriod,
-        isSelected: this.active
+        isSelected: this.isSelected
       })
     },
     getLabel(date) {
@@ -50,13 +56,13 @@ export default {
   flex-direction: column;
   margin-right: 10px;
   margin-bottom: 5px;
+  width: 32px;
 }
 
 .time-slot-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 32px;
   height: 32px;
   border-radius: 100%;
   font-size: 14px;
@@ -82,11 +88,11 @@ export default {
   user-select: none; /* Standard */
 }
 
-.available {
-  background-color: #58c6b5;
-}
 .blocked {
   background-color: #ed695f;
+}
+.blocked:hover {
+  opacity: 1 !important;
 }
 .idle {
   background-color: rgb(226, 226, 226);

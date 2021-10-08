@@ -1,29 +1,37 @@
 <template>
   <div class="page">
-    <BlockedTimePicker :meeting="this.meeting"/>
+    <BlockedTimePicker :blockedTimes="this.blockedTimes" :onChange="this.reFetch"/>
   </div>
 </template>
 
 <script>
 import BlockedTimePicker from '../components/BlockedTime/BlockedTimePicker.vue'
+import { userApi } from '../api/user.js'
 export default {
   components: {
     BlockedTimePicker
   },
+  beforeCreate() {
+    userApi.getBlockedTime(this.$store.getters.userId)
+      .then(res => {
+        this.blockedTimes = res.data
+        console.log(this.blockedTimes)
+      })
+      .catch(err => console.log(err))
+  },
   data() {
     return {
-      meeting: {
-        participantsList: [
-          '615d39980007d1573c0afbf6'
-        ],
-        _id: '615ef1157f0c016594e25612',
-        createdBy: '615d39980007d1573c0afbf6',
-        firstPossibleDay: '2022-09-25T00:00:00.000Z',
-        lastPossibleDay: '2022-09-30T00:00:00.000Z',
-        firstPossibleHour: 0,
-        lastPossibleHour: 15,
-        meetingName: 'My First Meeting'
-      }
+      blockedTimes: []
+    }
+  },
+  methods: {
+    reFetch() {
+      userApi.getBlockedTime(this.$store.getters.userId)
+        .then(res => {
+          this.blockedTimes = res.data
+          console.log(this.blockedTimes)
+        })
+        .catch(err => console.log(err))
     }
   }
 }

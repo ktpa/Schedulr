@@ -94,6 +94,25 @@ router.delete("/:id", authenticateRequest, (req, res) => {
   });
 });
 
+router.get("/:id/blockedTimes", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
+  }
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user) {
+      res.status(403);
+    }
+    blockedTimeModel.find({user: user._id}, function(err, meetings) {
+      if(err) {
+        return next(error)
+      } else {
+        res.status(200).json(meetings)
+      }
+    })
+  });
+});
+
 router.post("/:id/blockedTimes", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
