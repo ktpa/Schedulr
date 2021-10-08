@@ -5,8 +5,6 @@
     id="Layer_1"
     xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink"
-    x="0px"
-    y="0px"
     viewBox="0 0 24 24"
     style="enable-background:new 0 0 24 24;"
     xml:space="preserve"
@@ -32,25 +30,28 @@ export default {}
 
 <style>
 .abstract {
+  margin: 3rem;
   position: absolute;
   height: 300vh;
   z-index: 0;
   left: 15%;
   top: 15%;
-  opacity: 0.15;
+  opacity: 0.1;
+  overflow: visible;
+}
+.shadow {
+  filter: drop-shadow(0 0 0.01rem #58c6b5);
 }
 @-webkit-keyframes rotating /* Safari and Chrome */ {
   from {
     -webkit-transform: rotate(0deg);
     -o-transform: rotate(0deg);
     transform: rotate(0deg);
-    fill: blue;
   }
   to {
     -webkit-transform: rotate(360deg);
     -o-transform: rotate(360deg);
     transform: rotate(360deg);
-    fill: red;
   }
 }
 @keyframes rotating {
@@ -89,10 +90,19 @@ export default {}
   }
 }
 .rotating {
+  overflow: visible;
   -webkit-animation: rotating 350s linear infinite;
   -moz-animation: rotating 350s linear infinite;
   -ms-animation: rotating 350s linear infinite;
   -o-animation: rotating 350s linear infinite;
   animation: rotating 350s linear infinite;
+}
+@keyframes opacityTransform {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

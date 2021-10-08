@@ -2,8 +2,7 @@
   <div class="landing">
     <Animation />
     <Animation2 />
-
-    <div class="card">
+    <div class="card opacityTransform">
       <div class="left-section">
         <div class="logo">
           <img src="../res/images/logo.png" alt="logo" class="login-logo" />
@@ -56,6 +55,9 @@ export default {
 </script>
 
 <style>
+.opacityTransform {
+  animation: opacityTransform 0.5s linear normal;
+}
 .landing {
   position: relative;
   overflow: hidden;
