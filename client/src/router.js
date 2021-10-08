@@ -5,6 +5,7 @@ import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import Profile from './views/Profile.vue'
 import PageNotFound from './views/PageNotFound.vue'
+import CreateMeeting from './views/CreateMeeting.vue'
 
 Vue.use(Router)
 
@@ -32,6 +33,14 @@ const router = new Router({
       path: '/profile',
       name: 'Profile',
       component: Profile,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/create-meeting',
+      name: 'Create Meeting',
+      component: CreateMeeting,
       meta: {
         requiresAuth: true
       }
