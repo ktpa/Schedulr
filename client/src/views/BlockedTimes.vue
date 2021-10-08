@@ -1,31 +1,30 @@
 <template>
   <div class="page">
-    <AvailableTimePicker v-if="this.meeting" :meeting="this.meeting" />
+    <BlockedTimePicker :meeting="this.meeting"/>
   </div>
 </template>
 
 <script>
-import AvailableTimePicker from '../components/Meeting/AvailableTimePicker.vue'
-import { meetingApi } from '@/api/meeting.js'
+import BlockedTimePicker from '../components/BlockedTime/BlockedTimePicker.vue'
 export default {
   components: {
-    AvailableTimePicker
+    BlockedTimePicker
   },
   data() {
     return {
-      meeting: undefined
+      meeting: {
+        participantsList: [
+          '615d39980007d1573c0afbf6'
+        ],
+        _id: '615ef1157f0c016594e25612',
+        createdBy: '615d39980007d1573c0afbf6',
+        firstPossibleDay: '2022-09-25T00:00:00.000Z',
+        lastPossibleDay: '2022-09-30T00:00:00.000Z',
+        firstPossibleHour: 0,
+        lastPossibleHour: 15,
+        meetingName: 'My First Meeting'
+      }
     }
-  },
-  beforeCreate() {
-    meetingApi
-      .getOne(this.$route.params.id)
-      .then(res => {
-        this.meeting = res.data
-      })
-      .catch(err => {
-        console.log(err)
-        this.$router.push('/404')
-      })
   }
 }
 </script>

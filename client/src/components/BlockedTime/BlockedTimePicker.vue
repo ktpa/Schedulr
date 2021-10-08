@@ -9,7 +9,7 @@
       show-iso-weeknumbers
       is-required
     />
-    <HourPicker
+    <BlockedHourPicker
       :day="this.selectedDay"
       :hoursList="this.generatedData"
       :onChange="this.updateChangeList"
@@ -20,18 +20,52 @@
 <script>
 import { DatePicker } from 'v-calendar'
 import lodash from 'lodash'
-import HourPicker from './HourPicker.vue'
+import BlockedHourPicker from './BlockedHourPicker.vue'
+import { userApi } from '../../api/user'
 export default {
   // meeting is the original API response
   props: ['meeting'],
   components: {
     DatePicker,
-    HourPicker
+    BlockedHourPicker
   },
   data() {
     return {
-      selectedDay: new Date(this.meeting.firstPossibleDay),
+      selectedDay: new Date(),
       changeList: []
+    }
+  },
+  watch: {
+    changeList: function () {
+      if (this.changeList.length > 0) {
+        this.changeList.map(change => {
+          if (change.active) {
+            return userApi
+              .createBlockedTime(this.$store.getters.userId, { availableTime: change.time })
+              .then(res => {
+                console.log(res)
+                this.onChange()
+              })
+              .catch(err => console.log(err))
+          } else {
+            let idToDelete = null
+            this.meeting.availableTimes.forEach(time => {
+              if (
+                time.availableTime === change.time &&
+                time.user === this.$store.getters.userId
+              ) {
+                idToDelete = time._id
+              }
+            })
+            return userApi
+              .deleteBlockedTime(this.$store.getters.userId, idToDelete)
+              .then(res => console.log(res))
+              .catch(err => console.log(err))
+          }
+        })
+
+        this.changeList = []
+      }
     }
   },
   methods: {
@@ -64,8 +98,7 @@ export default {
         const date = new Date(day.valueOf())
         date.setTime(date.getTime() + INTERVAL * intervals)
         tempDataList.push({
-          time: date.toISOString(),
-          numOfAvailable: null
+          time: date.toISOString()
         })
       }
 
@@ -74,41 +107,6 @@ export default {
       // end object should look like this
       // hoursList: [{time, active, blocked, numOfAvailable}]
 
-      meeting.availableTimes.map(time => {
-        const index = lodash.findIndex(tempDataList, {
-          time: time.availableTime
-        })
-        if (time.user === this.$store.getters.userId) {
-          console.log('found one')
-          tempDataList[index] = {
-            ...tempDataList[index],
-            active: true
-          }
-        }
-
-        if (index > -1) {
-          const value =
-            typeof tempDataList[index].numOfAvailable === 'undefined'
-              ? 0
-              : tempDataList[index].numOfAvailable + 1
-
-          return (tempDataList[index] = {
-            ...tempDataList[index],
-            numOfAvailable: value
-          })
-        }
-        return 0
-      })
-
-      meeting.blockedTimes.map(time => {
-        const index = lodash.findIndex(tempDataList, {
-          time: time.blockedTime
-        })
-        return (tempDataList[index] = {
-          ...tempDataList[index],
-          blocked: true
-        })
-      })
       return tempDataList
     }
   }
