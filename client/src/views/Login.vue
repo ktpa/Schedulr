@@ -1,5 +1,6 @@
 <template>
   <div class="landing">
+    <img class="abstract rotating" src="../res/images/loading.svg" />
     <div class="card">
       <div class="left-section">
         <div class="logo">
@@ -51,12 +52,71 @@ export default {
 </script>
 
 <style>
+.abstract {
+  position: absolute;
+  height: 150vh;
+  z-index: 0;
+  left: 33%;
+  top: 33%;
+  opacity: 0.3;
+  top: 33%;
+  filter: blur(10px);
+  fill: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(237, 105, 95, 1) 0%,
+    rgba(88, 198, 181, 1) 100%
+  );
+  stroke: linear-gradient(
+    90deg,
+    rgba(2, 0, 36, 1) 0%,
+    rgba(237, 105, 95, 1) 0%,
+    rgba(88, 198, 181, 1) 100%
+  );
+}
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotating {
+  -webkit-animation: rotating 450s linear infinite;
+  -moz-animation: rotating 450s linear infinite;
+  -ms-animation: rotating 450s linear infinite;
+  -o-animation: rotating 450s linear infinite;
+  animation: rotating 450s linear infinite;
+}
 .landing {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-
+  width: 100vw;
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
 }
 .login-logo {
