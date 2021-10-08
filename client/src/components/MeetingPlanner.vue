@@ -3,12 +3,24 @@
     <div>
       <h2>Select a meeting date</h2>
       <DatePicker
-        v-model="date"
+        v-model="range"
         @drag="dragValue = $event"
+        :select-attribute="selectDragAttribute"
+        :drag-attribute="selectDragAttribute"
         :first-day-of-week="2"
         show-iso-weeknumbers
         class="neatShadow"
-      />
+        is-range
+        drag="dragValue = $event"
+      >
+        <template v-slot:day-popover="{ format }">
+          <div>
+            {{ format(dragValue ? dragValue.start : range.start, 'MMM D') }}
+            -
+            {{ format(dragValue ? dragValue.end : range.end, 'MMM D') }}
+          </div>
+        </template>
+      </DatePicker>
     </div>
     <div>
       <h2>
@@ -50,7 +62,11 @@ export default {
         name: ''
       },
       incorrect: false,
-      date: Date.now(),
+      range: {
+        start: Date.now(),
+        end: Date.now()
+      },
+      dragValue: null,
       modelConfig: {
         start: {
           timeAdjust: '00:00:00'
@@ -63,12 +79,12 @@ export default {
   },
   methods: {
     createMeeting() {
-      if (this.date instanceof Date) {
+      if (this.range.start instanceof Date && this.range.end instanceof Date) {
         console.log('Date is defined.')
         this.incorrect = false
         const meeting = {
-          firstPossibleDay: this.date.toISOString().split('T')[0],
-          lastPossibleDay: this.date.toISOString().split('T')[0],
+          firstPossibleDay: this.range.start.toISOString().split('T')[0],
+          lastPossibleDay: this.range.end.toISOString().split('T')[0],
           firstPossibleHour: 0,
           lastPossibleHour: 23,
           meetingName: this.form.name
@@ -85,6 +101,16 @@ export default {
       } else {
         console.log('Date is not defined.')
         this.incorrect = true
+      }
+    }
+  },
+  computed: {
+    selectDragAttribute() {
+      return {
+        popover: {
+          visibility: 'hover',
+          isInteractive: false
+        }
       }
     }
   }
