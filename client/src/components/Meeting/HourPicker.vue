@@ -68,6 +68,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 280px;
+  align-content: flex-start;
   margin-left: 50px;
 }
 
