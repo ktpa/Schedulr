@@ -1,7 +1,7 @@
 <template>
-  <h1 class="landing">
+  <div class="meetingCreationPage">
     <MeetingPlanner />
-  </h1>
+  </div>
 </template>
 
 <script>
@@ -14,4 +14,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.meetingCreationPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+}
+</style>

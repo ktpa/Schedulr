@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <b-list-group id="meetings_list">
       <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
         <a :href="`meeting/${meeting._id}`">
@@ -48,6 +48,9 @@ export default {
   align-self: flex-end;
   align-items: center;
   justify-content: center;
+}
+.home {
+  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
 }
 .name {
   margin-right: 2em;
