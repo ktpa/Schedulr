@@ -1,6 +1,8 @@
 <template>
   <div class="landing">
-    <div class="card">
+    <Animation />
+    <Animation2 />
+    <div class="card opacityTransform">
       <div class="left-section">
         <div class="logo">
           <img src="../res/images/logo.png" alt="logo" class="login-logo" />
@@ -32,9 +34,11 @@
 <script>
 import LoginForm from '../components/LoginForm.vue'
 import SignupForm from '../components/SignupForm.vue'
+import Animation from '../components/Animation.vue'
+import Animation2 from '../components/Animation2.vue'
 
 export default {
-  components: { LoginForm, SignupForm },
+  components: { LoginForm, SignupForm, Animation, Animation2 },
   name: 'login',
   data() {
     return {
@@ -51,12 +55,17 @@ export default {
 </script>
 
 <style>
+.opacityTransform {
+  animation: opacityTransform 0.5s linear normal;
+}
 .landing {
+  position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-
+  width: 100vw;
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
 }
 .login-logo {
