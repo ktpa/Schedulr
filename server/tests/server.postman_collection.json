@@ -1060,6 +1060,82 @@
 			"response": []
 		},
 		{
+			"name": "Update User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user[username]",
+							"value": "jens",
+							"type": "text"
+						},
+						{
+							"key": "user[email]",
+							"value": "jensa@email.com",
+							"type": "text"
+						},
+						{
+							"key": "user[password]",
+							"value": "jensjens",
+							"type": "text"
+						},
+						{
+							"key": "user[name]",
+							"value": "jens sjodin updated",
+							"type": "text"
+						},
+						{
+							"key": "user[profilePicUrl]",
+							"value": "www.google.com updated",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Blocked Times",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
