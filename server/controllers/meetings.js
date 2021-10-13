@@ -15,7 +15,7 @@ router.get("/", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    if(!req.query) {
+    if(!req.query.active && !req.query.inactive) {
       const meetings = await meetingModel
       .find({ participantsList: user._id }, function (err, meetings) {
         if (err) {
