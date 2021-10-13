@@ -15,7 +15,8 @@ router.get("/", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    const meetings = await meetingModel
+    if(!req.query) {
+      const meetings = await meetingModel
       .find({ participantsList: user._id }, function (err, meetings) {
         if (err) {
           return next(err);
@@ -25,7 +26,36 @@ router.get("/", authenticateRequest, (req, res) => {
         }
       })
       .populate("participantsList", "-password");
+      res.status(200).json({ data: meetings });
+    } else if (req.query.active) {
+      const date = new Date()
+      const isoDate = date.toISOString().split('T')[0]
+      const meetings = await meetingModel
+      .find({ participantsList: user._id, lastPossibleDay: { $gte: isoDate } }, function (err, meetings) {
+        if (err) {
+          return next(err);
+        }
+        if (meetings === null) {
+          return res.status(404).json({ message: "Meetings not found" });
+        }
+      })
+      .populate("participantsList", "-password");
+      res.status(200).json({ data: meetings });
+    } else if (req.query.inactive) {
+    const date = new Date()
+    const isoDate = date.toISOString().split('T')[0]
+    const meetings = await meetingModel
+    .find({ participantsList: user._id, lastPossibleDay: { $lt: isoDate } }, function (err, meetings) {
+      if (err) {
+        return next(err);
+      }
+      if (meetings === null) {
+        return res.status(404).json({ message: "Meetings not found" });
+      }
+    })
+    .populate("participantsList", "-password");
     res.status(200).json({ data: meetings });
+  }
   });
 });
 
