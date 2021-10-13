@@ -1,7 +1,7 @@
 <template>
-  <h1 class="landing">
+  <div class="create-meeting">
     <MeetingPlanner />
-  </h1>
+  </div>
 </template>
 
 <script>
@@ -14,4 +14,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+.create-meeting {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  height: 100%;
+}
+</style>

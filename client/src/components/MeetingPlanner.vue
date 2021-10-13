@@ -8,6 +8,7 @@
         :select-attribute="selectDragAttribute"
         :drag-attribute="selectDragAttribute"
         :first-day-of-week="2"
+        :min-date="minDate"
         show-iso-weeknumbers
         class="neatShadow"
         is-range
@@ -21,11 +22,6 @@
           </div>
         </template>
       </DatePicker>
-    </div>
-    <div>
-      <h2>
-        {{ new Intl.DateTimeFormat('en-GB').format(this.date) }}
-      </h2>
     </div>
     <div>
       <b-input
@@ -58,6 +54,7 @@ export default {
   },
   data() {
     return {
+      minDate: Date.now(),
       form: {
         name: ''
       },
@@ -119,12 +116,14 @@ export default {
 
 <style scoped>
 .form-input {
+  margin-top: 25px;
   max-width: 25em;
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 .confirmBtn {
+  margin-top: 10px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
