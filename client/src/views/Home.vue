@@ -3,10 +3,26 @@
     <b-list-group id="meetings_list">
       <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
         <a :href="`meeting/${meeting._id}`">
-          <span class="name">{{ meeting.meetingName }}</span>
-          <span class="participants"
-            >Participants: {{ meeting.participantsList.length }}</span
-          >
+          <div class="topContainer">
+            <span class="name">{{
+              formatMeetingName(meeting.meetingName)
+            }}</span>
+            <span class="participants"
+              >Participants: {{ meeting.participantsList.length }}</span
+            >
+          </div>
+          <div class="middleContainer">
+            <!-- Get user that created the meeting, show as owner + name. -->
+            <b-img
+              v-bind="mainProps"
+              rounded="circle"
+              alt="Circle image"
+              class="creatorImage"
+            ></b-img>
+            <span class="creator">Placeholder Creator</span>
+            <!-- Get participants of meeting, show concatenated. -->
+            <!-- Get dates of meeting, display earliest meeting day -->
+          </div>
         </a>
       </b-list-group-item>
     </b-list-group>
@@ -16,13 +32,21 @@
 <script>
 // @ is an alias to /src
 import { meetingApi } from '@/api/meeting.js'
+import { truncate } from 'lodash'
 
 export default {
   name: 'home',
   components: {},
   data() {
     return {
-      meetings: []
+      meetings: [],
+      mainProps: {
+        blank: true,
+        blankColor: '#777',
+        width: 50,
+        height: 50,
+        class: 'm1'
+      }
     }
   },
   beforeCreate() {
@@ -37,6 +61,14 @@ export default {
     participants: a => {
       console.log(a)
       return a.length
+    },
+    formatMeetingName(name) {
+      console.log(name)
+      name = truncate(name, {
+        length: '25'
+      })
+      console.log('Truncated: ' + name)
+      return name
     }
   }
 }
@@ -48,12 +80,22 @@ export default {
   grid-template-columns: repeat(auto-fill, minmax(500px, auto));
   gap: 5%;
 }
+.middleContainer {
+}
+.creatorImage {
+  margin: 5px;
+}
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+}
 .home {
 }
 .name {
   text-align: left;
   max-width: 75%;
   margin: 10px;
+  font-size: 1.8em;
 }
 .participants {
   margin: 10px;
@@ -61,6 +103,7 @@ export default {
 .list-group-item {
   align-self: center;
   justify-self: center;
+  text-align: left;
   height: 200px;
   width: 500px;
   gap: 2%;
@@ -96,7 +139,7 @@ export default {
 }
 a {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   color: rgba(255, 255, 255, 0.87);
   width: 100%;
   height: 100%;
