@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "522aa8e1-6e38-40bc-aaed-bb8b2ff788e0",
+		"_postman_id": "6e779311-0910-4ded-b265-bb33b476a064",
 		"name": "Server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -241,6 +241,77 @@
 						{
 							"key": "password",
 							"value": "jensjens",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin w Password & Set Variable Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"admin_token\", jsonData.accessToken);\r",
+							"postman.setGlobalVariable(\"admin_user_id\", jsonData.user);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Basic YXBwbGljYXRpb246c2VjcmV0"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"contentType": "text/html",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
 							"type": "text"
 						},
 						{
@@ -1406,57 +1477,6 @@
 			"response": []
 		},
 		{
-			"name": "Delete Users",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{token}}",
-						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "Content-Type",
-						"value": "application/x-www-form-urlencoded",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "urlencoded",
-					"urlencoded": []
-				},
-				"url": {
-					"raw": "http://localhost:{{port}}/api/users/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "{{port}}",
-					"path": [
-						"api",
-						"users",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Delete Meetings",
 			"event": [
 				{
@@ -1477,9 +1497,8 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "Bearer {{token}}",
-						"type": "text",
-						"disabled": true
+						"value": "Bearer {{admin_token}}",
+						"type": "text"
 					},
 					{
 						"key": "Content-Type",
@@ -1501,6 +1520,56 @@
 					"path": [
 						"api",
 						"meetings",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
 						""
 					]
 				}
