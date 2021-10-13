@@ -28,5 +28,11 @@ export default {
 }
 #root {
   min-height: calc(100vh - 122px);
+  margin: 20px 50px;
+}
+@media (max-width: 768px) {
+  #root {
+    margin: 20px 10px;
+  }
 }
 </style>
