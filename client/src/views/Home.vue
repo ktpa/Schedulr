@@ -40,7 +40,6 @@
             <span class="participants"
               >Participants: {{ meeting.participantsList.length }}</span
             >
-            <!-- Get participants of meeting, show concatenated. -->
           </div>
         </a>
       </b-list-group-item>
@@ -91,7 +90,7 @@ export default {
     formatMeetingName(name) {
       console.log(name)
       name = truncate(name, {
-        length: '25'
+        length: '28'
       })
       console.log('Truncated: ' + name)
       return name
@@ -120,11 +119,11 @@ export default {
   border-width: 2px;
 }
 .creator {
-  color: rgb(246, 237, 255);
+  color: rgb(0, 0, 0);
   font-size: 1.1em;
 }
 .meetingDate {
-  color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
 }
 .midText {
   display: flex;
@@ -138,8 +137,6 @@ export default {
 .bottomContainer {
   height: inherit;
   border-radius: 25px;
-}
-.home {
 }
 .name {
   text-align: left;
@@ -162,46 +159,46 @@ export default {
   border-radius: 25px;
 }
 .list-group-item:nth-child(even) {
-  background-color: rgba(9, 92, 215, 1);
+  background-color: rgb(253, 253, 253);
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 .list-group-item:nth-child(odd) {
-  background-color: rgba(8, 83, 196, 1);
+  background-color: rgb(253, 253, 253);
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 .list-group-item:nth-child(odd):hover {
-  background-color: rgb(14, 87, 197);
+  background-color: rgb(255, 255, 255);
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 .list-group-item:nth-child(even):hover {
-  background-color: rgb(15, 96, 216);
+  background-color: rgb(255, 255, 255);
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  transition: 0.3s;
+  transition: 0.2s;
 }
 a {
   display: flex;
   flex-direction: column;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(0, 0, 0, 0.87);
   width: 100%;
   height: 100%;
   transition: 0.2s;
 }
 a:hover {
   text-decoration: none;
-  color: white;
+  color: rgba(0, 0, 0, 1);
+  text-shadow: rgba(0, 0, 0, 0.3) 0 0.1px 1px;
   transition: 0.2s;
-  text-shadow: rgba(0, 0, 0, 0.3) 0 1px 5px;
 }
 .slick-shadow {
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
