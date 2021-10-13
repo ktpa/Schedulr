@@ -4,7 +4,6 @@
       <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
         <a :href="`meeting/${meeting._id}`">
           <span class="name">{{ meeting.meetingName }}</span>
-
           <span class="participants"
             >Participants: {{ meeting.participantsList.length }}</span
           >
@@ -47,19 +46,25 @@ export default {
 #meetings_list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, auto));
-  gap: 2%;
+  gap: 5%;
 }
 .home {
 }
 .name {
   text-align: left;
   max-width: 75%;
+  margin: 10px;
+}
+.participants {
+  margin: 10px;
 }
 .list-group-item {
   align-self: center;
   justify-self: center;
   height: 200px;
   width: 500px;
+  gap: 2%;
+  padding: 0px;
 }
 .list-group-item:nth-child(even) {
   background-color: rgba(9, 92, 215, 1);
@@ -94,6 +99,7 @@ a {
   justify-content: space-between;
   color: rgba(255, 255, 255, 0.87);
   width: 100%;
+  height: 100%;
   transition: 0.2s;
 }
 a:hover {
