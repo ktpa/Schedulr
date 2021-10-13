@@ -1,15 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { authApi } from '@/api/auth.js'
+import { userApi } from '@/api/user.js'
 import { Api } from '@/Api.js'
 import cookie from 'vue-cookies'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
+  // isAdmin is not the real way to do this, but It'll do the trick for us
+  // No matter what, we don't let them access admin page if they are not
   state: {
     status: '',
     token: cookie.get('token') || '',
-    userId: cookie.get('userId') || ''
+    userId: cookie.get('userId') || '',
+    isAdmin: cookie.get('isAdmin') || ''
   },
   mutations: {
     auth_request(state) {
@@ -37,13 +41,27 @@ export default new Vuex.Store({
           .then(res => {
             const token = res.data.accessToken
             const userId = res.data.user
-            const payload = {
-              token: token,
-              userId: userId
-            }
+            let isAdmin = false
             Vue.$cookies.set('token', token)
             Vue.$cookies.set('userId', userId)
             Api.defaults.headers.common.Authorization = `Bearer ${token}`
+            // delete this when we are graded
+            userApi
+              .getProfile(userId)
+              .then(res => {
+                if (res.data.data.username === 'admin') {
+                  Vue.$cookies.set('isAdmin', true)
+                  isAdmin = true
+                }
+              })
+              .catch(err => {
+                console.log(err)
+              })
+            const payload = {
+              token: token,
+              userId: userId,
+              isAdmin: isAdmin
+            }
             commit('auth_success', payload)
             resolve(res)
           })
@@ -51,6 +69,8 @@ export default new Vuex.Store({
             commit('auth_error')
             Vue.$cookies.remove('token')
             Vue.$cookies.remove('userId')
+            // delete this when we are graded
+            Vue.$cookies.remove('isAdmin')
             reject(err)
           })
       })
@@ -93,6 +113,8 @@ export default new Vuex.Store({
         Vue.$cookies.remove('token')
         Vue.$cookies.remove('userId')
         delete Api.defaults.headers.common.Authorization
+        // delete this when we are graded
+        Vue.$cookies.remove('isAdmin')
         resolve()
       })
     }
@@ -101,6 +123,7 @@ export default new Vuex.Store({
     isLoggedIn: state => !!state.token,
     authStatus: state => state.status,
     userId: state => state.userId,
-    token: state => state.token
+    token: state => state.token,
+    isAdmin: state => state.isAdmin
   }
 })

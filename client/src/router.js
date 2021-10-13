@@ -8,6 +8,8 @@ import BlockedTimes from './views/BlockedTimes.vue'
 import MeetingDetails from './views/MeetingDetails.vue'
 import PageNotFound from './views/PageNotFound.vue'
 import CreateMeeting from './views/CreateMeeting.vue'
+import Admin from './views/Admin.vue'
+import { userApi } from '@/api/user.js'
 
 Vue.use(Router)
 
@@ -46,7 +48,8 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
-    }, {
+    },
+    {
       path: '/create-meeting',
       name: 'Create Meeting',
       component: CreateMeeting,
@@ -62,11 +65,30 @@ const router = new Router({
         requiresAuth: true
       }
     },
+    {
+      path: '/admin',
+      name: 'Admin',
+      component: Admin,
+      meta: {
+        requiresAuth: true,
+        adminOnly: true
+      }
+    },
     { path: '/:pathMatch(.*)*', component: PageNotFound }
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.adminOnly)) {
+    userApi
+      .getProfile(store.getters.userId)
+      .then(res => {
+        res.data.data.username === 'admin' ? next() : next('/404')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn) {
       return next()

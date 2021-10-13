@@ -3,7 +3,6 @@
     <b-navbar-brand href="/"
       ><img class="header-logo" src="../res/images/logo.png" alt="logo"
     /></b-navbar-brand>
-
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse class="header-nav-bar" id="nav-collapse" is-nav>
@@ -15,6 +14,12 @@
           :class="{ active: this.$route.name === 'create-meeting' }"
           href="/create-meeting"
           >Create Meeting
+        </b-nav-item>
+        <b-nav-item
+          v-if="this.$store.getters.isAdmin"
+          :class="{ active: this.$route.name === 'admin' }"
+          href="/admin"
+          >Admin
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
