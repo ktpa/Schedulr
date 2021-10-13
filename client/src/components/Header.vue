@@ -13,15 +13,15 @@
         </b-nav-item>
         <b-nav-item
           :class="{ active: this.$route.name === 'create-meeting' }"
-          href="create-meeting"
+          href="/create-meeting"
           >Create Meeting
         </b-nav-item>
       </b-navbar-nav>
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown class="profile-button" right>
           <template #button-content> <ProfileButton /> </template>
-          <b-dropdown-item @click="profile">Profile</b-dropdown-item>
-          <b-dropdown-item @click="blockedTimes">Blocked Times</b-dropdown-item>
+          <b-dropdown-item href="/profile">Profile</b-dropdown-item>
+          <b-dropdown-item href="/blocked-times">Blocked Times</b-dropdown-item>
           <b-dropdown-item @click="logout">Sign Out</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
@@ -34,12 +34,6 @@ import ProfileButton from './ProfileButton.vue'
 export default {
   components: { ProfileButton },
   methods: {
-    profile() {
-      this.$router.push({ name: 'Profile' })
-    },
-    blockedTimes() {
-      this.$router.push({ name: 'BlockedTimes' })
-    },
     logout() {
       this.$store.dispatch('logout').then(() => {
         this.$router.push('/login')
