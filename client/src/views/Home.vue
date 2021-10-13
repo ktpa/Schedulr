@@ -7,21 +7,40 @@
             <span class="name">{{
               formatMeetingName(meeting.meetingName)
             }}</span>
-            <span class="participants"
-              >Participants: {{ meeting.participantsList.length }}</span
-            >
           </div>
           <div class="middleContainer">
             <!-- Get user that created the meeting, show as owner + name. -->
             <b-img
-              v-bind="mainProps"
+              v-bind="creatorProps"
               rounded="circle"
               alt="Circle image"
-              class="creatorImage"
+              class="creatorImage slick-shadow"
             ></b-img>
-            <span class="creator">Placeholder Creator</span>
-            <!-- Get participants of meeting, show concatenated. -->
+            <span class="creator">Placeholder Creator's meeting</span>
+            <div class="midText">
+              <span class="meetingDate"
+                >First: DD-MM-YYYY<br />Last: DD-MM-YYYY</span
+              >
+            </div>
             <!-- Get dates of meeting, display earliest meeting day -->
+          </div>
+          <div class="bottomContainer">
+            <b-img
+              v-bind="participantProps"
+              rounded="circle"
+              alt="Circle image"
+              class="participantImage slick-shadow"
+            ></b-img>
+            <b-img
+              v-bind="participantProps"
+              rounded="circle"
+              alt="Circle image"
+              class="participantImage"
+            ></b-img>
+            <span class="participants"
+              >Participants: {{ meeting.participantsList.length }}</span
+            >
+            <!-- Get participants of meeting, show concatenated. -->
           </div>
         </a>
       </b-list-group-item>
@@ -40,11 +59,18 @@ export default {
   data() {
     return {
       meetings: [],
-      mainProps: {
+      creatorProps: {
         blank: true,
-        blankColor: '#777',
-        width: 50,
-        height: 50,
+        blankColor: '#277',
+        width: 35,
+        height: 35,
+        class: 'm1'
+      },
+      participantProps: {
+        blank: true,
+        blankColor: '#277',
+        width: 25,
+        height: 25,
         class: 'm1'
       }
     }
@@ -79,15 +105,39 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, auto));
   gap: 5%;
-}
-.middleContainer {
+  border-radius: 25px;
 }
 .creatorImage {
   margin: 5px;
+  border-style: solid;
+  border-width: 3px;
+}
+.participantImage {
+  margin-right: -15px;
+  margin-left: 5px;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 2px;
+}
+.creator {
+  color: rgb(246, 237, 255);
+  font-size: 1.1em;
+}
+.meetingDate {
+  color: rgb(255, 255, 255);
+}
+.midText {
+  display: flex;
+  float: right;
+  padding-right: 5px;
 }
 .topContainer {
   display: flex;
   justify-content: space-between;
+}
+.bottomContainer {
+  height: inherit;
+  border-radius: 25px;
 }
 .home {
 }
@@ -99,6 +149,7 @@ export default {
 }
 .participants {
   margin: 10px;
+  float: right;
 }
 .list-group-item {
   align-self: center;
@@ -108,6 +159,7 @@ export default {
   width: 500px;
   gap: 2%;
   padding: 0px;
+  border-radius: 25px;
 }
 .list-group-item:nth-child(even) {
   background-color: rgba(9, 92, 215, 1);
@@ -150,5 +202,10 @@ a:hover {
   color: white;
   transition: 0.2s;
   text-shadow: rgba(0, 0, 0, 0.3) 0 1px 5px;
+}
+.slick-shadow {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 </style>
