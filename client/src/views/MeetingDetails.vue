@@ -1,35 +1,40 @@
 <template>
   <div>
-    <div class="page" v-if="this.meeting && isParticipant()">
+    <div v-if="this.meeting && isParticipant()">
       <div class="header">
-        <h1 v-if="this.meeting && !this.editing">
-          {{ this.title }}
-        </h1>
-        <b-input v-model="title" v-if="this.meeting && this.editing" />
-        <b-button
-          v-if="
-            this.meeting &&
-              this.meeting.createdBy === this.$store.getters.userId
-          "
-          size="sm"
-          class="edit-button"
-          variant="outline-secondary"
-          @click="this.editMeeting"
-          ><BIconPencilFill v-if="!this.editing" />
-          <BIconCheckCircle v-if="this.editing" />
-        </b-button>
-        <b-button
-          v-if="
-            this.meeting &&
-              this.meeting.createdBy === this.$store.getters.userId &&
-              this.editing
-          "
-          size="sm"
-          class="edit-button"
-          variant="outline-secondary"
-          @click="this.cancelEdit"
-          ><BIconX />
-        </b-button>
+        <div class="title">
+          <h1 v-if="this.meeting && !this.editing">
+            {{ this.title }}
+          </h1>
+          <b-input v-model="title" v-if="this.meeting && this.editing" />
+          <b-button
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId
+            "
+            size="sm"
+            class="edit-button"
+            variant="outline-secondary"
+            @click="this.editMeeting"
+            ><BIconPencilFill v-if="!this.editing" />
+            <BIconCheckCircle v-if="this.editing" />
+          </b-button>
+          <b-button
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId &&
+                this.editing
+            "
+            size="sm"
+            class="edit-button"
+            variant="outline-secondary"
+            @click="this.cancelEdit"
+            ><BIconX />
+          </b-button>
+        </div>
+        <div class="participants">
+          <b>Participants:</b> {{ this.numOfParticipants }}
+        </div>
       </div>
       <AvailableTimePicker
         v-if="this.meeting"
@@ -81,7 +86,8 @@ export default {
     return {
       meeting: undefined,
       editing: false,
-      title: 'null'
+      title: 'null',
+      numOfParticipants: 1
     }
   },
   beforeCreate() {
@@ -90,6 +96,7 @@ export default {
       .then(res => {
         this.meeting = res.data
         this.title = res.data.meetingName
+        this.numOfParticipants = res.data.participantsList.length
       })
       .catch(err => {
         console.log(err)
@@ -173,15 +180,17 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  margin-left: 20px;
-  float: left;
-}
 .header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
+  width: 100%;
   margin: 20px 0px;
+}
+.title {
+  display: flex;
+
+  align-items: center;
 }
 .edit-button {
   margin-left: 20px;
