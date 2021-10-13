@@ -114,7 +114,7 @@ router.get("/:id", authenticateRequest, (req, res) => {
   });
 });
 
-router.put("/:id", authenticateRequest, (req, res) => {
+router.patch("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
   }
@@ -229,10 +229,7 @@ router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
   });
 });
 
-router.delete(
-  "/:meetingid/availableTimes/:id",
-  authenticateRequest,
-  (req, res) => {
+router.delete("/:meetingid/availableTimes/:id", authenticateRequest, (req, res) => {
     if (!req.token) {
       res.status(401);
     }
@@ -256,10 +253,7 @@ router.delete(
   }
 );
 
-router.patch(
-  "/:meetingid/users/:userid",
-  authenticateRequest,
-  async (req, res) => {
+router.patch("/:meetingid/users/:userid", authenticateRequest, async (req, res) => {
     if (!req.token) {
       res.status(401);
     }
