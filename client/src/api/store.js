@@ -23,6 +23,7 @@ export default new Vuex.Store({
       state.status = 'success'
       state.userId = payload.userId
       state.token = payload.token
+      state.isAdmin = payload.isAdmin
     },
     auth_error(state) {
       state.status = 'error'
@@ -41,7 +42,6 @@ export default new Vuex.Store({
           .then(res => {
             const token = res.data.accessToken
             const userId = res.data.user
-            let isAdmin = false
             Vue.$cookies.set('token', token)
             Vue.$cookies.set('userId', userId)
             Api.defaults.headers.common.Authorization = `Bearer ${token}`
@@ -51,19 +51,24 @@ export default new Vuex.Store({
               .then(res => {
                 if (res.data.data.username === 'admin') {
                   Vue.$cookies.set('isAdmin', true)
-                  isAdmin = true
+                  const payload = {
+                    token: token,
+                    userId: userId,
+                    isAdmin: true
+                  }
+                  commit('auth_success', payload)
+                  return resolve(res)
                 }
+                const payload = {
+                  token: token,
+                  userId: userId
+                }
+                commit('auth_success', payload)
+                resolve(res)
               })
               .catch(err => {
                 console.log(err)
               })
-            const payload = {
-              token: token,
-              userId: userId,
-              isAdmin: isAdmin
-            }
-            commit('auth_success', payload)
-            resolve(res)
           })
           .catch(err => {
             commit('auth_error')

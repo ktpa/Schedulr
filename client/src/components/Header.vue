@@ -4,7 +4,6 @@
       ><img class="header-logo" src="../res/images/logo.png" alt="logo"
     /></b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
     <b-collapse class="header-nav-bar" id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item :class="{ active: this.$route.name === 'home' }" href="/"
@@ -16,7 +15,7 @@
           >Create Meeting
         </b-nav-item>
         <b-nav-item
-          v-if="this.$store.getters.isAdmin"
+          v-if="admin"
           :class="{ active: this.$route.name === 'admin' }"
           href="/admin"
           >Admin
@@ -38,6 +37,11 @@
 import ProfileButton from './ProfileButton.vue'
 export default {
   components: { ProfileButton },
+  data() {
+    return {
+      admin: this.$store.getters.isAdmin
+    }
+  },
   methods: {
     logout() {
       this.$store.dispatch('logout').then(() => {
