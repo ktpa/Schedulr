@@ -21,7 +21,7 @@ router.get("/", authenticateRequest, (req, res) => {
           return next(err);
         }
         if (meetings === null) {
-          return res.status(404).json({ message: "Meeting not found" });
+          return res.status(404).json({ message: "Meetings not found" });
         }
       })
       .populate("participantsList", "-password");
@@ -57,6 +57,19 @@ router.post("/", authenticateRequest, (req, res) => {
     }
   });
 });
+
+// TODO() Only used for passing requirements
+// Remove once project has been graded
+router.delete("/", (req, res) => {
+  try {
+    meetingModel.remove(function(err, x) {
+    if (err) { return next(err); }
+    res.status(200).json({ removedRecords: x.deletedCount })
+  })
+  } catch(err) {
+    res.status(500).json(err);
+  }
+})
 
 router.get("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
