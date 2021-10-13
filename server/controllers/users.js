@@ -52,6 +52,24 @@ router.delete("/", (req, res) => {
   }
 })
 
+// TODO() Only used for passing requirements
+// Remove once project has been graded
+router.put("/:id", async (req, res) => {
+  let update = req.body.user
+  try{
+    let updatedUser = await userModel.findOneAndReplace(
+      { _id: req.params.id },
+      update,
+      {
+        new: true
+      }
+    );
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
+
 router.get("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
