@@ -189,4 +189,14 @@ export default {
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
+@media (max-width: 768px) {
+  .meeting-planner {
+    display: flex;
+    flex-direction: column;
+  }
+  .right {
+    margin-left: 0px;
+    margin-top: 15px;
+  }
+}
 </style>
