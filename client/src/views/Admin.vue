@@ -16,6 +16,39 @@
         :disabled="busy"
         >Delete All Users</b-button
       >
+      <br />
+      <br />
+      <b-input
+        type="text"
+        v-model="user.username"
+        :disabled="true"
+        placeholder="username"
+        id="username"
+      />
+      <br />
+      <b-input
+        type="email"
+        v-model="user.email"
+        placeholder="e-mail"
+        id="email"
+      />
+      <br />
+      <b-input type="text" v-model="user.name" placeholder="name" id="name" />
+      <br />
+      <b-input
+        type="password"
+        v-model="user.password"
+        placeholder="password"
+        id="password"
+      />
+      <br />
+      <b-button
+        variant="danger"
+        ref="submit"
+        @click="this.clickPutUser"
+        :disabled="busy"
+        >Put User</b-button
+      >
 
       <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
         <template #overlay>
@@ -57,8 +90,31 @@ export default {
       info: '',
       busy: false,
       onOK: null,
-      message: ''
+      message: '',
+      user: {
+        name: '',
+        username: '',
+        email: '',
+        password: '',
+        profilePicUrl: ''
+      }
     }
+  },
+  beforeCreate() {
+    userApi
+      .getProfile(this.$store.getters.userId)
+      .then(res => {
+        const userRes = res.data.data
+        this.user.name = userRes.name
+        this.user.username = userRes.username
+        this.user.email = userRes.email
+        this.user.password = userRes.password
+        this.user.profilePicUrl = userRes.profilePicUrl
+        this.currName = userRes.name
+      })
+      .catch(err => {
+        console.log(err)
+      })
   },
   methods: {
     onShown() {
@@ -83,6 +139,16 @@ export default {
         'You are about to delete all users including Admin. You will be logged out afterwards. This action cannot be reverted!'
       this.busy = true
       this.onOK = this.deleteAllUsers
+    },
+    clickPutUser() {
+      this.message =
+        'You are about to update your user account according to the fields filled in using a PUT request. How do you feel about that? '
+      this.busy = true
+      this.onOK = this.putUser
+    },
+    putUser() {
+      userApi.putUpdateProfile(this.$store.getters.userId, { user: this.user })
+      this.busy = false
     },
     deleteAllUsers() {
       userApi
