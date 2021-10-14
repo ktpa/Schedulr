@@ -25,7 +25,8 @@ router.get("/", authenticateRequest, (req, res) => {
             return res.status(404).json({ message: "Meetings not found" });
           }
         })
-        .populate("participantsList", "-password");
+        .populate("participantsList", "-password")
+        .populate("createdBy", "-password");
       res.status(200).json({ data: meetings });
     } else if (req.query.active) {
       const date = new Date();

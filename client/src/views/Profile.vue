@@ -13,58 +13,69 @@
           </b-list-group>
         </p>
         <br />
-        <b-img v-bind="pictureProps" :src="user.profilePicUrl" />
-        <b-input
-          type="text"
-          v-model="user.username"
-          :disabled="true"
-          placeholder="username"
-          id="username"
+        <b-img
+          v-bind="pictureProps"
+          :src="user.profilePicUrl"
+          rounded="circle"
         />
-        <br />
-        <b-input
-          type="email"
-          v-model="user.email"
-          :disabled="true"
-          placeholder="e-mail"
-          id="email"
-        />
-        <br />
-        <b-input
-          type="text"
-          v-model="user.name"
-          :disabled="disabled"
-          placeholder="name"
-          id="name"
-        />
-        <br />
-        <b-input
-          type="password"
-          v-model="user.password"
-          :disabled="disabled"
-          placeholder="password"
-          id="password"
-        />
-      </div>
-      <div class="form_buttons">
-        <b-button v-if="disabled" @click="activateProfile"
-          >Update Profile</b-button
-        >
-        <b-button
-          class="form_button1"
+        <v-file-input
           v-if="!disabled"
-          variant="danger"
-          v-on:click="onCancel"
-          >Cancel</b-button
-        >
-        <b-button
-          class="form_button2"
-          v-if="!disabled"
-          variant="success"
-          v-on:click="onUpdateProfile"
-          >Save Changes</b-button
-        >
+          counter
+          show-size
+          truncate-length="15"
+        ></v-file-input>
+        <div class="forms">
+          <b-input
+            type="text"
+            v-model="user.username"
+            :disabled="true"
+            placeholder="username"
+            id="username"
+          />
+          <br />
+          <b-input
+            type="email"
+            v-model="user.email"
+            :disabled="true"
+            placeholder="e-mail"
+            id="email"
+          />
+          <br />
+          <b-input
+            type="text"
+            v-model="user.name"
+            :disabled="disabled"
+            placeholder="name"
+            id="name"
+          />
+          <br />
+          <b-input
+            type="password"
+            v-model="user.password"
+            :disabled="disabled"
+            placeholder="password"
+            id="password"
+          />
+        </div>
       </div>
+
+      <b-button v-if="disabled" @click="activateProfile"
+        >Update Profile</b-button
+      >
+      <b-button
+        class="form_button1"
+        v-if="!disabled"
+        variant="danger"
+        v-on:click="onCancel"
+        >Cancel</b-button
+      >
+      <b-button
+        class="form_button2"
+        v-if="!disabled"
+        variant="success"
+        v-on:click="onUpdateProfile"
+        >Save Changes</b-button
+      >
     </b-form>
   </div>
 </template>
@@ -175,7 +186,10 @@ export default {
   flex-direction: column;
   align-items: center;
 }
-.form_buttons {
-  padding-top: 20px;
+.forms {
+  margin: 20px;
+}
+.file-input {
+  margin: 20px;
 }
 </style>
