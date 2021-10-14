@@ -11,5 +11,6 @@ export const meetingApi = {
   update: (meetingId, update) => Api.patch(`/meetings/${meetingId}`, update),
   joinOrLeave: (meetingId, userId) =>
     Api.patch(`/meetings/${meetingId}/users/${userId}`),
-  delete: meetingId => Api.delete(`/meetings/${meetingId}`)
+  delete: meetingId => Api.delete(`/meetings/${meetingId}`),
+  deleteAll: () => Api.delete('/meetings')
 }

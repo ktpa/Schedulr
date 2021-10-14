@@ -15,47 +15,53 @@ router.get("/", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    if(!req.query.active && !req.query.inactive) {
+    if (!req.query.active && !req.query.inactive) {
       const meetings = await meetingModel
-      .find({ participantsList: user._id }, function (err, meetings) {
-        if (err) {
-          return next(err);
-        }
-        if (meetings === null) {
-          return res.status(404).json({ message: "Meetings not found" });
-        }
-      })
-      .populate("participantsList", "-password");
+        .find({ participantsList: user._id }, function (err, meetings) {
+          if (err) {
+            return next(err);
+          }
+          if (meetings === null) {
+            return res.status(404).json({ message: "Meetings not found" });
+          }
+        })
+        .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     } else if (req.query.active) {
-      const date = new Date()
-      const isoDate = date.toISOString().split('T')[0]
+      const date = new Date();
+      const isoDate = date.toISOString().split("T")[0];
       const meetings = await meetingModel
-      .find({ participantsList: user._id, lastPossibleDay: { $gte: isoDate } }, function (err, meetings) {
-        if (err) {
-          return next(err);
-        }
-        if (meetings === null) {
-          return res.status(404).json({ message: "Meetings not found" });
-        }
-      })
-      .populate("participantsList", "-password");
+        .find(
+          { participantsList: user._id, lastPossibleDay: { $gte: isoDate } },
+          function (err, meetings) {
+            if (err) {
+              return next(err);
+            }
+            if (meetings === null) {
+              return res.status(404).json({ message: "Meetings not found" });
+            }
+          }
+        )
+        .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     } else if (req.query.inactive) {
-    const date = new Date()
-    const isoDate = date.toISOString().split('T')[0]
-    const meetings = await meetingModel
-    .find({ participantsList: user._id, lastPossibleDay: { $lt: isoDate } }, function (err, meetings) {
-      if (err) {
-        return next(err);
-      }
-      if (meetings === null) {
-        return res.status(404).json({ message: "Meetings not found" });
-      }
-    })
-    .populate("participantsList", "-password");
-    res.status(200).json({ data: meetings });
-  }
+      const date = new Date();
+      const isoDate = date.toISOString().split("T")[0];
+      const meetings = await meetingModel
+        .find(
+          { participantsList: user._id, lastPossibleDay: { $lt: isoDate } },
+          function (err, meetings) {
+            if (err) {
+              return next(err);
+            }
+            if (meetings === null) {
+              return res.status(404).json({ message: "Meetings not found" });
+            }
+          }
+        )
+        .populate("participantsList", "-password");
+      res.status(200).json({ data: meetings });
+    }
   });
 });
 
@@ -90,16 +96,27 @@ router.post("/", authenticateRequest, (req, res) => {
 
 // TODO() Only used for passing requirements
 // Remove once project has been graded
-router.delete("/", (req, res) => {
-  try {
-    meetingModel.remove(function(err, x) {
-    if (err) { return next(err); }
-    res.status(200).json({ removedRecords: x.deletedCount })
-  })
-  } catch(err) {
-    res.status(500).json(err);
+router.delete("/", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
   }
-})
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user && user.username !== "admin") {
+      res.status(403);
+    }
+    try {
+      meetingModel.remove(function (err, x) {
+        if (err) {
+          return next(err);
+        }
+        res.status(200).json({ removedRecords: x.deletedCount });
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+});
 
 router.get("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
@@ -160,20 +177,20 @@ router.get("/:id", authenticateRequest, (req, res) => {
 // TODO() Only used for passing requirements
 // Remove once project has been graded
 router.put("/:id", async (req, res) => {
-  let update = req.body.meeting
-  try{
+  let update = req.body.meeting;
+  try {
     let updatedMeeting = await meetingModel.findOneAndReplace(
       { _id: req.params.id },
       update,
       {
-        new: true
+        new: true,
       }
     );
     res.status(200).json(updatedMeeting);
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 router.patch("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
@@ -290,7 +307,10 @@ router.post("/:id/availableTimes", authenticateRequest, (req, res) => {
   });
 });
 
-router.delete("/:meetingid/availableTimes/:id", authenticateRequest, (req, res) => {
+router.delete(
+  "/:meetingid/availableTimes/:id",
+  authenticateRequest,
+  (req, res) => {
     if (!req.token) {
       res.status(401);
     }
@@ -314,7 +334,10 @@ router.delete("/:meetingid/availableTimes/:id", authenticateRequest, (req, res) 
   }
 );
 
-router.patch("/:meetingid/users/:userid", authenticateRequest, async (req, res) => {
+router.patch(
+  "/:meetingid/users/:userid",
+  authenticateRequest,
+  async (req, res) => {
     if (!req.token) {
       res.status(401);
     }

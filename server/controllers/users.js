@@ -32,43 +32,56 @@ router.post("/", async (req, res) => {
 
 // TODO() Only used for passing requirements
 // Remove once project has been graded
-router.get("/",  (req, res) => {
-    userModel.find(function(err, users) {
-      if (err) { return next(err); }
-      res.status(200).json({ data: users})
-    })
+router.get("/", (req, res) => {
+  userModel.find(function (err, users) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({ data: users });
+  });
 });
 
 // TODO() Only used for passing requirements
 // Remove once project has been graded
-router.delete("/", (req, res) => {
-  try {
-    userModel.remove(function(err, x) {
-    if (err) { return next(err); }
-    res.status(200).json({ removedRecords: x.deletedCount })
-  })
-  } catch(err) {
-    res.status(500).json(err);
+router.delete("/", authenticateRequest, (req, res) => {
+  if (!req.token) {
+    res.status(401);
   }
-})
+
+  getUserFromToken(req.token).then((user) => {
+    if (!user && user.username !== "admin") {
+      res.status(403);
+    }
+    try {
+      userModel.remove(function (err, x) {
+        if (err) {
+          return next(err);
+        }
+        res.status(200).json({ removedRecords: x.deletedCount });
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+});
 
 // TODO() Only used for passing requirements
 // Remove once project has been graded
 router.put("/:id", async (req, res) => {
-  let update = req.body.user
-  try{
+  let update = req.body.user;
+  try {
     let updatedUser = await userModel.findOneAndReplace(
       { _id: req.params.id },
       update,
       {
-        new: true
+        new: true,
       }
     );
     res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json(err);
   }
-})
+});
 
 router.get("/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
@@ -143,13 +156,13 @@ router.get("/:id/blockedTimes", authenticateRequest, (req, res) => {
     if (!user) {
       res.status(403);
     }
-    blockedTimeModel.find({user: user._id}, function(err, meetings) {
-      if(err) {
-        return next(error)
+    blockedTimeModel.find({ user: user._id }, function (err, meetings) {
+      if (err) {
+        return next(error);
       } else {
-        res.status(200).json(meetings)
+        res.status(200).json(meetings);
       }
-    })
+    });
   });
 });
 

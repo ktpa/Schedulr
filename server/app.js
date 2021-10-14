@@ -5,6 +5,7 @@ var path = require("path");
 var cors = require("cors");
 var history = require("connect-history-api-fallback");
 var initDefClient = require("./auth/initDefaultClient");
+var initAdmin = require("./auth/initAdmin");
 
 //Routes
 const authRoutes = require("./controllers/auth");
@@ -48,9 +49,12 @@ app.use("/api/users", usersRoutes);
 app.use("/api/dev", devRoutes);
 app.use("/api/meetings", meetingsRoutes);
 
- app.get('/api', function(req, res) {
-     res.json({'message': 'This route is used for newman-wait that runs with the npm test command.'});
- });
+app.get("/api", function (req, res) {
+  res.json({
+    message:
+      "This route is used for newman-wait that runs with the npm test command.",
+  });
+});
 
 // Configuration for serving frontend in production mode
 // Support Vuejs HTML 5 history mode
@@ -82,7 +86,8 @@ app.listen(port, function (err) {
   console.log(`Express server listening on port ${port}, in ${env} mode`);
   console.log(`Backend: http://localhost:${port}/api/`);
   console.log(`Frontend (production): http://localhost:${port}/`);
-  initDefClient()
+  initDefClient();
+  initAdmin();
 });
 
 module.exports = app;
