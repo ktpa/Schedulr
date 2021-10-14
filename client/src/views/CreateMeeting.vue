@@ -1,5 +1,5 @@
 <template>
-  <div class="meetingCreationPage">
+  <div class="create-meeting">
     <MeetingPlanner />
   </div>
 </template>
@@ -15,12 +15,10 @@ export default {
 </script>
 
 <style>
-.meetingCreationPage {
+.create-meeting {
   display: flex;
-  align-items: center;
+  align-content: center;
   justify-content: center;
-  overflow: hidden;
-  position: relative;
-  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+  height: 100%;
 }
 </style>

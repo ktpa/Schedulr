@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2671b4de-fcda-4c27-9fb0-b62b27534f9a",
+		"_postman_id": "6e779311-0910-4ded-b265-bb33b476a064",
 		"name": "Server",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -241,6 +241,77 @@
 						{
 							"key": "password",
 							"value": "jensjens",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login Admin w Password & Set Variable Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"postman.setGlobalVariable(\"admin_token\", jsonData.accessToken);\r",
+							"postman.setGlobalVariable(\"admin_user_id\", jsonData.user);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Basic YXBwbGljYXRpb246c2VjcmV0"
+					},
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "admin",
+							"contentType": "text/html",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
 							"type": "text"
 						},
 						{
@@ -938,7 +1009,7 @@
 		{
 			"name": "Update Meeting",
 			"request": {
-				"method": "PUT",
+				"method": "PATCH",
 				"header": [
 					{
 						"key": "Authorization",
@@ -977,6 +1048,254 @@
 						"api",
 						"meetings",
 						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Meeting",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "meeting[createdBy]",
+							"value": "{{user_id}}",
+							"type": "text"
+						},
+						{
+							"key": "meeting[firstPossibleDay]",
+							"value": "2022-09-25",
+							"type": "text"
+						},
+						{
+							"key": "meeting[lastPossibleDay]",
+							"value": "2022-09-30",
+							"type": "text"
+						},
+						{
+							"key": "meeting[firstPossibleHour]",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "meeting[lastPossibleHour]",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "meeting[meetingName]",
+							"value": "Updated with PUT request",
+							"type": "text"
+						},
+						{
+							"key": "meeting[participantsList][]",
+							"value": "{{user_id}}",
+							"type": "text"
+						},
+						{
+							"key": "meeting[participantsList][]",
+							"value": "{{user_id_2}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/{{meeting_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						"{{meeting_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "user[username]",
+							"value": "jens",
+							"type": "text"
+						},
+						{
+							"key": "user[email]",
+							"value": "jensa@email.com",
+							"type": "text"
+						},
+						{
+							"key": "user[password]",
+							"value": "jensjens",
+							"type": "text"
+						},
+						{
+							"key": "user[name]",
+							"value": "jens sjodin updated",
+							"type": "text"
+						},
+						{
+							"key": "user[profilePicUrl]",
+							"value": "www.google.com updated",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Blocked Times",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}/blockedTimes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"blockedTimes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Blocked Time",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/{{user_id}}/blockedTimes/{{blockedTime_id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						"{{user_id}}",
+						"blockedTimes",
+						"{{blockedTime_id}}"
 					]
 				}
 			},
@@ -1152,6 +1471,106 @@
 						"api",
 						"users",
 						"{{user_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Meetings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/meetings/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"meetings",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{admin_token}}",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": []
+				},
+				"url": {
+					"raw": "http://localhost:{{port}}/api/users/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "{{port}}",
+					"path": [
+						"api",
+						"users",
+						""
 					]
 				}
 			},

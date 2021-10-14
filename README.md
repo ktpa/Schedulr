@@ -68,7 +68,8 @@ SchedulR is a tool for ambitious people with little time. SchedulR has an easy-t
 * Login/Signup: A user creates an account or authenticates here.
 * Home: A user can see upcoming meetings and set their blocked time.
 * Create Meeting: A user creates meetings.
-* Meeting: This is where all attendees view meeting information.
+* Meeting Details: This is where all attendees view the specific meetings information.
+* Blocked Times: This is where a user can set their blocked times.
 
 
 ### Entity-Relationship (ER) Diagram

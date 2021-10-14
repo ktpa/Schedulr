@@ -52,6 +52,7 @@
         @click="this.leaveMeeting"
         >Leave Meeting</b-button
       >
+      <QRCode/>
     </div>
     <JoinMeeting
       v-if="this.meeting && !isParticipant()"
@@ -66,13 +67,15 @@ import JoinMeeting from '../components/Meeting/JoinMeeting.vue'
 import { meetingApi } from '@/api/meeting.js'
 import { BIconPencilFill, BIconCheckCircle, BIconX } from 'bootstrap-vue'
 import lodash from 'lodash'
+import QRCode from '../components/QRCode/QRCode.vue'
 export default {
   components: {
     AvailableTimePicker,
     JoinMeeting,
     BIconPencilFill,
     BIconCheckCircle,
-    BIconX
+    BIconX,
+    QRCode
   },
   data() {
     return {
