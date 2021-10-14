@@ -1,13 +1,28 @@
 <template>
-  <div>
-    <div>
-      <h2>Select a meeting date</h2>
+  <div class="meeting-planner">
+    <div class="left">
+      <span class="label">
+        1. Enter meeting name
+      </span>
+      <b-input
+        class="form-input"
+        type="text"
+        size="lg"
+        v-model="form.name"
+        placeholder="Meeting name"
+        id="name"
+      />
+
+      <span class="label">
+        2. Select meeting date
+      </span>
       <DatePicker
         v-model="range"
         @drag="dragValue = $event"
         :select-attribute="selectDragAttribute"
         :drag-attribute="selectDragAttribute"
         :first-day-of-week="2"
+        :min-date="minDate"
         show-iso-weeknumbers
         class="neatShadow"
         is-range
@@ -22,25 +37,37 @@
         </template>
       </DatePicker>
     </div>
-    <div>
-      <h2>
-        {{ new Intl.DateTimeFormat('en-GB').format(this.date) }}
-      </h2>
-    </div>
-    <div>
-      <b-input
-        class="form-input"
-        type="text"
-        v-model="form.name"
-        placeholder="Meeting name"
-        id="name"
-      />
-    </div>
-    <div v-if="this.incorrect">
-      <p class="errorText h6">Date has not been set.</p>
-    </div>
-    <div>
-      <b-button v-on:click="createMeeting()" class="confirmBtn"
+    <div class="right">
+      <span class="label">
+        3. Select meeting time
+      </span>
+
+      <span class="label-sm">
+        First possible hour
+      </span>
+      <b-time
+        class="b-time"
+        v-model="firstHour"
+        :hour12="false"
+        :minutes-step="30"
+        :hide-header="true"
+        locale="en"
+      ></b-time>
+
+      <span class="label-sm">
+        Last possible hour
+      </span>
+      <b-time
+        v-model="lastHour"
+        :hour12="false"
+        :minutes-step="30"
+        :hide-header="true"
+        locale="en"
+      ></b-time>
+      <b-button
+        v-on:click="createMeeting()"
+        class="confirmBtn"
+        variant="outline-primary"
         >Create Meeting</b-button
       >
     </div>
@@ -58,38 +85,31 @@ export default {
   },
   data() {
     return {
+      minDate: Date.now(),
       form: {
-        name: ''
+        name: 'New Meeting'
       },
       incorrect: false,
       range: {
-        start: Date.now(),
-        end: Date.now()
+        start: new Date(Date.now()),
+        end: new Date(Date.now() + 60 * 60 * 24 * 1000) // tomorrow
       },
-      dragValue: null,
-      modelConfig: {
-        start: {
-          timeAdjust: '00:00:00'
-        },
-        end: {
-          timeAdjust: '23:59:59'
-        }
-      }
+      firstHour: '09:00',
+      lastHour: '17:00',
+      dragValue: null
     }
   },
   methods: {
     createMeeting() {
       if (this.range.start instanceof Date && this.range.end instanceof Date) {
-        console.log('Date is defined.')
         this.incorrect = false
         const meeting = {
           firstPossibleDay: this.range.start.toISOString().split('T')[0],
           lastPossibleDay: this.range.end.toISOString().split('T')[0],
-          firstPossibleHour: 0,
-          lastPossibleHour: 23,
+          firstPossibleHour: this.firstHour.split(':')[0],
+          lastPossibleHour: this.lastHour.split(':')[0],
           meetingName: this.form.name
         }
-        console.log(meeting)
         meetingApi
           .createMeeting(meeting)
           .then(res => {
@@ -99,7 +119,6 @@ export default {
             console.log(err)
           })
       } else {
-        console.log('Date is not defined.')
         this.incorrect = true
       }
     }
@@ -118,13 +137,49 @@ export default {
 </script>
 
 <style scoped>
+.enter-title {
+  margin-bottom: 15px;
+}
+.label {
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+  margin-bottom: 10px;
+  color: #3751fe;
+}
+.label-sm {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  margin-bottom: 5px;
+  opacity: 0.6;
+}
+.b-time {
+  margin-bottom: 10px;
+}
+.meeting-planner {
+  display: flex;
+  flex-direction: row;
+}
+.left {
+  display: flex;
+  flex-direction: column;
+}
+.right {
+  display: flex;
+  flex-direction: column;
+  margin-left: 100px;
+}
+
 .form-input {
+  margin-bottom: 15px;
   max-width: 25em;
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 .confirmBtn {
+  margin-top: 10px;
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
@@ -134,10 +189,14 @@ export default {
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
-.errorText {
-  color: red;
-}
-.successful {
-  color: rgb(56, 187, 56);
+@media (max-width: 768px) {
+  .meeting-planner {
+    display: flex;
+    flex-direction: column;
+  }
+  .right {
+    margin-left: 0px;
+    margin-top: 15px;
+  }
 }
 </style>

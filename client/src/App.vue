@@ -27,7 +27,7 @@ export default {
   color: #2c3e50;
 }
 #root {
-  min-height: calc(100vh - 122px);
+  min-height: calc(100vh - 162px);
   margin: 20px 50px;
 }
 @media (max-width: 768px) {
