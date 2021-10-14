@@ -1,10 +1,6 @@
 <template>
   <div class="profile">
     <h1>Welcome {{ this.currName }}</h1>
-    <div class="update_profile">
-      <b-button v-if="disabled" @click="activateProfile"
-        >Update Profile</b-button>
-    </div>
 
     <b-form ref="form" @submit="onUpdateProfile">
       <div class="profile-details">
@@ -16,7 +12,8 @@
             }}</b-list-group-item>
           </b-list-group>
         </p>
-        <br/>
+        <br />
+        <b-img v-bind="pictureProps" :src="user.profilePicUrl" />
         <b-input
           type="text"
           v-model="user.username"
@@ -50,8 +47,23 @@
         />
       </div>
       <div class="form_buttons">
-        <b-button class="form_button1" v-if="!disabled" variant="danger" v-on:click="onCancel">Cancel</b-button>
-        <b-button class="form_button2" v-if="!disabled" variant="success" v-on:click="onUpdateProfile">Save Changes</b-button>
+        <b-button v-if="disabled" @click="activateProfile"
+          >Update Profile</b-button
+        >
+        <b-button
+          class="form_button1"
+          v-if="!disabled"
+          variant="danger"
+          v-on:click="onCancel"
+          >Cancel</b-button
+        >
+        <b-button
+          class="form_button2"
+          v-if="!disabled"
+          variant="success"
+          v-on:click="onUpdateProfile"
+          >Save Changes</b-button
+        >
       </div>
     </b-form>
   </div>
@@ -68,6 +80,13 @@ export default {
         email: '',
         password: '',
         profilePicUrl: ''
+      },
+      pictureProps: {
+        blank: false,
+        blankColor: '#177',
+        width: 100,
+        height: 100,
+        class: 'm1' // Get default picture and replace source if src is missing.
       },
       currName: '',
       disabled: true,
@@ -151,9 +170,6 @@ export default {
 </script>
 
 <style>
-.update_profile {
-  padding-top: 20px;
-}
 .profile {
   display: flex;
   flex-direction: column;
@@ -162,5 +178,4 @@ export default {
 .form_buttons {
   padding-top: 20px;
 }
-
 </style>
