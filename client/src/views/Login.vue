@@ -53,7 +53,6 @@ export default {
   }
 }
 </script>
-
 <style>
 .opacityTransform {
   animation: opacityTransform 0.5s linear normal;
@@ -67,6 +66,7 @@ export default {
   height: 100vh;
   width: 100vw;
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+  margin: -20px -50px;
 }
 .login-logo {
   height: 50px;
@@ -109,6 +109,9 @@ export default {
   background-size: 100%;
 }
 @media (max-width: 768px) {
+  .landing {
+    margin: -20px -10px;
+  }
   .card {
     width: 80%;
   }
