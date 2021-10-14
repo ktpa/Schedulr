@@ -51,10 +51,15 @@
               alt=""
               class="participantImage slick-shadow"
             ></b-img>
-            <span class="participants"
+            <span class="participants" :id="`tooltip-${meeting._id}`"
               ><BIconPeopleFill class="participants-icon" />Participants:
               {{ meeting.participantsList.length }}</span
             >
+            <b-tooltip :target="`tooltip-${meeting._id}`" triggers="hover">
+              <span v-for="user in meeting.participantsList" :key="user._id">
+                {{ user.name }}<br />
+              </span>
+            </b-tooltip>
           </div>
         </a>
       </b-list-group-item>
