@@ -5,12 +5,14 @@ import BootstrapVue from 'bootstrap-vue'
 import { Api } from '@/Api.js'
 import store from './api/store'
 import VueCookies from 'vue-cookies'
+import VueClipboard from 'vue-clipboard2'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 Vue.use(VueCookies)
+Vue.use(VueClipboard)
 
 Vue.$cookies.config('30d')
 
@@ -26,18 +28,7 @@ if (token) {
 new Vue({
   router,
   store,
-  render: function (h) {
+  render(h) {
     return h(App)
-  },
-  created: function () {
-    /*
-    this.$http.interceptors.response.use(undefined, function (err) {
-      return new Promise(function (resolve, reject) {
-        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch('logout')
-        }
-        throw err
-      })
-    }) */
   }
 }).$mount('#app')

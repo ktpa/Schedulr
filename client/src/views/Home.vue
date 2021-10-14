@@ -1,10 +1,56 @@
 <template>
-  <div>
+  <div class="home">
     <b-list-group id="meetings_list">
-      <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
+      <b-list-group-item
+        class="list-group-item list-group-item-action list-group-item-info"
+        v-for="meeting in meetings"
+        :key="meeting.message"
+      >
         <a :href="`meeting/${meeting._id}`">
-          <span>{{ meeting.meetingName }}</span>
-          <span>Participants: {{ meeting.participantsList.length }}</span>
+          <div class="topContainer">
+            <span class="name">{{
+              formatMeetingName(meeting.meetingName)
+            }}</span>
+          </div>
+          <div class="middleContainer">
+            <!-- Get user that created the meeting, show as owner + name. -->
+            <b-img
+              v-bind="creatorProps"
+              :src="meeting.createdBy.profilePicUrl"
+              rounded="circle"
+              alt=""
+              class="creatorImage slick-shadow"
+            ></b-img>
+            <span class="creator">{{ meeting.createdBy.name }}</span>
+            <div class="midText">
+              <span class="meetingDate"
+                >First:
+                {{
+                  new Date(meeting.firstPossibleDay)
+                    .toISOString()
+                    .split('T')[0]
+                }}<br />Last:
+                {{
+                  new Date(meeting.lastPossibleDay).toISOString().split('T')[0]
+                }}</span
+              >
+            </div>
+            <!-- Get dates of meeting, display earliest meeting day -->
+          </div>
+          <div class="bottomContainer">
+            <b-img
+              v-for="participant in meeting.participantsList"
+              :key="participant.profilePicUrl"
+              :src="participant.profilePicUrl"
+              v-bind="participantProps"
+              rounded="circle"
+              alt=""
+              class="participantImage slick-shadow"
+            ></b-img>
+            <span class="participants"
+              >Participants: {{ meeting.participantsList.length }}</span
+            >
+          </div>
         </a>
       </b-list-group-item>
     </b-list-group>
@@ -14,13 +60,29 @@
 <script>
 // @ is an alias to /src
 import { meetingApi } from '@/api/meeting.js'
+import { truncate } from 'lodash'
 
 export default {
   name: 'home',
   components: {},
   data() {
     return {
-      meetings: []
+      meetings: [],
+      creatorProps: {
+        blank: false,
+        blankColor: '#177',
+        width: 35,
+        height: 35,
+        class: 'm1'
+      },
+      participantProps: {
+        blank: false,
+        blankColor: '#242',
+        width: 25,
+        height: 25,
+        class: 'm1',
+        background: 'black'
+      }
     }
   },
   beforeCreate() {
@@ -35,6 +97,12 @@ export default {
     participants: a => {
       console.log(a)
       return a.length
+    },
+    formatMeetingName(name) {
+      name = truncate(name, {
+        length: '28'
+      })
+      return name
     }
   }
 }
@@ -42,28 +110,92 @@ export default {
 
 <style scoped>
 #meetings_list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, auto));
+  gap: 5%;
+  border-radius: 15px;
+}
+.creatorImage {
+  margin: 5px;
+  border-style: solid;
+  border-width: 3px;
+}
+.participantImage {
+  margin-right: -15px;
+  margin-left: 5px;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 2px;
+}
+.creator {
+  color: rgb(0, 0, 0);
+  font-size: 1.1em;
+}
+.meetingDate {
+  color: rgb(0, 0, 0);
+}
+.midText {
   display: flex;
-  align-self: flex-end;
+  float: right;
+  padding-right: 5px;
+}
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.bottomContainer {
+  height: inherit;
+  border-radius: 15px;
+}
+.name {
+  text-align: left;
+  max-width: 75%;
+  margin: 10px;
+  font-size: 1.8em;
+}
+.participants {
+  margin: 10px;
+  float: right;
 }
 .list-group-item {
-  padding: 15px;
-  margin-bottom: 10px;
+  align-self: center;
+  justify-self: center;
+  text-align: left;
+  height: 200px;
+  width: 500px;
+  gap: 2%;
+  padding: 0px;
+  border-radius: 15px;
+  margin: 5px;
 }
 .list-group-item:nth-child(even) {
-  display: flex;
-  background-color: #fc7a30;
+  transition: 0.1s;
 }
 .list-group-item:nth-child(odd) {
-  display: flex;
-  background-color: #da6b6b;
+  transition: 0.1s;
+}
+.list-group-item:nth-child(odd):hover {
+  transition: 0.1s;
+}
+.list-group-item:nth-child(even):hover {
+  transition: 0.1s;
 }
 a {
   display: flex;
-  color: white;
+  flex-direction: column;
+  color: rgba(0, 0, 0, 0.95);
   width: 100%;
-  justify-content: space-between;
+  height: 100%;
+  transition: 0.2s;
 }
 a:hover {
   text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+  transition: 0.2s;
+}
+.slick-shadow {
+  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
 }
 </style>

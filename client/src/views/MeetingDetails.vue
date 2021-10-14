@@ -1,58 +1,121 @@
 <template>
-  <div>
-    <div class="page" v-if="this.meeting && isParticipant()">
+  <div class="wrapper">
+    <div v-if="this.meeting && isParticipant()">
       <div class="header">
-        <h1 v-if="this.meeting && !this.editing">
-          {{ this.title }}
-        </h1>
-        <b-input v-model="title" v-if="this.meeting && this.editing" />
-        <b-button
-          v-if="
-            this.meeting &&
-              this.meeting.createdBy === this.$store.getters.userId
-          "
-          size="sm"
-          class="edit-button"
-          variant="outline-secondary"
-          @click="this.editMeeting"
-          ><BIconPencilFill v-if="!this.editing" />
-          <BIconCheckCircle v-if="this.editing" />
-        </b-button>
-        <b-button
-          v-if="
-            this.meeting &&
-              this.meeting.createdBy === this.$store.getters.userId &&
-              this.editing
-          "
-          size="sm"
-          class="edit-button"
-          variant="outline-secondary"
-          @click="this.cancelEdit"
-          ><BIconX />
-        </b-button>
+        <div class="title">
+          <h1 v-if="this.meeting && !this.editing">
+            {{ this.title }}
+          </h1>
+          <b-input v-model="title" v-if="this.meeting && this.editing" />
+          <b-button
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId
+            "
+            size="sm"
+            class="edit-button"
+            variant="outline-secondary"
+            @click="this.editMeeting"
+            ><BIconPencilFill v-if="!this.editing" />
+            <BIconCheckCircle v-if="this.editing" />
+          </b-button>
+          <b-button
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId &&
+                this.editing
+            "
+            size="sm"
+            class="edit-button"
+            variant="outline-secondary"
+            @click="this.cancelEdit"
+            ><BIconX />
+          </b-button>
+        </div>
       </div>
-      <AvailableTimePicker
-        v-if="this.meeting"
-        :meeting="this.meeting"
-        :onChange="this.reFetch"
-      />
-      <b-button
-        class="delete-button"
-        v-if="
-          this.meeting && this.meeting.createdBy === this.$store.getters.userId
-        "
-        @click="this.deleteMeeting"
-        >Delete Meeting</b-button
-      >
-      <b-button
-        class="delete-button"
-        v-if="
-          this.meeting && this.meeting.createdBy !== this.$store.getters.userId
-        "
-        @click="this.leaveMeeting"
-        >Leave Meeting</b-button
-      >
-      <QRCode/>
+      <div class="meeting-content">
+        <AvailableTimePicker
+          v-if="this.meeting"
+          :meeting="this.meeting"
+          :onChange="this.reFetch"
+        />
+        <div class="utils">
+          <ParticipantsList :participantsList="meeting.participantsList" />
+          <div class="share">
+            <span class="share-label">Share Meeting</span>
+            <div class="qr">
+              <QRCode />
+            </div>
+            <div class="copy-to-clipboard">
+              <b-button
+                variant="outline-primary"
+                class="copy-button"
+                v-clipboard:copy="url"
+                v-clipboard:success="onCopy"
+                ><BIconClipboard
+              /></b-button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="action-form">
+        <b-form>
+          <b-button
+            :disabled="busy"
+            ref="submit"
+            variant="danger"
+            class="delete-button"
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId
+            "
+            @click="this.clickDeleteMeeting"
+            >Delete Meeting</b-button
+          >
+          <b-button
+            :disabled="busy"
+            ref="submit"
+            class="delete-button"
+            variant="outline-danger"
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy !== this.$store.getters.userId
+            "
+            @click="this.clickLeaveMeeting"
+            >Leave Meeting</b-button
+          >
+          <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
+            <template #overlay>
+              <div
+                ref="dialog"
+                tabindex="-1"
+                role="dialog"
+                aria-modal="false"
+                aria-labelledby="form-confirm-label"
+                class="text-center p-3"
+              >
+                <p>
+                  <strong id="form-confirm-label"
+                    >Are you sure about this?</strong
+                  >
+                </p>
+                <div class="buttons">
+                  <b-button
+                    variant="outline-success"
+                    class="mr-3"
+                    @click="onCancel"
+                  >
+                    Cancel
+                  </b-button>
+                  <b-button variant="outline-danger" @click="onOK"
+                    >Yes</b-button
+                  >
+                </div>
+              </div>
+            </template>
+          </b-overlay>
+        </b-form>
+      </div>
     </div>
     <JoinMeeting
       v-if="this.meeting && !isParticipant()"
@@ -64,8 +127,14 @@
 <script>
 import AvailableTimePicker from '../components/Meeting/AvailableTimePicker.vue'
 import JoinMeeting from '../components/Meeting/JoinMeeting.vue'
+import ParticipantsList from '../components/Meeting/ParticipantsList.vue'
 import { meetingApi } from '@/api/meeting.js'
-import { BIconPencilFill, BIconCheckCircle, BIconX } from 'bootstrap-vue'
+import {
+  BIconPencilFill,
+  BIconCheckCircle,
+  BIconX,
+  BIconClipboard
+} from 'bootstrap-vue'
 import lodash from 'lodash'
 import QRCode from '../components/QRCode/QRCode.vue'
 export default {
@@ -75,13 +144,18 @@ export default {
     BIconPencilFill,
     BIconCheckCircle,
     BIconX,
-    QRCode
+    BIconClipboard,
+    QRCode,
+    ParticipantsList
   },
   data() {
     return {
       meeting: undefined,
       editing: false,
-      title: 'null'
+      title: 'null',
+      url: window.location.href,
+      onOK: null,
+      busy: false
     }
   },
   beforeCreate() {
@@ -97,6 +171,32 @@ export default {
       })
   },
   methods: {
+    onShown() {
+      this.$refs.dialog.focus()
+    },
+    onHidden() {
+      this.$refs.submit.focus()
+    },
+    onCancel() {
+      this.onOK = null
+      this.busy = false
+    },
+    clickDeleteMeeting() {
+      this.busy = true
+      this.onOK = this.deleteMeeting
+    },
+    clickLeaveMeeting() {
+      this.busy = true
+      this.onOK = this.leaveMeeting
+    },
+    onCopy() {
+      this.$bvToast.toast('You copied the meeting link!', {
+        autoHideDelay: 2500,
+        noCloseButton: true,
+        variant: 'success',
+        noHoverPause: true
+      })
+    },
     deleteMeeting() {
       if (this.meeting) {
         if (this.meeting.createdBy === this.$store.getters.userId) {
@@ -173,15 +273,59 @@ export default {
 </script>
 
 <style scoped>
-.page {
-  margin-left: 20px;
-  float: left;
+.meeting-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.utils {
+  margin-left: 100px;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
 }
 .header {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  width: 100%;
   margin: 20px 0px;
+}
+.title {
+  display: flex;
+  align-items: center;
+}
+.share {
+  padding: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #00000030;
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+}
+.share-label {
+  white-space: nowrap;
+  font-size: 15px;
+  line-height: 15px;
+  display: block;
+
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.qr {
+  margin-left: 15px;
+  height: 100px;
+  width: 100px;
+}
+.copy-to-clipboard {
+  margin-left: 25px;
+}
+.copy-button {
+  height: 100px;
+  width: 100px;
 }
 .edit-button {
   margin-left: 20px;
@@ -192,5 +336,22 @@ export default {
 }
 h1 {
   float: left;
+}
+@media (max-width: 768px) {
+  .meeting-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .utils {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0px;
+    margin-top: 30px;
+  }
+  .action-form {
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>
