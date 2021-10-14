@@ -11,44 +11,49 @@
             <span class="name">{{
               formatMeetingName(meeting.meetingName)
             }}</span>
+            <span class="meetingDate">
+              <BIconCalendarWeekFill />
+              {{
+                `${
+                  new Date(meeting.firstPossibleDay).toString().split(' ')[1]
+                } ${
+                  new Date(meeting.firstPossibleDay).toString().split(' ')[2]
+                }`
+              }}
+              -
+              {{
+                `${
+                  new Date(meeting.lastPossibleDay).toString().split(' ')[1]
+                } ${new Date(meeting.lastPossibleDay).toString().split(' ')[2]}`
+              }}</span
+            >
           </div>
           <div class="middleContainer">
             <!-- Get user that created the meeting, show as owner + name. -->
             <b-img
               v-bind="creatorProps"
-              :src="meeting.createdBy.profilePicUrl"
+              :src="getProfilePic(meeting.createdBy.profilePicUrl)"
               rounded="circle"
               alt=""
               class="creatorImage slick-shadow"
             ></b-img>
             <span class="creator">{{ meeting.createdBy.name }}</span>
-            <div class="midText">
-              <span class="meetingDate"
-                >First:
-                {{
-                  new Date(meeting.firstPossibleDay)
-                    .toISOString()
-                    .split('T')[0]
-                }}<br />Last:
-                {{
-                  new Date(meeting.lastPossibleDay).toISOString().split('T')[0]
-                }}</span
-              >
-            </div>
+            <div class="midText"></div>
             <!-- Get dates of meeting, display earliest meeting day -->
           </div>
           <div class="bottomContainer">
             <b-img
               v-for="participant in meeting.participantsList"
-              :key="participant.profilePicUrl"
-              :src="participant.profilePicUrl"
+              :key="participant._id"
+              :src="getProfilePic(participant.profilePicUrl)"
               v-bind="participantProps"
               rounded="circle"
               alt=""
               class="participantImage slick-shadow"
             ></b-img>
             <span class="participants"
-              >Participants: {{ meeting.participantsList.length }}</span
+              ><BIconPeopleFill class="participants-icon" />Participants:
+              {{ meeting.participantsList.length }}</span
             >
           </div>
         </a>
@@ -61,10 +66,11 @@
 // @ is an alias to /src
 import { meetingApi } from '@/api/meeting.js'
 import { truncate } from 'lodash'
-
+import { BIconCalendarWeekFill, BIconPeopleFill } from 'bootstrap-vue'
+const placeholder = require('../res/images/profilePlaceholder.png')
 export default {
   name: 'home',
-  components: {},
+  components: { BIconCalendarWeekFill, BIconPeopleFill },
   data() {
     return {
       meetings: [],
@@ -103,6 +109,9 @@ export default {
         length: '28'
       })
       return name
+    },
+    getProfilePic(img) {
+      return img || placeholder
     }
   }
 }
@@ -128,11 +137,15 @@ export default {
   border-width: 2px;
 }
 .creator {
+  margin-left: 15px;
   color: rgb(0, 0, 0);
   font-size: 1.1em;
 }
 .meetingDate {
-  color: rgb(0, 0, 0);
+  font-weight: 500;
+  color: #3852fe;
+  margin-top: 20px;
+  margin-right: 10px;
 }
 .midText {
   display: flex;
@@ -145,6 +158,7 @@ export default {
 }
 .bottomContainer {
   height: inherit;
+  margin-top: 30px;
   border-radius: 15px;
 }
 .name {
@@ -157,6 +171,9 @@ export default {
   margin: 10px;
   float: right;
 }
+.participants-icon {
+  margin-right: 5px;
+}
 .list-group-item {
   align-self: center;
   justify-self: center;
@@ -164,7 +181,7 @@ export default {
   height: 200px;
   width: 500px;
   gap: 2%;
-  padding: 0px;
+  padding: 5px;
   border-radius: 15px;
   margin: 5px;
 }
