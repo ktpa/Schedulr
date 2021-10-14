@@ -18,7 +18,7 @@
               v-bind="creatorProps"
               :src="meeting.createdBy.profilePicUrl"
               rounded="circle"
-              alt="Circle image"
+              alt=""
               class="creatorImage slick-shadow"
             ></b-img>
             <span class="creator">{{ meeting.createdBy.name }}</span>
