@@ -128,7 +128,12 @@ export default {
   },
   methods: {
     onCopy() {
-      alert('You just copied!')
+      this.$bvToast.toast('You copied the meeting link!', {
+        autoHideDelay: 2500,
+        noCloseButton: true,
+        variant: 'success',
+        noHoverPause: true
+      })
     },
     deleteMeeting() {
       if (this.meeting) {
