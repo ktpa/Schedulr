@@ -3,6 +3,7 @@ const { authenticateRequest } = require("./auth");
 const { getUserFromToken } = require("./auth");
 const meetingModel = require("../models/meetings");
 const availableTimeModel = require("../models/available_times");
+const blockedTimesModel = require("../models/blocked_times");
 const lodash = require("lodash");
 const mongoose = require("mongoose");
 
@@ -25,6 +26,7 @@ router.get("/", authenticateRequest, (req, res) => {
             return res.status(404).json({ message: "Meetings not found" });
           }
         })
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     } else if (req.query.active) {
@@ -42,7 +44,9 @@ router.get("/", authenticateRequest, (req, res) => {
             }
           }
         )
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
+
       res.status(200).json({ data: meetings });
     } else if (req.query.inactive) {
       const date = new Date();
@@ -59,6 +63,7 @@ router.get("/", authenticateRequest, (req, res) => {
             }
           }
         )
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     }
@@ -132,14 +137,14 @@ router.get("/:id", authenticateRequest, (req, res) => {
       const findOneMeeting = meetingModel.aggregate([
         { $match: { _id: mongoose.Types.ObjectId(req.params.id) } },
       ]);
-      findOneMeeting
-        .lookup({
-          from: "blockedtimes",
-          localField: "createdBy",
-          foreignField: "user",
-          as: "blockedTimes",
-        })
-        .project("-blockedTimes.user");
+      //findOneMeeting
+      // .lookup({
+      //   from: "blockedtimes",
+      //   localField: "createdBy",
+      //   foreignField: "user",
+      //   as: "blockedTimes",
+      // })
+      // .project("-blockedTimes.user");
       // TODO(numank): We can fetch only blocked times after now().
       findOneMeeting
         .lookup({
@@ -164,7 +169,14 @@ router.get("/:id", authenticateRequest, (req, res) => {
           if (meeting.length < 1) {
             res.status(404).json("meeting_not_found");
           }
-          res.status(200).json(meeting[0]);
+          blockedTimesModel.find({ user: user._id }, (err, blockedTimes) => {
+            if (err) {
+              res.status(500).json(err);
+            }
+            res
+              .status(200)
+              .json({ ...meeting[0], ...{ blockedTimes: blockedTimes } });
+          });
         },
         (err) => res.status(500).json(err)
       );
