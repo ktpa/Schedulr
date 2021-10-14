@@ -20,6 +20,7 @@
 
 <script>
 import { BIconEnvelope } from 'bootstrap-vue'
+const placeholder = require('../../res/images/profilePlaceholder.png')
 export default {
   components: { BIconEnvelope },
   props: {
@@ -33,13 +34,8 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      placeholder: require('../../res/images/profilePlaceholder.png')
-    }
-  },
   methods: {
-    getProfilePicUrl: url => url || this.placeholder
+    getProfilePicUrl: url => url || placeholder
   }
 }
 </script>

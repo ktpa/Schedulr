@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="wrapper">
     <div v-if="this.meeting && isParticipant()">
       <div class="header">
         <div class="title">
@@ -39,41 +39,83 @@
           :meeting="this.meeting"
           :onChange="this.reFetch"
         />
-        <div class="share">
-          <span class="share-label">Share Meeting</span>
-          <div class="qr">
-            <QRCode />
-          </div>
-          <div class="copy-to-clipboard">
-            <b-button
-              variant="outline-primary"
-              class="copy-button"
-              v-clipboard:copy="url"
-              v-clipboard:success="onCopy"
-              ><BIconClipboard
-            /></b-button>
-          </div>
-        </div>
-        <div class="participants">
+        <div class="utils">
           <ParticipantsList :participantsList="meeting.participantsList" />
+          <div class="share">
+            <span class="share-label">Share Meeting</span>
+            <div class="qr">
+              <QRCode />
+            </div>
+            <div class="copy-to-clipboard">
+              <b-button
+                variant="outline-primary"
+                class="copy-button"
+                v-clipboard:copy="url"
+                v-clipboard:success="onCopy"
+                ><BIconClipboard
+              /></b-button>
+            </div>
+          </div>
         </div>
       </div>
-      <b-button
-        class="delete-button"
-        v-if="
-          this.meeting && this.meeting.createdBy === this.$store.getters.userId
-        "
-        @click="this.deleteMeeting"
-        >Delete Meeting</b-button
-      >
-      <b-button
-        class="delete-button"
-        v-if="
-          this.meeting && this.meeting.createdBy !== this.$store.getters.userId
-        "
-        @click="this.leaveMeeting"
-        >Leave Meeting</b-button
-      >
+      <div class="action-form">
+        <b-form>
+          <b-button
+            :disabled="busy"
+            ref="submit"
+            variant="danger"
+            class="delete-button"
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy === this.$store.getters.userId
+            "
+            @click="this.clickDeleteMeeting"
+            >Delete Meeting</b-button
+          >
+          <b-button
+            :disabled="busy"
+            ref="submit"
+            class="delete-button"
+            variant="outline-danger"
+            v-if="
+              this.meeting &&
+                this.meeting.createdBy !== this.$store.getters.userId
+            "
+            @click="this.clickLeaveMeeting"
+            >Leave Meeting</b-button
+          >
+          <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
+            <template #overlay>
+              <div
+                ref="dialog"
+                tabindex="-1"
+                role="dialog"
+                aria-modal="false"
+                aria-labelledby="form-confirm-label"
+                class="text-center p-3"
+              >
+                <p>
+                  <strong id="form-confirm-label"
+                    >Are you sure about this?</strong
+                  >
+                </p>
+                <div class="buttons">
+                  <b-button
+                    variant="outline-success"
+                    class="mr-3"
+                    @click="onCancel"
+                  >
+                    Cancel
+                  </b-button>
+                  <b-button variant="outline-danger" @click="onOK"
+                    >Yes</b-button
+                  >
+                </div>
+              </div>
+            </template>
+          </b-overlay>
+        </b-form>
+      </div>
     </div>
     <JoinMeeting
       v-if="this.meeting && !isParticipant()"
@@ -111,7 +153,9 @@ export default {
       meeting: undefined,
       editing: false,
       title: 'null',
-      url: window.location.href
+      url: window.location.href,
+      onOK: null,
+      busy: false
     }
   },
   beforeCreate() {
@@ -127,6 +171,24 @@ export default {
       })
   },
   methods: {
+    onShown() {
+      this.$refs.dialog.focus()
+    },
+    onHidden() {
+      this.$refs.submit.focus()
+    },
+    onCancel() {
+      this.onOK = null
+      this.busy = false
+    },
+    clickDeleteMeeting() {
+      this.busy = true
+      this.onOK = this.deleteMeeting
+    },
+    clickLeaveMeeting() {
+      this.busy = true
+      this.onOK = this.leaveMeeting
+    },
     onCopy() {
       this.$bvToast.toast('You copied the meeting link!', {
         autoHideDelay: 2500,
@@ -211,9 +273,20 @@ export default {
 </script>
 
 <style scoped>
+.meeting-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.utils {
+  margin-left: 100px;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+}
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   width: 100%;
   margin: 20px 0px;
@@ -228,9 +301,10 @@ export default {
   border-radius: 5px;
   border-width: 1px;
   border-color: #00000030;
-  width: 295px;
+  width: 300px;
   display: flex;
   flex-direction: row;
+  margin-top: 30px;
 }
 .share-label {
   white-space: nowrap;
@@ -262,5 +336,22 @@ export default {
 }
 h1 {
   float: left;
+}
+@media (max-width: 768px) {
+  .meeting-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .utils {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 0px;
+    margin-top: 30px;
+  }
+  .action-form {
+    display: flex;
+    justify-content: center;
+  }
 }
 </style>

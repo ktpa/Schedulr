@@ -35,12 +35,14 @@ export default {
   },
   watch: {
     // this is where we update backend with current changes
-    changeList: function () {
+    changeList() {
       if (this.changeList.length > 0) {
         this.changeList.map(change => {
           if (change.active) {
             return userApi
-              .createBlockedTime(this.$store.getters.userId, { blockedTime: change.time })
+              .createBlockedTime(this.$store.getters.userId, {
+                blockedTime: change.time
+              })
               .then(res => {
                 this.onChange()
               })
@@ -48,9 +50,7 @@ export default {
           } else {
             let idToDelete = null
             this.blockedTimes.forEach(time => {
-              if (
-                time.blockedTime === change.time
-              ) {
+              if (time.blockedTime === change.time) {
                 idToDelete = time._id
               }
             })
@@ -79,7 +79,7 @@ export default {
     }
   },
   computed: {
-    generatedData: function () {
+    generatedData() {
       const list = this.blockedTimes
       const tempDataList = []
       const AN_HOUR = 1000 * 3600

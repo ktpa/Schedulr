@@ -56,6 +56,8 @@ export default {
 .collapse {
   width: 300px;
   border-radius: 5px;
+  border: 1px solid;
+  border-color: #00000030;
 }
 .button-label {
   text-align: left;
