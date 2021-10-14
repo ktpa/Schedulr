@@ -29,9 +29,8 @@ export default {
 
 <style scoped>
 .qrcodewrapper {
-  margin-top: 100px;
-  width: 450px;
-  height: 450px;
+  width: 100%;
+  height: 100%;
 }
 .qrcode {
   margin-top: '100px';

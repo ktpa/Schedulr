@@ -36,11 +36,28 @@
           <b>Participants:</b> {{ this.numOfParticipants }}
         </div>
       </div>
-      <AvailableTimePicker
-        v-if="this.meeting"
-        :meeting="this.meeting"
-        :onChange="this.reFetch"
-      />
+      <div class="meeting-content">
+        <AvailableTimePicker
+          v-if="this.meeting"
+          :meeting="this.meeting"
+          :onChange="this.reFetch"
+        />
+        <div class="share">
+          <span class="share-label">Share Meeting</span>
+          <div class="qr">
+            <QRCode />
+          </div>
+          <div class="copy-to-clipboard">
+            <b-button
+              variant="outline-primary"
+              class="copy-button"
+              v-clipboard:copy="url"
+              v-clipboard:success="onCopy"
+              ><BIconClipboard
+            /></b-button>
+          </div>
+        </div>
+      </div>
       <b-button
         class="delete-button"
         v-if="
@@ -57,7 +74,6 @@
         @click="this.leaveMeeting"
         >Leave Meeting</b-button
       >
-      <QRCode/>
     </div>
     <JoinMeeting
       v-if="this.meeting && !isParticipant()"
@@ -70,7 +86,12 @@
 import AvailableTimePicker from '../components/Meeting/AvailableTimePicker.vue'
 import JoinMeeting from '../components/Meeting/JoinMeeting.vue'
 import { meetingApi } from '@/api/meeting.js'
-import { BIconPencilFill, BIconCheckCircle, BIconX } from 'bootstrap-vue'
+import {
+  BIconPencilFill,
+  BIconCheckCircle,
+  BIconX,
+  BIconClipboard
+} from 'bootstrap-vue'
 import lodash from 'lodash'
 import QRCode from '../components/QRCode/QRCode.vue'
 export default {
@@ -80,6 +101,7 @@ export default {
     BIconPencilFill,
     BIconCheckCircle,
     BIconX,
+    BIconClipboard,
     QRCode
   },
   data() {
@@ -87,7 +109,8 @@ export default {
       meeting: undefined,
       editing: false,
       title: 'null',
-      numOfParticipants: 1
+      numOfParticipants: 1,
+      url: window.location.href
     }
   },
   beforeCreate() {
@@ -104,6 +127,9 @@ export default {
       })
   },
   methods: {
+    onCopy() {
+      alert('You just copied!')
+    },
     deleteMeeting() {
       if (this.meeting) {
         if (this.meeting.createdBy === this.$store.getters.userId) {
@@ -189,8 +215,38 @@ export default {
 }
 .title {
   display: flex;
-
   align-items: center;
+}
+.share {
+  padding: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: #00000030;
+  width: 295px;
+  display: flex;
+  flex-direction: row;
+}
+.share-label {
+  white-space: nowrap;
+  font-size: 15px;
+  line-height: 15px;
+  display: block;
+
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+.qr {
+  margin-left: 15px;
+  height: 100px;
+  width: 100px;
+}
+.copy-to-clipboard {
+  margin-left: 25px;
+}
+.copy-button {
+  height: 100px;
+  width: 100px;
 }
 .edit-button {
   margin-left: 20px;
