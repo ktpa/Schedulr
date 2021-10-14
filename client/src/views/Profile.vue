@@ -1,7 +1,6 @@
 <template>
   <div class="profile">
     <h1>Welcome {{ this.currName }}</h1>
-
     <b-form ref="form" @submit="onUpdateProfile">
       <div class="profile-details">
         <p v-if="errors.length">
@@ -13,17 +12,19 @@
           </b-list-group>
         </p>
         <br />
-        <b-img
-          v-bind="pictureProps"
-          :src="user.profilePicUrl"
-          rounded="circle"
-        />
-        <v-file-input
-          v-if="!disabled"
-          counter
-          show-size
-          truncate-length="15"
-        ></v-file-input>
+        <div class="pic-upload">
+          <b-img
+            v-bind="pictureProps"
+            :src="user.profilePicUrl"
+            rounded="circle"
+          />
+          <input
+            type="file"
+            accept=".jpg"
+            class="file-upload"
+            @change="upload"
+          />
+        </div>
         <div class="forms">
           <b-input
             type="text"
@@ -55,6 +56,7 @@
             :disabled="disabled"
             placeholder="password"
             id="password"
+            v-if="!disabled"
           />
         </div>
       </div>
@@ -81,6 +83,8 @@
 </template>
 <script>
 import { userApi } from '@/api/user.js'
+import { imageApi } from '@/api/imageUpload.js'
+
 export default {
   name: 'profile',
   data() {
@@ -99,6 +103,7 @@ export default {
         height: 100,
         class: 'm1' // Get default picture and replace source if src is missing.
       },
+      file: null,
       currName: '',
       disabled: true,
       errors: []
@@ -136,6 +141,12 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    upload(e) {
+      const image = e.target.files[0]
+      imageApi.upload(image).then(res => {
+        console.log(res.data.link)
+      })
     },
     activateProfile() {
       this.disabled = !this.disabled
@@ -189,7 +200,26 @@ export default {
 .forms {
   margin: 20px;
 }
-.file-input {
-  margin: 20px;
+.file-upload {
+  z-index: 1;
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+.pic-upload {
+  position: relative;
+  height: 100px;
+  width: 100px;
+}
+.pic-upload:hover {
+  opacity: 0.8;
+}
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
