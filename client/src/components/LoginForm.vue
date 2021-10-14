@@ -7,7 +7,8 @@
         type="text"
         v-model="form.username"
         placeholder="Username"
-        id="username"
+        id="input-username"
+        :state="state"
       />
     </div>
 
@@ -18,8 +19,13 @@
         type="password"
         v-model="form.password"
         placeholder="Password"
-        id="password"
+        id="input-password"
+        :state="state"
       />
+
+      <b-form-invalid-feedback id="input-live-feedback">
+        Username or Password incorrect
+      </b-form-invalid-feedback>
     </div>
 
     <b-button class="submit-login" type="submit" v-on:click="submitLogin()">
@@ -40,7 +46,8 @@ export default {
     form: {
       username: '',
       password: ''
-    }
+    },
+    state: null
   }),
 
   methods: {
@@ -52,7 +59,7 @@ export default {
       this.$store
         .dispatch('login', user)
         .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
+        .catch(() => (this.state = false))
     }
   }
 }
