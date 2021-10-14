@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "moment": "^2.29.1",
-    "v-calendar": "^2.3.2"
+    "v-calendar": "^2.3.2",
+    "vue-virtual-scroll-list": "^2.3.3"
   }
 }

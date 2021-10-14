@@ -1,13 +1,12 @@
 <template>
-<div class='qrcode'>
-<a :href="image" download>
-<img id='image' :src="image" alt='QR Code to easily share the current meeting'/>
-</a>
-</div>
+  <div class="qrcodewrapper">
+    <div class="qrcode" v-html="this.image"></div>
+  </div>
 </template>
 
 <script>
 import QRCode from 'qrcode'
+import { qrRender } from './qrRender'
 export default {
   data() {
     return {
@@ -20,31 +19,20 @@ export default {
   },
   methods: {
     generateQR() {
-      QRCode.toDataURL(this.url).then(url => {
-        this.image = url
-        console.log(url)
-      })
-        .catch(err => {
-          console.log(err)
-        })
+      this.image = qrRender(
+        QRCode.create(this.url, { errorCorrectionLevel: 'H' })
+      )
     }
   }
 }
 </script>
 
 <style scoped>
-.qrcode {
-  display: flex;
-  flex-wrap: wrap;
-  width: 280px;
-  align-content: flex-start;
-  margin-left: 50px;
+.qrcodewrapper {
+  width: 100%;
+  height: 100%;
 }
-
-@media (max-width: 768px) {
-  .qrcode {
-    margin-top: 50px;
-    margin-left: 25px;
-  }
+.qrcode {
+  margin-top: '100px';
 }
 </style>
