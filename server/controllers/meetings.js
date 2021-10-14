@@ -26,6 +26,7 @@ router.get("/", authenticateRequest, (req, res) => {
             return res.status(404).json({ message: "Meetings not found" });
           }
         })
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     } else if (req.query.active) {
@@ -43,7 +44,9 @@ router.get("/", authenticateRequest, (req, res) => {
             }
           }
         )
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
+
       res.status(200).json({ data: meetings });
     } else if (req.query.inactive) {
       const date = new Date();
@@ -60,6 +63,7 @@ router.get("/", authenticateRequest, (req, res) => {
             }
           }
         )
+        .populate("createdBy", "-password")
         .populate("participantsList", "-password");
       res.status(200).json({ data: meetings });
     }
