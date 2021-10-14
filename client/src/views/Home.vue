@@ -2,7 +2,7 @@
   <div class="home">
     <b-list-group id="meetings_list">
       <b-list-group-item
-        class="list-group-item list-group-item-action list-group-item-info"
+        class="list-group-item"
         v-for="meeting in meetings"
         :key="meeting.message"
       >
@@ -125,14 +125,15 @@ export default {
 <style scoped>
 #meetings_list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(500px, auto));
-  gap: 5%;
+  grid-template-columns: repeat(auto-fill, minmax(450px, auto));
   border-radius: 15px;
+  gap: 25px;
 }
 .creatorImage {
   margin: 5px;
   border-style: solid;
   border-width: 3px;
+  border-color: #0d185b80;
 }
 .participantImage {
   margin-right: -15px;
@@ -140,6 +141,7 @@ export default {
   margin-top: 10px;
   border-style: solid;
   border-width: 2px;
+  border-color: #0d185b60;
 }
 .creator {
   margin-left: 15px;
@@ -149,6 +151,7 @@ export default {
 .meetingDate {
   font-weight: 500;
   color: #3852fe;
+  opacity: 0.95;
   margin-top: 20px;
   margin-right: 10px;
 }
@@ -167,41 +170,41 @@ export default {
   border-radius: 15px;
 }
 .name {
+  color: #0d185b;
   text-align: left;
   max-width: 75%;
   margin: 10px;
   font-size: 1.8em;
+  font-weight: 600;
 }
 .participants {
+  color: #775f99;
   margin: 10px;
   float: right;
 }
 .participants-icon {
+  color: #775f99;
   margin-right: 5px;
 }
 .list-group-item {
+  transition: 0.1s;
   align-self: center;
   justify-self: center;
   text-align: left;
   height: 200px;
-  width: 500px;
-  gap: 2%;
+  width: 450px;
   padding: 5px;
   border-radius: 15px;
-  margin: 5px;
+  margin-bottom: 25px;
+  box-shadow: 7px 7px 7px #00000015;
+  border-width: 0px;
+  background-color: #bee5eb50;
 }
-.list-group-item:nth-child(even) {
-  transition: 0.1s;
+
+.list-group-item:hover {
+  background-color: #bee5eb80;
 }
-.list-group-item:nth-child(odd) {
-  transition: 0.1s;
-}
-.list-group-item:nth-child(odd):hover {
-  transition: 0.1s;
-}
-.list-group-item:nth-child(even):hover {
-  transition: 0.1s;
-}
+
 a {
   display: flex;
   flex-direction: column;
@@ -219,5 +222,13 @@ a:hover {
   -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
+}
+@media (max-width: 768px) {
+  #meetings_list {
+    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+  }
+  .list-group-item {
+    width: 350px;
+  }
 }
 </style>
