@@ -20,8 +20,8 @@ router.post("/", async (req, res) => {
 
       (err) => {
         const errorMessage =
-          err.code === 11000 ? `${Object.keys(err.keyValue)}_in_use` : err;
-        res.status(400).json({ error: errorMessage });
+        err.code === 11000 ? `${Object.keys(err.keyValue)}_in_use` : err;
+        res.status(400).json({ errorMessage });
       }
     );
     // TODO(numank): Investigate authorizing user after signup.
