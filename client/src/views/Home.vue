@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <b-list-group id="meetings_list">
-      <b-list-group-item v-for="meeting in meetings" :key="meeting.message">
+      <b-list-group-item
+        class="list-group-item list-group-item-action list-group-item-info"
+        v-for="meeting in meetings"
+        :key="meeting.message"
+      >
         <a :href="`meeting/${meeting._id}`">
           <div class="topContainer">
             <span class="name">{{
@@ -12,30 +16,36 @@
             <!-- Get user that created the meeting, show as owner + name. -->
             <b-img
               v-bind="creatorProps"
+              :src="meeting.createdBy.profilePicUrl"
               rounded="circle"
               alt="Circle image"
               class="creatorImage slick-shadow"
             ></b-img>
-            <span class="creator">Placeholder Creator's meeting</span>
+            <span class="creator">{{ meeting.createdBy.name }}</span>
             <div class="midText">
               <span class="meetingDate"
-                >First: DD-MM-YYYY<br />Last: DD-MM-YYYY</span
+                >First:
+                {{
+                  new Date(meeting.firstPossibleDay)
+                    .toISOString()
+                    .split('T')[0]
+                }}<br />Last:
+                {{
+                  new Date(meeting.lastPossibleDay).toISOString().split('T')[0]
+                }}</span
               >
             </div>
             <!-- Get dates of meeting, display earliest meeting day -->
           </div>
           <div class="bottomContainer">
             <b-img
+              v-for="participant in meeting.participantsList"
+              :key="participant.profilePicUrl"
+              :src="participant.profilePicUrl"
               v-bind="participantProps"
               rounded="circle"
-              alt="Circle image"
+              alt=""
               class="participantImage slick-shadow"
-            ></b-img>
-            <b-img
-              v-bind="participantProps"
-              rounded="circle"
-              alt="Circle image"
-              class="participantImage"
             ></b-img>
             <span class="participants"
               >Participants: {{ meeting.participantsList.length }}</span
@@ -59,18 +69,19 @@ export default {
     return {
       meetings: [],
       creatorProps: {
-        blank: true,
-        blankColor: '#277',
+        blank: false,
+        blankColor: '#177',
         width: 35,
         height: 35,
         class: 'm1'
       },
       participantProps: {
-        blank: true,
-        blankColor: '#277',
+        blank: false,
+        blankColor: '#242',
         width: 25,
         height: 25,
-        class: 'm1'
+        class: 'm1',
+        background: 'black'
       }
     }
   },
@@ -88,11 +99,9 @@ export default {
       return a.length
     },
     formatMeetingName(name) {
-      console.log(name)
       name = truncate(name, {
         length: '28'
       })
-      console.log('Truncated: ' + name)
       return name
     }
   }
@@ -104,7 +113,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(500px, auto));
   gap: 5%;
-  border-radius: 25px;
+  border-radius: 15px;
 }
 .creatorImage {
   margin: 5px;
@@ -136,7 +145,7 @@ export default {
 }
 .bottomContainer {
   height: inherit;
-  border-radius: 25px;
+  border-radius: 15px;
 }
 .name {
   text-align: left;
@@ -156,40 +165,25 @@ export default {
   width: 500px;
   gap: 2%;
   padding: 0px;
-  border-radius: 25px;
+  border-radius: 15px;
+  margin: 5px;
 }
 .list-group-item:nth-child(even) {
-  background-color: rgb(253, 253, 253);
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 .list-group-item:nth-child(odd) {
-  background-color: rgb(253, 253, 253);
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 3px;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 .list-group-item:nth-child(odd):hover {
-  background-color: rgb(255, 255, 255);
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 .list-group-item:nth-child(even):hover {
-  background-color: rgb(255, 255, 255);
-  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  box-shadow: rgba(0, 0, 0, 0.3) 0 2px 3px;
-  transition: 0.2s;
+  transition: 0.1s;
 }
 a {
   display: flex;
   flex-direction: column;
-  color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.95);
   width: 100%;
   height: 100%;
   transition: 0.2s;
@@ -197,7 +191,6 @@ a {
 a:hover {
   text-decoration: none;
   color: rgba(0, 0, 0, 1);
-  text-shadow: rgba(0, 0, 0, 0.3) 0 0.1px 1px;
   transition: 0.2s;
 }
 .slick-shadow {
