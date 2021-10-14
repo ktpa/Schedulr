@@ -32,9 +32,6 @@
             ><BIconX />
           </b-button>
         </div>
-        <div class="participants">
-          <b>Participants:</b> {{ this.numOfParticipants }}
-        </div>
       </div>
       <div class="meeting-content">
         <AvailableTimePicker
@@ -56,6 +53,9 @@
               ><BIconClipboard
             /></b-button>
           </div>
+        </div>
+        <div class="participants">
+          <ParticipantsList :participantsList="meeting.participantsList" />
         </div>
       </div>
       <b-button
@@ -85,6 +85,7 @@
 <script>
 import AvailableTimePicker from '../components/Meeting/AvailableTimePicker.vue'
 import JoinMeeting from '../components/Meeting/JoinMeeting.vue'
+import ParticipantsList from '../components/Meeting/ParticipantsList.vue'
 import { meetingApi } from '@/api/meeting.js'
 import {
   BIconPencilFill,
@@ -102,14 +103,14 @@ export default {
     BIconCheckCircle,
     BIconX,
     BIconClipboard,
-    QRCode
+    QRCode,
+    ParticipantsList
   },
   data() {
     return {
       meeting: undefined,
       editing: false,
       title: 'null',
-      numOfParticipants: 1,
       url: window.location.href
     }
   },
@@ -119,7 +120,6 @@ export default {
       .then(res => {
         this.meeting = res.data
         this.title = res.data.meetingName
-        this.numOfParticipants = res.data.participantsList.length
       })
       .catch(err => {
         console.log(err)
