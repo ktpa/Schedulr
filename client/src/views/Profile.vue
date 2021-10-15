@@ -144,9 +144,21 @@ export default {
     },
     upload(e) {
       const image = e.target.files[0]
-      imageApi.upload(image).then(res => {
-        console.log(res.data.link)
-      })
+      const formData = new FormData()
+      formData.append('image', image)
+      imageApi
+        .upload(formData)
+        .then(res => {
+          userApi
+            .updateProfile(this.$store.getters.userId, {
+              profilePicUrl: res.data.data.link
+            })
+            .then(updatedProfile => {
+              this.getProfile()
+            })
+            .catch(err => console.log(err.response))
+        })
+        .catch(err => console.log(err.response))
     },
     activateProfile() {
       this.disabled = !this.disabled

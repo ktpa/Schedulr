@@ -6,10 +6,13 @@ const ImgurApi = axios.create({
 
 const IMGUR_CLIENT_CONFIG = {
   headers: {
-    Authorization: '4b324dc8161ea3ddd737d2c86f19cedd290b7547'
+    Authorization: 'Client-ID 3eec201d5f67dcc',
+    'Content-Type': 'multipart/form-data'
   }
 }
 
 export const imageApi = {
-  upload: image => ImgurApi.post('/upload', image, IMGUR_CLIENT_CONFIG)
+  upload: image => {
+    return ImgurApi.post('/image', image, IMGUR_CLIENT_CONFIG)
+  }
 }
