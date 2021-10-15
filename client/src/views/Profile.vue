@@ -1,11 +1,6 @@
 <template>
   <div class="profile">
     <h1>Welcome {{ this.currName }}</h1>
-    <div class="update_profile">
-      <b-button v-if="disabled" @click="activateProfile"
-        >Update Profile</b-button>
-    </div>
-
     <b-form ref="form" @submit="onUpdateProfile">
       <div class="profile-details">
         <p v-if="errors.length">
@@ -16,48 +11,80 @@
             }}</b-list-group-item>
           </b-list-group>
         </p>
-        <br/>
-        <b-input
-          type="text"
-          v-model="user.username"
-          :disabled="true"
-          placeholder="username"
-          id="username"
-        />
         <br />
-        <b-input
-          type="email"
-          v-model="user.email"
-          :disabled="true"
-          placeholder="e-mail"
-          id="email"
-        />
-        <br />
-        <b-input
-          type="text"
-          v-model="user.name"
-          :disabled="disabled"
-          placeholder="name"
-          id="name"
-        />
-        <br />
-        <b-input
-          type="password"
-          v-model="user.password"
-          :disabled="disabled"
-          placeholder="password"
-          id="password"
-        />
+        <div class="pic-upload">
+          <b-img
+            v-bind="pictureProps"
+            :src="user.profilePicUrl"
+            rounded="circle"
+          />
+          <input
+            type="file"
+            accept=".jpg"
+            class="file-upload"
+            @change="upload"
+          />
+        </div>
+        <div class="forms">
+          <b-input
+            type="text"
+            v-model="user.username"
+            :disabled="true"
+            placeholder="username"
+            id="username"
+          />
+          <br />
+          <b-input
+            type="email"
+            v-model="user.email"
+            :disabled="true"
+            placeholder="e-mail"
+            id="email"
+          />
+          <br />
+          <b-input
+            type="text"
+            v-model="user.name"
+            :disabled="disabled"
+            placeholder="name"
+            id="name"
+          />
+          <br />
+          <b-input
+            type="password"
+            v-model="user.password"
+            :disabled="disabled"
+            placeholder="password"
+            id="password"
+            v-if="!disabled"
+          />
+        </div>
       </div>
-      <div class="form_buttons">
-        <b-button class="form_button1" v-if="!disabled" variant="danger" v-on:click="onCancel">Cancel</b-button>
-        <b-button class="form_button2" v-if="!disabled" variant="success" v-on:click="onUpdateProfile">Save Changes</b-button>
-      </div>
+
+      <b-button v-if="disabled" @click="activateProfile"
+        >Update Profile</b-button
+      >
+      <b-button
+        class="form_button1"
+        v-if="!disabled"
+        variant="danger"
+        v-on:click="onCancel"
+        >Cancel</b-button
+      >
+      <b-button
+        class="form_button2"
+        v-if="!disabled"
+        variant="success"
+        v-on:click="onUpdateProfile"
+        >Save Changes</b-button
+      >
     </b-form>
   </div>
 </template>
 <script>
 import { userApi } from '@/api/user.js'
+import { imageApi } from '@/api/imageUpload.js'
+
 export default {
   name: 'profile',
   data() {
@@ -69,6 +96,14 @@ export default {
         password: '',
         profilePicUrl: ''
       },
+      pictureProps: {
+        blank: false,
+        blankColor: '#177',
+        width: 100,
+        height: 100,
+        class: 'm1' // Get default picture and replace source if src is missing.
+      },
+      file: null,
       currName: '',
       disabled: true,
       errors: []
@@ -106,6 +141,24 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    upload(e) {
+      const image = e.target.files[0]
+      const formData = new FormData()
+      formData.append('image', image)
+      imageApi
+        .upload(formData)
+        .then(res => {
+          userApi
+            .updateProfile(this.$store.getters.userId, {
+              profilePicUrl: res.data.data.link
+            })
+            .then(updatedProfile => {
+              this.getProfile()
+            })
+            .catch(err => console.log(err.response))
+        })
+        .catch(err => console.log(err.response))
     },
     activateProfile() {
       this.disabled = !this.disabled
@@ -151,16 +204,34 @@ export default {
 </script>
 
 <style>
-.update_profile {
-  padding-top: 20px;
-}
 .profile {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.form_buttons {
-  padding-top: 20px;
+.forms {
+  margin: 20px;
 }
-
+.file-upload {
+  z-index: 1;
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  left: 0;
+  opacity: 0;
+}
+.pic-upload {
+  position: relative;
+  height: 100px;
+  width: 100px;
+}
+.pic-upload:hover {
+  opacity: 0.8;
+}
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 </style>
