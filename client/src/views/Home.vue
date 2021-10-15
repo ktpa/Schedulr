@@ -111,7 +111,7 @@ export default {
     },
     formatMeetingName(name) {
       name = truncate(name, {
-        length: '28'
+        length: '20'
       })
       return name
     },
