@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
 
       (err) => {
         const errorMessage =
-        err.code === 11000 ? `${Object.keys(err.keyValue)}_in_use` : err;
+          err.code === 11000 ? `${Object.keys(err.keyValue)}_in_use` : err;
         res.status(400).json({ errorMessage });
       }
     );
@@ -226,7 +226,7 @@ router.delete("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
 });
 
 // TODO() Only used for passing requirements
-// Remove once project has been graded
+// Remove once project has been graded.
 router.get("/:userid/blockedTimes/:id", authenticateRequest, (req, res) => {
   if (!req.token) {
     res.status(401);
