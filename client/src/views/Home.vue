@@ -1,5 +1,5 @@
 <template>
-  <div class="home" :key="meetingKey">
+  <div class="home">
     <b-list-group id="meetings_list">
       <b-list-group-item
         class="list-group-item"
@@ -79,8 +79,6 @@ export default {
   data() {
     return {
       meetings: [],
-      windowWidth: innerWidth,
-      length: 15,
       meetingKey: 0,
       creatorProps: {
         blank: false,
@@ -117,17 +115,6 @@ export default {
     participants: a => {
       console.log(a)
       return a.length
-    },
-    handleResize() {
-      this.windowWidth = window.innerWidth
-      if (this.windowWidth <= 766) {
-        this.length = 5
-        this.meetingKey = 1
-      } else {
-        this.length = 20
-        this.meetingKey = 0
-      }
-      console.log(this.meetingKey)
     },
     formatMeetingName(name) {
       name = truncate(name, this.length)
@@ -243,13 +230,19 @@ a:hover {
 }
 @media (max-width: 768px) {
   #meetings_list {
-    grid-template-columns: repeat(auto-fill, minmax(360px, auto));
+    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+    gap: 50px;
   }
   .list-group-item {
-    width: 360px;
+    width: 350px;
+    height: 180px;
   }
-}
-
-@media (max-width: 492px) {
+  .name {
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+  .creator {
+    font-size: 1.05em;
+  }
 }
 </style>
