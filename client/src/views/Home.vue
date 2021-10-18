@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :key="meetingKey">
     <b-list-group id="meetings_list">
       <b-list-group-item
         class="list-group-item"
@@ -79,6 +79,9 @@ export default {
   data() {
     return {
       meetings: [],
+      windowWidth: innerWidth,
+      length: 15,
+      meetingKey: 0,
       creatorProps: {
         blank: false,
         blankColor: '#177',
@@ -96,6 +99,12 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener('resize', this.handleResize)
+  },
+  destroyed() {
+    window.removeEventListener('resize', this.handleResize)
+  },
   beforeCreate() {
     meetingApi
       .getMeetings()
@@ -109,10 +118,19 @@ export default {
       console.log(a)
       return a.length
     },
+    handleResize() {
+      this.windowWidth = window.innerWidth
+      if (this.windowWidth <= 766) {
+        this.length = 5
+        this.meetingKey = 1
+      } else {
+        this.length = 20
+        this.meetingKey = 0
+      }
+      console.log(this.meetingKey)
+    },
     formatMeetingName(name) {
-      name = truncate(name, {
-        length: '20'
-      })
+      name = truncate(name, this.length)
       return name
     },
     getProfilePic(img) {
@@ -225,10 +243,13 @@ a:hover {
 }
 @media (max-width: 768px) {
   #meetings_list {
-    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+    grid-template-columns: repeat(auto-fill, minmax(360px, auto));
   }
   .list-group-item {
-    width: 350px;
+    width: 360px;
   }
+}
+
+@media (max-width: 492px) {
 }
 </style>
