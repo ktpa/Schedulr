@@ -1,6 +1,14 @@
 <template>
   <div class="page">
-    <BlockedTimePicker :blockedTimes="this.blockedTimes" :onChange="this.reFetch"/>
+    <div class="header">
+      <h1>
+        Blocked Times
+      </h1>
+    </div>
+    <BlockedTimePicker
+      :blockedTimes="this.blockedTimes"
+      :onChange="this.reFetch"
+    />
   </div>
 </template>
 
@@ -12,7 +20,8 @@ export default {
     BlockedTimePicker
   },
   beforeCreate() {
-    userApi.getBlockedTime(this.$store.getters.userId)
+    userApi
+      .getBlockedTime(this.$store.getters.userId)
       .then(res => {
         this.blockedTimes = res.data
         console.log(this.blockedTimes)
@@ -26,7 +35,8 @@ export default {
   },
   methods: {
     reFetch() {
-      userApi.getBlockedTime(this.$store.getters.userId)
+      userApi
+        .getBlockedTime(this.$store.getters.userId)
         .then(res => {
           this.blockedTimes = res.data
           console.log(this.blockedTimes)
@@ -39,6 +49,12 @@ export default {
 
 <style scoped>
 .page {
-  min-height: 100vh;
+  text-align: left;
+}
+.header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 20px 0px;
 }
 </style>
