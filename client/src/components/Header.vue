@@ -10,13 +10,13 @@
           >Home
         </b-nav-item>
         <b-nav-item
-          :class="{ active: this.$route.name === 'create-meeting' }"
+          :class="{ active: this.$route.name === 'Create Meeting' }"
           href="/create-meeting"
           >Create Meeting
         </b-nav-item>
         <b-nav-item
           v-if="admin"
-          :class="{ active: this.$route.name === 'admin' }"
+          :class="{ active: this.$route.name === 'Admin' }"
           href="/admin"
           >Admin
         </b-nav-item>
