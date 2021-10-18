@@ -84,6 +84,7 @@
 <script>
 import { userApi } from '@/api/user.js'
 import { imageApi } from '@/api/imageUpload.js'
+const placeholder = require('../res/images/profilePlaceholder.png')
 
 export default {
   name: 'profile',
@@ -100,8 +101,7 @@ export default {
         blank: false,
         blankColor: '#177',
         width: 100,
-        height: 100,
-        class: 'm1' // Get default picture and replace source if src is missing.
+        height: 100
       },
       file: null,
       currName: '',
@@ -118,7 +118,7 @@ export default {
         this.user.username = userRes.username
         this.user.email = userRes.email
         this.user.password = userRes.password
-        this.user.profilePicUrl = userRes.profilePicUrl
+        this.user.profilePicUrl = userRes.profilePicUrl || placeholder
         this.currName = userRes.name
       })
       .catch(err => {
@@ -135,7 +135,7 @@ export default {
           this.user.username = userRes.username
           this.user.email = userRes.email
           this.user.password = '******'
-          this.user.profilePicUrl = userRes.profilePicUrl
+          this.user.profilePicUrl = userRes.profilePicUrl || placeholder
           this.currName = userRes.name
         })
         .catch(err => {
