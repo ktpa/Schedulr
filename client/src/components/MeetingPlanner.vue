@@ -101,31 +101,40 @@ export default {
   },
   methods: {
     createMeeting() {
-      if (this.range.start instanceof Date && this.range.end instanceof Date) {
-        this.incorrect = false
-        const meeting = {
-          firstPossibleDay: this.range.start.toISOString().split('T')[0],
-          lastPossibleDay: this.range.end.toISOString().split('T')[0],
-          firstPossibleHour:
-            parseInt(this.firstHour.split(':')[0]) +
-            (parseInt(this.firstHour.split(':')[1]) === 30 ? 0.5 : 0),
-          lastPossibleHour:
-            parseInt(this.lastHour.split(':')[0]) +
-            (parseInt(this.lastHour.split(':')[1]) === 30 ? 0.5 : 0),
-          meetingName: this.form.name
-        }
-        console.log(meeting)
-        meetingApi
-          .createMeeting(meeting)
-          .then(res => {
-            this.$router.push(`/meeting/${res.data._id}`)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        this.incorrect = true
+      const first =
+        parseInt(this.firstHour.split(':')[0]) +
+        (parseInt(this.firstHour.split(':')[1]) === 30 ? 0.5 : 0)
+      const last =
+        parseInt(this.lastHour.split(':')[0]) +
+        (parseInt(this.lastHour.split(':')[1]) === 30 ? 0.5 : 0)
+      // validate meeting hours
+      if (first > last) {
+        return this.$bvToast.toast(
+          'First possible hour cannot be greater than last possible hour!',
+          {
+            autoHideDelay: 2500,
+            noCloseButton: true,
+            variant: 'danger',
+            noHoverPause: true
+          }
+        )
       }
+      const meeting = {
+        firstPossibleDay: this.range.start.toISOString().split('T')[0],
+        lastPossibleDay: this.range.end.toISOString().split('T')[0],
+        firstPossibleHour: first,
+        lastPossibleHour: last,
+        meetingName: this.form.name
+      }
+      console.log(meeting)
+      meetingApi
+        .createMeeting(meeting)
+        .then(res => {
+          this.$router.push(`/meeting/${res.data._id}`)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   computed: {
