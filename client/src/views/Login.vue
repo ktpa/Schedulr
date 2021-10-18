@@ -1,32 +1,34 @@
 <template>
-  <div class="landing">
-    <Animation />
-    <Animation2 />
-    <div class="card opacityTransform">
-      <div class="left-section">
-        <div class="logo">
-          <img src="../res/images/logo.png" alt="logo" class="login-logo" />
-        </div>
+  <div class="landing-wrapper">
+    <div class="landing">
+      <Animation />
+      <Animation2 />
+      <div class="card opacityTransform">
+        <div class="left-section">
+          <div class="logo">
+            <img src="../res/images/logo.png" alt="logo" class="login-logo" />
+          </div>
 
-        <LoginForm v-if="isLogin" />
-        <SignupForm v-if="!isLogin" />
-        <b-link class="switch-forms" variant="link" sm @click="switchForm">
-          Click here if you would like to {{ isLogin ? 'sign up' : 'login' }}
-        </b-link>
-      </div>
-      <div class="right-section">
-        <div class="motto">
-          <h2>Time is precious!</h2>
-          <h5 class="sub">
-            Let <i>Schedulr</i> arrange all your meetings<br />
-            and get-togethers!
-          </h5>
+          <LoginForm v-if="isLogin" />
+          <SignupForm v-if="!isLogin" />
+          <b-link class="switch-forms" variant="link" sm @click="switchForm">
+            Click here if you would like to {{ isLogin ? 'sign up' : 'login' }}
+          </b-link>
         </div>
-        <img
-          class="landing-vector"
-          src="../res/images/landingVector.svg"
-          alt="landing vector"
-        />
+        <div class="right-section">
+          <div class="motto">
+            <h2>Time is precious!</h2>
+            <h5 class="sub">
+              Let <i>Schedulr</i> arrange all your meetings<br />
+              and get-togethers!
+            </h5>
+          </div>
+          <img
+            class="landing-vector"
+            src="../res/images/landingVector.svg"
+            alt="landing vector"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -54,6 +56,11 @@ export default {
 }
 </script>
 <style>
+.landing-wrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
 .opacityTransform {
   animation: opacityTransform 0.5s linear normal;
 }
@@ -66,7 +73,6 @@ export default {
   height: 100vh;
   width: 100vw;
   background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
-  margin: -20px -50px;
 }
 .login-logo {
   height: 50px;
@@ -109,9 +115,6 @@ export default {
   background-size: 100%;
 }
 @media (max-width: 768px) {
-  .landing {
-    margin: -20px -10px;
-  }
   .card {
     width: 80%;
   }
