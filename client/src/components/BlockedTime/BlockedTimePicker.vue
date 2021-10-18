@@ -87,11 +87,11 @@ export default {
 
       const start = 0
       const end = 23
-      this.selectedDay.setHours(0, 0, 0, 0)
+      this.selectedDay.setUTCHours(0, 0, 0, 0)
       const day = new Date(this.selectedDay)
       day.setTime(day.getTime() + AN_HOUR * start)
 
-      for (let intervals = 0; intervals < (end - start) * 2 + 1; intervals++) {
+      for (let intervals = 0; intervals <= (end - start) * 2 + 1; intervals++) {
         const date = new Date(day.valueOf())
         date.setTime(date.getTime() + INTERVAL * intervals)
         tempDataList.push({
