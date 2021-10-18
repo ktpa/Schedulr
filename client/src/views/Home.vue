@@ -79,6 +79,7 @@ export default {
   data() {
     return {
       meetings: [],
+      meetingKey: 0,
       creatorProps: {
         blank: false,
         blankColor: '#177',
@@ -110,9 +111,7 @@ export default {
       return a.length
     },
     formatMeetingName(name) {
-      name = truncate(name, {
-        length: '20'
-      })
+      name = truncate(name, this.length)
       return name
     },
     getProfilePic(img) {
@@ -226,9 +225,18 @@ a:hover {
 @media (max-width: 768px) {
   #meetings_list {
     grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+    gap: 50px;
   }
   .list-group-item {
     width: 350px;
+    height: 180px;
+  }
+  .name {
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+  .creator {
+    font-size: 1.05em;
   }
 }
 </style>
