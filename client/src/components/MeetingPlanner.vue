@@ -101,26 +101,21 @@ export default {
   },
   methods: {
     createMeeting() {
-      if (this.range.start instanceof Date && this.range.end instanceof Date) {
-        this.incorrect = false
-        const meeting = {
-          firstPossibleDay: this.range.start.toISOString().split('T')[0],
-          lastPossibleDay: this.range.end.toISOString().split('T')[0],
-          firstPossibleHour: this.firstHour.split(':')[0],
-          lastPossibleHour: this.lastHour.split(':')[0],
-          meetingName: this.form.name
-        }
-        meetingApi
-          .createMeeting(meeting)
-          .then(res => {
-            this.$router.push(`/meeting/${res.data._id}`)
-          })
-          .catch(err => {
-            console.log(err)
-          })
-      } else {
-        this.incorrect = true
+      const meeting = {
+        firstPossibleDay: this.range.start.toISOString().split('T')[0],
+        lastPossibleDay: this.range.end.toISOString().split('T')[0],
+        firstPossibleHour: this.firstHour.split(':')[0],
+        lastPossibleHour: this.lastHour.split(':')[0],
+        meetingName: this.form.name
       }
+      meetingApi
+        .createMeeting(meeting)
+        .then(res => {
+          this.$router.push(`/meeting/${res.data._id}`)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   computed: {
