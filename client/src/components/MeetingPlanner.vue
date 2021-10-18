@@ -106,10 +106,15 @@ export default {
         const meeting = {
           firstPossibleDay: this.range.start.toISOString().split('T')[0],
           lastPossibleDay: this.range.end.toISOString().split('T')[0],
-          firstPossibleHour: this.firstHour.split(':')[0],
-          lastPossibleHour: this.lastHour.split(':')[0],
+          firstPossibleHour:
+            parseInt(this.firstHour.split(':')[0]) +
+            (parseInt(this.firstHour.split(':')[1]) === 30 ? 0.5 : 0),
+          lastPossibleHour:
+            parseInt(this.lastHour.split(':')[0]) +
+            (parseInt(this.lastHour.split(':')[1]) === 30 ? 0.5 : 0),
           meetingName: this.form.name
         }
+        console.log(meeting)
         meetingApi
           .createMeeting(meeting)
           .then(res => {
