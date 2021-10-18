@@ -1,7 +1,9 @@
 <template>
   <footer v-if="isLoggedIn()" id="footer">
-    <p>Copyright © 2021, Schedulr All rights reserved.</p>
-    <p><a href="mailTo:info@schedulr.email">Contact us</a></p>
+    <div class="content">
+      <p>Copyright © 2021, Schedulr All rights reserved.</p>
+      <p><a href="mailTo:info@schedulr.email">Contact us</a></p>
+    </div>
   </footer>
 </template>
 
@@ -20,8 +22,14 @@ export default {
   display: flex;
   width: 100%;
   align-self: flex-end;
-  justify-content: space-between;
+  justify-content: center;
+
   color: #2c3e50;
   padding: 10px 20px;
+}
+.content {
+  display: flex;
+  width: 1440px;
+  justify-content: space-between;
 }
 </style>
