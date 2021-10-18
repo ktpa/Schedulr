@@ -2,7 +2,9 @@
   <div id="app">
     <Header v-if="isLoggedIn()" />
     <div id="root">
-      <router-view />
+      <div id="page">
+        <router-view />
+      </div>
     </div>
     <Footer />
   </div>
@@ -19,7 +21,7 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -27,8 +29,13 @@ export default {
   color: #2c3e50;
 }
 #root {
+  display: flex;
+  justify-content: center;
   min-height: calc(100vh - 162px);
   margin: 20px 50px;
+}
+#page {
+  width: 1440px;
 }
 @media (max-width: 768px) {
   #root {

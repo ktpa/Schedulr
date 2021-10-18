@@ -126,6 +126,9 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  width: 100%px;
+}
 #meetings_list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(450px, auto));
@@ -229,7 +232,7 @@ a:hover {
 @media (max-width: 768px) {
   #meetings_list {
     grid-template-columns: repeat(auto-fill, minmax(350px, auto));
-    gap: 50px;
+    gap: 25px 50px;
   }
   .list-group-item {
     width: 350px;

@@ -34,11 +34,13 @@
         </div>
       </div>
       <div class="meeting-content">
-        <AvailableTimePicker
-          v-if="this.meeting"
-          :meeting="this.meeting"
-          :onChange="this.reFetch"
-        />
+        <div class="picker">
+          <AvailableTimePicker
+            v-if="this.meeting"
+            :meeting="this.meeting"
+            :onChange="this.reFetch"
+          />
+        </div>
         <div class="utils">
           <ParticipantsList :participantsList="meeting.participantsList" />
           <div class="share">
@@ -56,65 +58,70 @@
               /></b-button>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="action-form">
-        <b-form>
-          <b-button
-            :disabled="busy"
-            ref="submit"
-            variant="danger"
-            class="delete-button"
-            v-if="
-              this.meeting &&
-                this.meeting.createdBy === this.$store.getters.userId
-            "
-            @click="this.clickDeleteMeeting"
-            >Delete Meeting</b-button
-          >
-          <b-button
-            :disabled="busy"
-            ref="submit"
-            class="delete-button"
-            variant="outline-danger"
-            v-if="
-              this.meeting &&
-                this.meeting.createdBy !== this.$store.getters.userId
-            "
-            @click="this.clickLeaveMeeting"
-            >Leave Meeting</b-button
-          >
-          <b-overlay :show="busy" no-wrap @shown="onShown" @hidden="onHidden">
-            <template #overlay>
-              <div
-                ref="dialog"
-                tabindex="-1"
-                role="dialog"
-                aria-modal="false"
-                aria-labelledby="form-confirm-label"
-                class="text-center p-3"
+          <div class="action-form">
+            <b-form>
+              <b-button
+                :disabled="busy"
+                ref="submit"
+                variant="danger"
+                class="delete-button"
+                v-if="
+                  this.meeting &&
+                    this.meeting.createdBy === this.$store.getters.userId
+                "
+                @click="this.clickDeleteMeeting"
+                >Delete Meeting</b-button
               >
-                <p>
-                  <strong id="form-confirm-label"
-                    >Are you sure about this?</strong
+              <b-button
+                :disabled="busy"
+                ref="submit"
+                class="delete-button"
+                variant="outline-danger"
+                v-if="
+                  this.meeting &&
+                    this.meeting.createdBy !== this.$store.getters.userId
+                "
+                @click="this.clickLeaveMeeting"
+                >Leave Meeting</b-button
+              >
+              <b-overlay
+                :show="busy"
+                no-wrap
+                @shown="onShown"
+                @hidden="onHidden"
+              >
+                <template #overlay>
+                  <div
+                    ref="dialog"
+                    tabindex="-1"
+                    role="dialog"
+                    aria-modal="false"
+                    aria-labelledby="form-confirm-label"
+                    class="text-center p-3"
                   >
-                </p>
-                <div class="buttons">
-                  <b-button
-                    variant="outline-success"
-                    class="mr-3"
-                    @click="onCancel"
-                  >
-                    Cancel
-                  </b-button>
-                  <b-button variant="outline-danger" @click="onOK"
-                    >Yes</b-button
-                  >
-                </div>
-              </div>
-            </template>
-          </b-overlay>
-        </b-form>
+                    <p>
+                      <strong id="form-confirm-label"
+                        >Are you sure about this?</strong
+                      >
+                    </p>
+                    <div class="buttons">
+                      <b-button
+                        variant="outline-success"
+                        class="mr-3"
+                        @click="onCancel"
+                      >
+                        Cancel
+                      </b-button>
+                      <b-button variant="outline-danger" @click="onOK"
+                        >Yes</b-button
+                      >
+                    </div>
+                  </div>
+                </template>
+              </b-overlay>
+            </b-form>
+          </div>
+        </div>
       </div>
     </div>
     <JoinMeeting
@@ -273,14 +280,20 @@ export default {
 </script>
 
 <style scoped>
+.wrapper {
+  max-width: 1440px;
+}
 .meeting-content {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
-.utils {
-  margin-left: 100px;
+.picker {
+  margin-bottom: 25px;
 }
+
 .buttons {
   display: flex;
   justify-content: center;
@@ -331,8 +344,9 @@ export default {
   margin-left: 20px;
 }
 .delete-button {
-  float: left;
+  float: right;
   margin-top: 20px;
+  width: 100%;
 }
 h1 {
   float: left;
