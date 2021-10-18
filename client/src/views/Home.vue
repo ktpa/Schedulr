@@ -7,39 +7,43 @@
         :key="meeting.message"
       >
         <a :href="`meeting/${meeting._id}`">
-          <div class="topContainer">
-            <span class="name">{{
-              formatMeetingName(meeting.meetingName)
-            }}</span>
-            <span class="meetingDate">
-              <BIconCalendarWeekFill />
-              {{
-                `${
-                  new Date(meeting.firstPossibleDay).toString().split(' ')[1]
-                } ${
-                  new Date(meeting.firstPossibleDay).toString().split(' ')[2]
-                }`
-              }}
-              -
-              {{
-                `${
-                  new Date(meeting.lastPossibleDay).toString().split(' ')[1]
-                } ${new Date(meeting.lastPossibleDay).toString().split(' ')[2]}`
-              }}</span
-            >
-          </div>
-          <div class="middleContainer">
-            <!-- Get user that created the meeting, show as owner + name. -->
-            <b-img
-              v-bind="creatorProps"
-              :src="getProfilePic(meeting.createdBy.profilePicUrl)"
-              rounded="circle"
-              alt=""
-              class="creatorImage slick-shadow"
-            ></b-img>
-            <span class="creator">{{ meeting.createdBy.name }}</span>
-            <div class="midText"></div>
-            <!-- Get dates of meeting, display earliest meeting day -->
+          <div>
+            <div class="topContainer">
+              <span class="name">{{
+                formatMeetingName(meeting.meetingName)
+              }}</span>
+              <span class="meetingDate">
+                <BIconCalendarWeekFill />
+                {{
+                  `${
+                    new Date(meeting.firstPossibleDay).toString().split(' ')[1]
+                  } ${
+                    new Date(meeting.firstPossibleDay).toString().split(' ')[2]
+                  }`
+                }}
+                -
+                {{
+                  `${
+                    new Date(meeting.lastPossibleDay).toString().split(' ')[1]
+                  } ${
+                    new Date(meeting.lastPossibleDay).toString().split(' ')[2]
+                  }`
+                }}</span
+              >
+            </div>
+            <div class="middleContainer">
+              <!-- Get user that created the meeting, show as owner + name. -->
+              <b-img
+                v-bind="creatorProps"
+                :src="getProfilePic(meeting.createdBy.profilePicUrl)"
+                rounded="circle"
+                alt=""
+                class="creatorImage slick-shadow"
+              ></b-img>
+              <span class="creator">{{ meeting.createdBy.name }}</span>
+              <div class="midText"></div>
+              <!-- Get dates of meeting, display earliest meeting day -->
+            </div>
           </div>
           <div class="bottomContainer">
             <b-img
@@ -153,6 +157,7 @@ export default {
   opacity: 0.95;
   margin-top: 20px;
   margin-right: 10px;
+  font-size: 0.9em;
 }
 .midText {
   display: flex;
@@ -164,14 +169,12 @@ export default {
   justify-content: space-between;
 }
 .bottomContainer {
-  height: inherit;
-  margin-top: 30px;
   border-radius: 15px;
 }
 .name {
   color: #0d185b;
   text-align: left;
-  max-width: 75%;
+  max-width: 60%;
   margin: 10px;
   font-size: 1.8em;
   font-weight: 600;
@@ -207,6 +210,7 @@ export default {
 a {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   color: rgba(0, 0, 0, 0.95);
   width: 100%;
   height: 100%;
