@@ -4,18 +4,14 @@
       <span>{{ this.getLabel(this.timePeriod) }}</span>
     </div>
     <div
-      v-bind:class="[
-        isSelected ? 'blocked' : 'idle',
-        'time-slot-button'
-      ]"
+      v-bind:class="[isSelected ? 'blocked' : 'idle', 'time-slot-button']"
       @click="statusChange()"
-    >
-    </div>
+    ></div>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
+// import moment from 'moment'
 export default {
   name: 'TimeSlot',
   props: ['time', 'active', 'onSlotClick'],
@@ -42,9 +38,8 @@ export default {
       })
     },
     getLabel(date) {
-      return moment(date)
-        .format('HH:mm')
-        .toString()
+      const hours = date.split('T')[1]
+      return `${hours.split(':')[0]}:${hours.split(':')[1]}`
     }
   }
 }
