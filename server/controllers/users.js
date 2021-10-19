@@ -4,6 +4,7 @@ const { getUserFromToken } = require("./auth");
 const userModel = require("../models/users");
 const blockedTimeModel = require("../models/blocked_times");
 const lodash = require("lodash");
+const bcrypt = require("bcrypt");
 
 router.post("/", async (req, res) => {
   var publicFields = ["_id", "username", "email", "name"];
@@ -69,6 +70,14 @@ router.delete("/", authenticateRequest, (req, res) => {
 // Remove once project has been graded
 router.put("/:id", async (req, res) => {
   let update = req.body.user;
+
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(update.password, salt);
+
+  update = {
+    ...update,
+    password: hash,
+  };
   try {
     let updatedUser = await userModel.findOneAndReplace(
       { _id: req.params.id },
