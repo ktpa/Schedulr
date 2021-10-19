@@ -47,7 +47,7 @@
           </div>
           <div class="bottomContainer">
             <b-img
-              v-for="participant in meeting.participantsList"
+              v-for="participant in participantsListLength(meeting)"
               :key="participant._id"
               :src="getProfilePic(participant.profilePicUrl)"
               v-bind="participantProps"
@@ -113,6 +113,14 @@ export default {
     participants: a => {
       console.log(a)
       return a.length
+    },
+    participantsListLength(meeting) {
+      console.log(meeting)
+      if (meeting.participantsList.length > 12) {
+        return 12
+      } else {
+        return meeting.participantsList
+      }
     },
     formatMeetingName(name) {
       name = truncate(name, this.length)
