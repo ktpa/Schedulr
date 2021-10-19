@@ -98,7 +98,9 @@ export default {
       username: '',
       password: '',
       emptyField: ''
-    }
+    },
+    // Adapted from https://regexr.com/2rhq7
+    regX: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
   }),
 
   methods: {
@@ -112,6 +114,10 @@ export default {
       if (this.form.email === '') {
         this.state.email = false
         this.error.email = 'Email cannot be empty'
+        valid = false
+      } else if (!this.regX.exec(this.form.email)) {
+        this.state.email = false
+        this.error.email = 'Invalid email'
         valid = false
       }
       if (this.form.username === '') {
