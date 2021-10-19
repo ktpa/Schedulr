@@ -9,6 +9,7 @@
         placeholder="Name"
         id="name"
         :state="state.name"
+        v-on:keyup.enter="submitSignup"
       />
       <b-form-invalid-feedback id="name">
         {{ this.error.name }}
@@ -24,6 +25,7 @@
         placeholder="E-mail"
         id="email"
         :state="state.email"
+        v-on:keyup.enter="submitSignup"
       />
       <b-form-invalid-feedback id="email">
         {{ this.error.email }}
@@ -39,6 +41,7 @@
         placeholder="Username"
         id="username"
         :state="state.username"
+        v-on:keyup.enter="submitSignup"
       />
       <b-form-invalid-feedback id="username">
         {{ this.error.username }}
@@ -54,6 +57,7 @@
         placeholder="Password"
         id="password"
         :state="state.password"
+        v-on:keyup.enter="submitSignup"
       />
       <b-form-invalid-feedback id="password">
         {{ this.error.password }}

@@ -9,6 +9,7 @@
         placeholder="Username"
         id="input-username"
         :state="state"
+        v-on:keyup.enter="submitLogin"
       />
     </div>
 
@@ -21,6 +22,7 @@
         placeholder="Password"
         id="input-password"
         :state="state"
+        v-on:keyup.enter="submitLogin"
       />
 
       <b-form-invalid-feedback id="input-live-feedback">
