@@ -48,6 +48,7 @@
             :disabled="disabled"
             placeholder="name"
             id="name"
+            v-on:keyup.enter="onUpdateProfile"
           />
           <br />
           <b-input
@@ -57,6 +58,7 @@
             placeholder="password"
             id="password"
             v-if="!disabled"
+            v-on:keyup.enter="onUpdateProfile"
           />
         </div>
       </div>
