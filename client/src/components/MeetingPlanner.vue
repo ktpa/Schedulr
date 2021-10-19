@@ -11,6 +11,7 @@
         v-model="form.name"
         placeholder="Meeting name"
         id="name"
+        v-on:keyup.enter="createMeeting"
       />
 
       <span class="label">
