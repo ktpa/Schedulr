@@ -16,7 +16,7 @@
             >Create Meeting
           </b-nav-item>
           <b-nav-item
-            v-if="admin"
+            v-if="this.$store.getters.isAdmin"
             :class="{ active: this.$route.name === 'Admin' }"
             href="/admin"
             >Admin
@@ -42,9 +42,7 @@ import ProfileButton from './ProfileButton.vue'
 export default {
   components: { ProfileButton },
   data() {
-    return {
-      admin: this.$store.getters.isAdmin
-    }
+    return {}
   },
   methods: {
     logout() {
