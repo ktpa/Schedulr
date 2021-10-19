@@ -15,7 +15,7 @@ const meetingsRoutes = require("./controllers/meetings");
 
 // Variables
 var mongoURI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/animalDevelopmentDB";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/SchedulrDB";
 var port = process.env.PORT || 3000;
 
 // Connect to MongoDB
